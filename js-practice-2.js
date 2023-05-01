@@ -1,6 +1,7 @@
-let inputArray = ['a','b','c','a','u']
+let inputArray = ['a','b','c','a','y']
 finalArray = inputArray.map((a)=>{
-    return a.charCodeAt() - 97;
+    // return `${a.charCodeAt()-97+1}`
+    return (a.charCodeAt() - 97)+1;
 })
 console.log(finalArray)
 
