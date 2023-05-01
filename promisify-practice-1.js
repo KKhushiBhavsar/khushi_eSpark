@@ -15,7 +15,7 @@ function1.then(resolve=> console.log(resolve))
 
 //with async await
 const function2 = async ()=>{    
-        await setTimeout(()=>{
+         setTimeout(()=>{
             if(Math.random() > 0.5){
                 console.log("success!")
             }else{
@@ -50,40 +50,31 @@ runApi(`https://jsonplaceholder.typicode.com/todos/1`);
 
 
 
-//exersice 3:
-//directly calling api
-const multipleApi = async(i)=>{
-    const fetchData = await runApi(`https://jsonplaceholder.typicode.com/todos/${i}`)
-}
-const callingFunction = async() =>{
-    let i = 0;
-   setInterval(()=>{
-       if(i < 7){
-           i++
-           multipleApi(i)
-       }
-   },1000)
-}
-callingFunction()
-
-//calling axios like function to check url
+//Exersice 3:
 const multipleApi1 = async(i)=>{
     const fetchData = await fetch(`https://jsonplaceholder.typicode.com/todos/${i}`);
     const data = await fetchData.json();
     console.log(data)
 }
 const callingFunction1 = async() =>{
-    let i = 0;
-   setInterval(()=>{
-       if(i < 7){
-           i++
-           multipleApi1(i)
-       }
-   },1000)
+    let i=0;
+    while(i < 7){
+           multipleApi1(i);
+           i++;
+    }
 }
+// const callingFunction1 = async() =>{
+//     let i = 0;
+//    setInterval(()=>{
+//        if(i < 7){
+//            i++
+//            multipleApi1(i)
+//        }
+//    },1000)
+// }
 callingFunction1()
 
-//excersice 4:
+//Excersice 4:
 
 const fetchUrl = async()=>{
     try{
