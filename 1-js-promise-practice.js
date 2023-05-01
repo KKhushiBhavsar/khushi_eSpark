@@ -84,8 +84,8 @@ const fetchUrl = async()=>{
                 activityId: "64325f409942ad7ccff8484d",
                 activity: {
                     activityVisibility: {},
-                    attachedRoles: [],
-                    audience: "",
+                    attachedRoles: ['user','admin'],
+                    audience: "user",
                     category: "5c67e5a1c7cc90124ccfaf4b",
                     created_at: "Wed Oct 05 2011 20:18:00 GMT+0530",
                     editorial: true,
@@ -112,4 +112,4 @@ const fetchUrl = async()=>{
     }
     
 }
-fetchUrl();
+// fetchUrl();
