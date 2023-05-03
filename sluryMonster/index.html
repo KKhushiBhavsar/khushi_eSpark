@@ -31,7 +31,7 @@
             <div class="battleLog">
                <span>Battle Log</span>
                 <ul>
-                    <li v-for="moves in battleBoard" :key="moves" :style="{color: moves.color}">{{moves.displayLog}}</li>
+                    <li v-for="moves in battleBoard" :key="moves" :style="{color: moves.color}">{{moves.displayLog}}<hr></li>
                 </ul>
             </div>
         </div>

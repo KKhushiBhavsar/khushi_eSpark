@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="style.css" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <div id="app">
+        <h1>Tic-Tac-Toe</h1>
+<table class="gameBoard">
+    <tr>
+        <td class="cell" @click="move(0)">{{board[0]}}</td>
+        <td class="cell" @click="move(1)">{{board[1]}}</td>
+        <td class="cell" @click="move(2)">{{board[2]}}</td>
+    </tr>
+    <tr>
+        <td class="cell" @click="move(3)">{{board[3]}}</td>
+        <td class="cell" @click="move(4)">{{board[4]}}</td>
+        <td class="cell" @click="move(5)">{{board[5]}}</td>
+    </tr>
+    <tr>
+        <td class="cell" @click="move(6)">{{board[6]}}</td>
+        <td class="cell" @click="move(7)">{{board[7]}}</td>
+        <td class="cell" @click="move(8)">{{board[8]}}</td>
+    </tr>
+</table>
+<div class="text">{{text}}</div>
+<div class="button">
+    <button id="resetButton" @click="reset()">Reset</button>
+</div>
+<div class="winBoard">
+<table id="winCount">
+    <tr>
+        <td> Player 1</td>
+        <td>{{player1Win}}</td>
+    </tr>
+ <tr>
+        <td> Player 2</td>
+        <td>{{player2Win}}</td>
+    </tr>
+</table>
+</div>
+    <script src="app.js"></script>
+  </body>
+</html>
