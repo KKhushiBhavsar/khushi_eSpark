@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="style.css" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <div id="app">
+        <h1>Monster Slayer</h1>
+        <div class="parentContainer">
+            <div class="container1">
+                <h3>Monster Health</h3>
+                <div class="barParent">
+                    <div class="barChild" :style="{width: monsterHealth+'%' , backgroundColor: monsterHealth > 30 ? 'green':'red'}"> </div>
+                </div>
+            </div>
+            <div class="container1">
+                <h3>Your Health</h3>
+                <div class="barChild" :style="{width: playerHealth+'%' , backgroundColor: playerHealth > 30 ? 'green':'red'}"></div>
+            </div>
+            <div class="btnContainer">
+                <button @click="attack()">ATTACK</button>
+                <button :disabled="speacialAttackDisabled" @click="specialAttack()">SPECIAL ATTACK</button>
+                <button :disabled="healDisabled" @click="healPlayer()">HEAL</button>
+                <button :disabled="surrenderDisabled" @click="playerSurrender()">SURRENDER</button>
+            </div>
+            <div class="battleLog">
+               <span>Battle Log</span>
+                <ul>
+                    <li v-for="moves in battleBoard" :key="moves" :style="{color: moves.color}">{{moves.displayLog}}</li>
+                </ul>
+            </div>
+        </div>
+    <script src="app.js"></script>
+  </body>
+</html>
