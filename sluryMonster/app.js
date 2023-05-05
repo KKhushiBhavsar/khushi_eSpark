@@ -64,13 +64,13 @@ createApp({
         },
         reset() {
             // setTimeout(() => {
-                // this.monsterHealth = 100;
-                // this.playerHealth = 100;
-                // this.speacialAttackDisabled = true;
-                // this.healDisabled = true;
-                // this.surrenderDisabled = true;
-                // this.battleCounter = 0;
-                // this.battleBoard = [];
+                this.actorModules.monsterHealth = 100;
+                this.actorModules.playerHealth = 100;
+                this.actorModules.speacialAttackDisabled = true;
+                this.actorModules.healDisabled = true;
+                this.actorModules.surrenderDisabled = true;
+                this.actorModules.battleCounter = 0;
+                this.actorModules.battleBoard = [];
             // }, 2000)
 
         },
