@@ -11,29 +11,32 @@
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
     <div id="app">
         <h1>Monster Slayer</h1>
-        <div class="parentContainer">
-            <div class="container1">
+        <div class="parent-container">
+            <div class="child-container">
                 <h3>Monster Health</h3>
-                <div class="barParent">
-                    <div class="barChild" :style="{width: monsterHealth+'%' , backgroundColor: monsterHealth > 30 ? 'green':'red'}"> </div>
+                <div class="bar-parent">
+                    <div class="bar-child" :style="monsterBarStyle"> </div>
                 </div>
             </div>
-            <div class="container1">
+            <div class="child-container">
                 <h3>Your Health</h3>
-                <div class="barChild" :style="{width: playerHealth+'%' , backgroundColor: playerHealth > 30 ? 'green':'red'}"></div>
+                <div class="bar-parent">
+                    <div class="bar-child" :style="userBarStyle"></div>
+                </div>
             </div>
-            <div class="btnContainer">
+            <div class="btn-container">
                 <button @click="attack()">ATTACK</button>
-                <button :disabled="speacialAttackDisabled" @click="specialAttack()">SPECIAL ATTACK</button>
-                <button :disabled="healDisabled" @click="healPlayer()">HEAL</button>
-                <button :disabled="surrenderDisabled" @click="playerSurrender()">SURRENDER</button>
+                <button :disabled="actorModules.speacialAttackDisabled" @click="specialAttack()">SPECIAL ATTACK</button>
+                <button :disabled="actorModules.healDisabled" @click="healPlayer()">HEAL</button>
+                <button :disabled="actorModules.surrenderDisabled" @click="playerSurrender()">SURRENDER</button>
             </div>
-            <div class="battleLog">
+            <div class="battle-log">
                <span>Battle Log</span>
                 <ul>
-                    <li v-for="moves in battleBoard" :key="moves" :style="{color: moves.color}">{{moves.displayLog}}<hr></li>
+                    <li v-for="moves in actorModules.battleBoard" :key="moves" :style="{color: moves.color}">{{moves.displayLog}}<hr></li>
                 </ul>
             </div>
+            
         </div>
     <script src="app.js"></script>
   </body>

@@ -1,97 +1,107 @@
 const { createApp } = Vue
-    
+const healthObjects = {
+    monsterHealth: 100,
+    playerHealth: 100,
+    speacialAttackDisabled: true,
+    healDisabled: true,
+    surrenderDisabled: true,
+    battleCounter: 0,
+    battleBoard: [],
+}
 createApp({
     data() {
         return {
-            monsterHealth: 100,
-            playerHealth: 100,
-            speacialAttackDisabled: true,
-            healDisabled: true,
-            surrenderDisabled: true,
-            battleCounter: 0,
-            battleBoard: [],
+            actorModules: healthObjects,
         }
     },
     methods: {
         playerMove() {
-            this.battleCounter++;
+            this.actorModules.battleCounter++;
             const damage = Math.floor(Math.random() * 10);
-            this.monsterHealth -= damage;
-            this.gameLog("you", "attacked", damage, "green")
+            this.actorModules.monsterHealth -= damage;
+            this.gameLog(`you attacked, monster ${damage}%`, "green")
         },
         monsterMove() {
-            const damage = Math.floor(Math.random() * 10);
-            this.playerHealth -= damage;
-            this.gameLog("moster", "attacked", damage, "red")
+            const damage = Math.floor(Math.random() * 15);
+            this.actorModules.playerHealth -= damage;
+            this.gameLog(`monster attacked, you  ${damage}%`, "red")
         },
         attack() {
+            this.checkHealth;
             this.playerMove();
             this.monsterMove();
         },
         specialAttack() {
-            this.battleCounter = 0;
+            if(this.actorModules.speacialAttackDisabled) return
+            this.actorModules.battleCounter = 0;
             const damage = Math.floor(Math.random() * 25);
-            this.monsterHealth -= damage;
-            this.speacialAttackDisabled = true;
-            this.gameLog("you", "special attacked", damage, "blue")
+            this.actorModules.monsterHealth -= damage;
+            this.actorModules.speacialAttackDisabled = true;
+            this.gameLog(`you special attacked, monster ${damage}%`, "blue")
             this.monsterMove();
 
         },
         healPlayer() {
-
-            this.playerHealth += Math.floor(Math.random() * 25);
-            this.healDisabled = true;
-            this.gameLog("you", "healed", this.playerHealth, "orange")
+            if(this.actorModules.healDisabled) return
+            this.actorModules.playerHealth += Math.floor(Math.random() * 25);
+            this.actorModules.healDisabled = true;
+            this.gameLog(`you are healing`, "orange")
             this.monsterMove();
 
         },
         playerSurrender() {
-            this.gameLog("you", "surrender", this.playerHealth, "red");
+            this.gameLog("you", "surrender", this.actorModules.playerHealth, "red");
             this.reset();
         },
-        gameLog(player, move, damage, color) {
-            const displayLog = `${player}  ${move} , damage is ${damage}`;
-            this.battleBoard.push({
+        gameLog(move, color) {
+            const displayLog = `${move}`;
+            // console.log("battle log",this.actorModules.battleBoard)
+            this.actorModules.battleBoard.push({
                 displayLog,
                 color
             });
-            console.log(this.battleBoard)
+            // console.log(this.actorModules.battleBoard)
         },
         reset() {
             // setTimeout(() => {
-                this.monsterHealth = 100;
-                this.playerHealth = 100;
-                this.speacialAttackDisabled = true;
-                this.healDisabled = true;
-                this.surrenderDisabled = true;
-                this.battleCounter = 0;
-                this.battleBoard = [];
+                // this.monsterHealth = 100;
+                // this.playerHealth = 100;
+                // this.speacialAttackDisabled = true;
+                // this.healDisabled = true;
+                // this.surrenderDisabled = true;
+                // this.battleCounter = 0;
+                // this.battleBoard = [];
             // }, 2000)
 
         },
-    },
-    watch: {
-        monsterHealth(value) {
-            if (value <= 0) {
+    }, computed:{
+        monsterBarStyle(){
+            return{width: this.actorModules.monsterHealth+'%' , backgroundColor: this.actorModules.monsterHealth > 30 ? 'green':'red'} 
+        },
+         userBarStyle(){
+            return{width: this.actorModules.playerHealth+'%' , backgroundColor: this.actorModules.playerHealth > 30 ? 'green':'red'} 
+        },
+        checkHealth() {
+            console.log("userHeath!")
+            if (this.actorModules.playerHealth <= 0) {
+                alert("you lose!");
+                this.reset();
+                return 1;
+                
+            } else if (this.actorModules.playerHealth <= 25) {
+                this.actorModules.healDisabled = false;
+                return 12;
+            }
+            if (this.actorModules.monsterHealth <= 0) {
                 alert("you won!");
                 this.reset();
             }
-        },
-        playerHealth(value) {
-            if (value <= 0) {
-                alert("you lose!");
-                this.reset();
-            } else if (value <= 25) {
-                this.healDisabled = false;
+            if (this.actorModules.battleCounter == 7) {
+                this.actorModules.speacialAttackDisabled = false;
+            }
+            if (this.actorModules.battleCounter >= 1) {
+                this.actorModules.surrenderDisabled = false;
             }
         },
-        battleCounter(value) {
-            if (value == 7) {
-                this.speacialAttackDisabled = false;
-            }
-            if (value >= 1) {
-                this.surrenderDisabled = false;
-            }
-        }
     }
 }).mount('#app')
