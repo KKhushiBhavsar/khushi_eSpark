@@ -10,12 +10,8 @@
 import AppAside from './components/AppAside.vue'
 import AppHeader from './components/AppHeader.vue'
 import AppFooter from './components/AppFooter.vue'
-import imageAndSound from './components/imageAndSound.vue'
-import ComputersAndTablets from './components/ComputersAndTablets.vue'
-import HouseHoldAndLiving from './components/HouseHoldAndLiving'
-import AppKitchen from './components/AppKitchen.vue'
-import SportAndcare from './components/SportAndcare.vue'
 import AllCategories from './components/AllCategories.vue'
+import AppContent from './components/AppContent.vue'
 
 export default {
   name: 'App',
@@ -23,17 +19,15 @@ export default {
     AppHeader,
     AppAside,
     AppFooter,
-    imageAndSound,
-    ComputersAndTablets,
-    HouseHoldAndLiving,
-    AppKitchen,
-    SportAndcare,
+    AppContent,
+    
+
     AllCategories,
   },
   data(){
     return{
       isShowing: true,
-      displayComponent: 'HelloWorld',
+      displayComponent: 'AppContent',
       subCategory: null,
       subcategoriesItems: null,
       allItems: null,
@@ -43,7 +37,7 @@ export default {
     renderingPage({displayPage,isShow,subCategory,subcategoriesItems,allItems}){
       console.log(displayPage,isShow)
       this.isShowing = isShow;
-      this.displayComponent = displayPage;
+      // this.displayComponent = displayPage;
       this.subCategory = subCategory;
       this.subcategoriesItems = subcategoriesItems;
       this.allItems = allItems
