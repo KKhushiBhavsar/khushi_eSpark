@@ -637,7 +637,6 @@ export default ({
             // console.log(this.displayPage)
         
             this.$emit("displayData",{
-                displayPage: this.displayPage,
                 isShow: this.isShow,
                 subCategory: subCategory,
                 subcategoriesItems: subcategoriesItems,

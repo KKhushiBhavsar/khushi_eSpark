@@ -17,12 +17,12 @@
             </div>
             <div class="nav-bar-links">
                 <div class="menu-range">
-                    View Our Range
+                   <span @click="renderClass('AppAside')"> View Our Range</span>
                 </div>
                 <div class="nav-contact-us">
                     <span class="nav-contact"><img src="../assets/contact-nav.png" alt=""> 124123423</span> 
                     <span class="nav-contact"><img src="../assets/wp-nav.png" alt=""> WhatsApp</span>
-                    <span class="nav-contact">Customer Service</span>
+                    <span class="nav-contact"><span @click="renderClass('CustomentService')">Customer Service</span></span>
                     <span class="nav-contact">Repair</span>
                    <span class="nav-contact">Commercial</span>
                     <span class="nav-contact">Our Stores</span>
@@ -34,6 +34,16 @@
 <script>
 export default ({
     name: 'AppHeader',
+    methods:{
+        renderClass(page){
+            // alert(page)
+             this.$emit("displayComponent",{
+                isShow: false,
+                container: page,
+                
+            })
+        }
+    }
 })
 </script>
 <style scoped>
