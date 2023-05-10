@@ -56,10 +56,10 @@ ul :hover {
 }
 .parent-container{
     display: flex;
-    border: 1px solid black;
+    /* border: 1px solid black; */
 }
 .child-component{
-    border: 1px solid black;
+    /* border: 1px solid black; */
     width: 90%;
     padding: 10px
 }

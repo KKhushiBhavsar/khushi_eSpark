@@ -17,7 +17,7 @@
             </div>
             <div class="nav-bar-links">
                 <div class="menu-range">
-                   <span @click="renderClass('AppAside')"> View Our Range</span>
+                   <!-- <span @click="renderClass('AppAside')"> View Our Range</span> -->
                 </div>
                 <div class="nav-contact-us">
                     <span class="nav-contact"><img src="../assets/contact-nav.png" alt=""> 124123423</span> 
