@@ -1,7 +1,7 @@
 <template>
     <h1>AllCategories</h1>
-    <div class="parent-container" v-if="IsCategory">
-    <ul v-for="category in subCategory" :key="category.sid">
+    <div class="parent-container">
+    <ul v-for="category in allCategories" :key="category.sid">
         <li class="img-item" @click="setSubCategory(category.sid)">
             <div class="card-container">
                 <div class="img-container">
@@ -14,28 +14,8 @@
         </li>
     </ul>
 </div>
-<div class="parent-container" v-else>
-      <div>
-            {{subCat}}
-        </div>
-    <ul  v-for="subCategory in subCat" :key="subCategory.sitem">
-        <div>
-            {{subCategory}}
-        </div>
-        <li class="img-item" @click="setSubCategory(subCategory.sitem)">
-                <div class="card-container-subcategory">
-                    <div class="img-container">
-                        <img :src="subCategory.img" class="img">
-                    </div>
-                    <div class="text-item-subcategory">
-                        <p>Price  {{subCategory.price}}</p>  
-                        <p>ratings  {{subCategory.rating}}</p>  
-                        <p>description  {{subCategory.description}}</p>  
-                    </div>
-                </div>
-            </li>
-    </ul>
-</div>
+    {{allCategories}}
+    
 </template>
 <script>
 export default{
@@ -43,28 +23,8 @@ export default{
      props: {
         subCategory: Object,
         subcategoriesItems: Object,
+        allCategories: Object,
     },
-    data() {
-        return {
-            IsCategory: true,
-            subCat:null,
-        }
-    },
-    methods:{
-        setSubCategory(id){
-           console.log("id",id)
-            this.IsCategory = false;
-         Object.entries(this.subcategoriesItems).forEach(item => {
-             console.log(" item[1]sid]", item[1]["sid"])
-                if(item[1]["sid"] === id)
-                {
-                    this.subCat=(item[1]["subItems"])
-                }
-            });
-
-            console.log("subCat",this.subCat)
-        }
-    }
 }
 </script>
 

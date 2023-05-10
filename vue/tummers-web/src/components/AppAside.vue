@@ -246,7 +246,8 @@ export default ({
                     name: "AllCategories",
                     text: "All Categories",
                     alt: "All Categories",
-                    img: require('../assets/allCategories.png')
+                    img: require('../assets/allCategories.png'),
+                    subcategory: [{}],
                 },
             ],
             subcategoriesItems : [{
@@ -629,17 +630,18 @@ export default ({
                 // console.log("id",this.subcategoriesItems[i.sid-1].sid)                
                 // console.log("subitem",subItem)
             });     
-                console.log("subcategoriesItems",subcategoriesItems)
-            console.log("subcategories",subCategory)
+            // console.log("subcategoriesItems",subcategoriesItems)
+            // console.log("subcategories",subCategory)
             this.displayPage = name;
             this.isShow = false;
-            console.log(this.displayPage)
+            // console.log(this.displayPage)
         
             this.$emit("displayData",{
                 displayPage: this.displayPage,
                 isShow: this.isShow,
                 subCategory: subCategory,
                 subcategoriesItems: subcategoriesItems,
+                allItems: this.categories,
                 
             })
         }

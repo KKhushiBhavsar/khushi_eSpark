@@ -1,7 +1,7 @@
 <template>
   <app-header/>
    <app-aside v-if="isShowing" @displayData="renderingPage" />
-    <component :is="displayComponent" :subCategory="subCategory" :subcategoriesItems="subcategoriesItems"> </component>
+    <component :is="displayComponent" :subCategory="subCategory" :subcategoriesItems="subcategoriesItems" :allCategories="allItems"> </component>
     <app-footer />
 </template>
 
@@ -36,15 +36,17 @@ export default {
       displayComponent: 'HelloWorld',
       subCategory: null,
       subcategoriesItems: null,
+      allItems: null,
     }
   },
   methods:{
-    renderingPage({displayPage,isShow,subCategory,subcategoriesItems}){
+    renderingPage({displayPage,isShow,subCategory,subcategoriesItems,allItems}){
       console.log(displayPage,isShow)
       this.isShowing = isShow;
       this.displayComponent = displayPage;
       this.subCategory = subCategory;
       this.subcategoriesItems = subcategoriesItems;
+      this.allItems = allItems
       console.log(subcategoriesItems)
     }
   }
