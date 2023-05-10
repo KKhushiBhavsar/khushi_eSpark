@@ -1,8 +1,8 @@
 <template>
 <h1>Image & sound</h1>
-<div class="parent-container">
-    <ul v-for="category in subCategory" :key="category.id">
-        <li class="img-item">
+<div class="parent-container" v-if="IsCategory">
+    <ul v-for="category in subCategory" :key="category.sid">
+        <li class="img-item" @click="setSubCategory(category.sid)">
             <div class="card-container">
                 <div class="img-container">
                     <img :src="category.img" class="img">
@@ -14,15 +14,56 @@
         </li>
     </ul>
 </div>
+<div class="parent-container" v-else>
+      <div>
+            {{subCat}}
+        </div>
+    <ul  v-for="subCategory in subCat" :key="subCategory.sitem">
+        <div>
+            {{subCategory}}
+        </div>
+        <li class="img-item" @click="setSubCategory(subCategory.sitem)">
+                <div class="card-container-subcategory">
+                    <div class="img-container">
+                        <img :src="subCategory.img" class="img">
+                    </div>
+                    <div class="text-item-subcategory">
+                        <p>Price  {{subCategory.price}}</p>  
+                        <p>ratings  {{subCategory.rating}}</p>  
+                        <p>description  {{subCategory.description}}</p>  
+                    </div>
+                </div>
+            </li>
+    </ul>
+</div>
 </template>
 
 <script>
 export default {
     name: "imageAndSound",
-    props: ['subCategory'],
+    props: {
+        subCategory: Object,
+        subcategoriesItems: Object,
+    },
     data() {
         return {
+            IsCategory: true,
+            subCat:null,
+        }
+    },
+    methods:{
+        setSubCategory(id){
+           console.log("id",id)
+            this.IsCategory = false;
+         Object.entries(this.subcategoriesItems).forEach(item => {
+             console.log(" item[1]sid]", item[1]["sid"])
+                if(item[1]["sid"] === id)
+                {
+                    this.subCat=(item[1]["subItems"])
+                }
+            });
 
+            console.log("subCat",this.subCat)
         }
     }
 }
@@ -43,9 +84,17 @@ ul {
 
 .parent-container {
     display: flex;
+    flex-wrap: wrap;
 }
 .card-container{
-    width: 30%;
+    /* width: 30%; */
     margin: 10px;
+}
+   
+.card-container-subcategory{
+ margin: 10px;
+    border: 1px solid green;
+    padding: 20px;
+
 }
 </style>
