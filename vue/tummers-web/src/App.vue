@@ -1,8 +1,8 @@
 <template>
-<app-header @displayComponent="renderComponent" />
-<app-aside v-if="isShowing" @displayData="renderingPage" />
+<AppHeader @displayComponent="renderComponent" />
+<AppAside v-if="isShowing" @displayData="renderingPage" />
 <component :is="displayComponent" :subCategory="subCategory" :subcategoriesItems="subcategoriesItems" :allCategories="allItems"> </component>
-<app-footer />
+<AppFooter />
 </template>
 
 <script>

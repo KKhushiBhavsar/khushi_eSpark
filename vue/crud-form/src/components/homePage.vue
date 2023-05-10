@@ -19,3 +19,13 @@ export default ({
     },
 })
 </script>
+<style scoped>
+button{
+    width: 10%;
+    height: 40px;
+    margin: 10px;
+    background-color: rgb(206, 231, 233);
+    color: rgb(13, 46, 51);
+    border: 2px solid rgb(13, 46, 51);
+}
+</style>

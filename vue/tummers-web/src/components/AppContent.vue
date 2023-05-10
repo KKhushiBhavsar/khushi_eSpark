@@ -54,8 +54,12 @@
 export default {
     name: "imageAndSound",
     props: {
-        subCategory: Object,
-        subcategoriesItems: Object,
+        subCategory:{
+            type: Object,
+        },
+        subcategoriesItems: {
+            type: Object,
+        }
     },
     data() {
         return {

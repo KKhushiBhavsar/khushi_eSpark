@@ -2,29 +2,26 @@
 <h1>CustomentService</h1>
 <div class="parent-container">
     <div class="nav-service">
-        <ul>
-            <li @click="component='CustomerAndService'">Customer Service</li>
-            <li @click="component='ExchangeReturn'">Exchange Return</li>
-            <li @click="component='RepairWarranty'">Repair & warranty</li>
-        </ul>
+       <ul>
+           <li @click="component='CustomerService'">Customer Service</li>
+           <li @click="component='ExchangeReturn'">Exchange & Return</li>
+           <li @click="component='RepairWarranty'">Repair & warranty</li>
+           <li @click="component='DeliveryPickup'">Delivery & Pickup</li>
+           <li @click="component='Pay'">Pay</li>
+           <li @click="component='SecurityPrivacy'">Security & Privacy</li>
+           <li @click="component='ToOrder'">To Order</li>
+       </ul>
     </div>
-    <div class="child-component">
-        <component :is="component"></component>
-    </div>
+   
 </div>
 </template>
-
 <script>
-import CustomerAndService from './CustomerAndService.vue'
-import ExchangeReturn from './ExchangeReturn.vue'
-import RepairWarranty from './RepairWarranty.vue'
+
 
 export default {
     name: "CustomentService",
     components: {
-        CustomerAndService,
-        ExchangeReturn,
-        RepairWarranty
+       
     },
     data() {
         return {

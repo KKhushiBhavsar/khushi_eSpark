@@ -21,9 +21,15 @@
 export default{
     name : "AllCategories",
      props: {
-        subCategory: Object,
-        subcategoriesItems: Object,
-        allCategories: Object,
+        subCategory:{
+            type: Object,
+        },
+        subcategoriesItems: {
+            type: Object,
+        },
+        allCategories:{
+            type: Object,
+        },
     },
 }
 </script>

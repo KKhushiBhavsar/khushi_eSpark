@@ -10,8 +10,7 @@
         </div>
         <div class="ftr-search">
             <input type="search" name="ftr-search" id="ftrSearch" placeholder="E-mail address">
-            <button class="ftr-register">To Register</button>
-            
+            <button class="ftr-register">To Register</button>           
             
         </div>
     </div>

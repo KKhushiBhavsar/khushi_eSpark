@@ -1,8 +1,8 @@
 <template>
     <h1>Add users</h1>
-    <input type="text" placeholder="name" v-model="name">
-    <input type="text" placeholder="age" v-model="age">
-    <input type="text" placeholder="contact" v-model="contact">
+    <input type="text" placeholder="name" v-model="name"><br>
+    <input type="text" placeholder="age" v-model="age"><br>
+    <input type="text" placeholder="contact" v-model="contact"><br>
     <button @click="addUser()" :user="user">Add User</button>
     <all-users @user="getUser" />
 </template> 
@@ -59,3 +59,22 @@ export default ({
     }
 })
 </script>
+<style scoped>
+input{
+    width: 50%;
+    height: 20px;
+    margin: 10px;
+    border: 1px solid gray;
+    border-radius: 7px;
+    padding: 10px;
+    background-color: rgb(139, 172, 180);
+    color: black;
+}
+button{
+    padding: 10px;
+    margin: 10px;
+    background-color: rgb(108, 154, 165);
+    border: 2px solid black;
+    color: azure;
+}
+</style>
