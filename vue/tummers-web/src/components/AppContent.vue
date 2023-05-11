@@ -1,60 +1,56 @@
 <template>
 <div v-if="IsSubCategory">
     <div class="parent-container" v-if="IsCategory">
-        <ul v-for="category in subCategory" :key="category.sid">
-            <li class="img-item" @click="setSubCategory(category.sid)">
-                <div class="card-container">
-                    <div class="img-container">
-                        <img :src="category.img" class="img">
-                    </div>
-                    <div class="text-item">
-                        {{category.name}}
-                    </div>
-                </div>
-            </li>
-        </ul>
+        <CategoryComponent v-for="category in subCategory" :key="category.sid">
+
+            <template v-slot:displayImage>
+                <img :src="category.img" class="img" @click="setSubCategory(category.sid)">
+            </template>
+            <template v-slot:displayDetails>
+                {{category.name}}
+            </template>
+        </CategoryComponent>
     </div>
     <div class="parent-container" v-else>
         <button @click="IsCategory=!IsCategory">Back</button>
-        <ul v-for="subCategory in subCat" :key="subCategory.sitem">
-            <li class="img-item" @click="showDetails(subCategory)">
-                <div class="card-container-subcategory">
-                    <div class="img-container">
-                        <img :src="subCategory.img" class="img">
-                    </div>
-                    <div class="text-item-subcategory">
-                        <p>Price {{subCategory.price}}</p>
-                        <p>ratings {{subCategory.rating}}</p>
-                        <p>description {{subCategory.description}}</p>
-                    </div>
-                </div>
-            </li>
-        </ul>
+        <CategoryComponent v-for="category in subCat" :key="category.sitem" >
+            <template v-slot:displayImage>
+                <img :src="category.img" class="img" @click="showDetails(category)">
+            </template>
+            <template v-slot:displayDetails>
+                <p>Price {{category.price}}</p>
+                <p>ratings {{category.rating}}</p>
+                <p>description {{category.description}}</p>
+            </template>
+        </CategoryComponent>
     </div>
 </div>
 <div v-if="!IsSubCategory">
     <button @click="IsSubCategory=!IsSubCategory">Back</button>
-    <div class="parent-details-container">
-        <div class="card-container-details">
-            <div class="img-container-details">
-                <img :src="this.detailItem.img" class="img">
-            </div>
-            <div class="text-item-subcategory">
-                <p>Price {{this.detailItem.price}}</p>
-                <p>ratings {{this.detailItem.rating}}</p>
-                <p>description {{this.detailItem.description}}</p>
-            </div>
+        <CategoryComponent>
+            <template v-slot:displayImage>
+                <img :src="detailItem.img" class="img">
+            </template>
+            <template v-slot:displayDetails>
+                <p>Price {{detailItem.price}}</p>
+                <p>ratings {{detailItem.rating}}</p>
+                <p>description {{detailItem.description}}</p>
+            </template>
+        </CategoryComponent>
         </div>
-    </div>
-
-</div>
+   
 </template>
 
 <script>
+import CategoryComponent from './CategoryComponent.vue'
+
 export default {
     name: "imageAndSound",
+    components: {
+        CategoryComponent,
+    },
     props: {
-        subCategory:{
+        subCategory: {
             type: Object,
         },
         subcategoriesItems: {
@@ -121,7 +117,8 @@ ul {
     padding: 20px;
     box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
 }
-.parent-details-container{
+
+.parent-details-container {
     font-size: 16px;
     width: 46%;
     margin: 47px;
@@ -130,7 +127,8 @@ ul {
     color: forestgreen;
     box-shadow: rgb(0 0 0 / 19%) 0px 10px 20px, rgb(0 0 0 / 23%) 0px 6px 6px;
 }
-button{
+
+button {
     width: 100px;
     height: 50px;
     background-color: darkseagreen;
