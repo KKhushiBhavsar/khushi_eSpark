@@ -28,7 +28,7 @@
                         <td>Phone No:</td>
                         <td><input type="text" v-model="userData.basicDetails.phoneno"></td>
                         <td>City</td>
-                        <td><input type="text"  v-model="userData.basicDetailscity"></td>
+                        <td><input type="text"  v-model="userData.basicDetails.city"></td>
                     </tr>
                     <tr>
                         <td colspan="2">Gender: <input type="radio"  name="radio_gen" value="male" v-model="userData.basicDetails.gender">Male
