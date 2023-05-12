@@ -60,38 +60,44 @@
             <fieldset>
                 <legend>Education Details</legend>
                 <table id="education_details">
-                    <tr>
+                    <tr v-for="(eduDetails,index) in userData.educationDetails" :key="eduDetails">
                         <td>Cerification Name:
-                            <select name="course"  v-model="userData.educationDetails.Selectedcourse">
+                            <select name="course"  v-model="userData.educationDetails[index].Selectedcourse">
                                 <option v-for="edu in course" :key="edu">{{edu}}</option>
                             </select>
                         </td>
                         <td>Board/University Name: </td>
-                        <td><input type="text" v-model="userData.educationDetails.university"></td>
+                        <td><input type="text" v-model="userData.educationDetails[index].university"></td>
                         <td>Passing Year: </td>
-                        <td><input type="text" v-model="userData.educationDetails.passing_year"></td>
+                        <td><input type="text" v-model="userData.educationDetails[index].passing_year"></td>
                         <td>Percentage: </td>
-                        <td><input type="text"  v-model="userData.educationDetails.percentage"></td>
-                        <td><input type="button" class="btn"  name="add" value="+ADD" >
-                        </td>
+                        <td><input type="text"  v-model="userData.educationDetails[index].percentage"></td>
+                    </tr>
+                    <tr>
+                        <td><input type="button" class="btn"   value="+ADD" @click="addEducation()"></td>
+                        <td><input type="button" class="btn"   value="-RMV" @click="removeEducation()"></td>
                     </tr>
                 </table>
             </fieldset>
             <fieldset>
                 <legend>Experience Details</legend>
                 <table id="experience_table">
-                    <tr>
+                    <tr v-for="(experience,index) in userData.experienceDetails" :key="experience">
                         <td>Company Name: </td>
-                        <td><input type="text"  v-model="userData.experienceDetails.company_name"></td>
+                        <td><input type="text"  v-model="userData.experienceDetails[index].company_name"></td>
                         <td>Designation</td>
-                        <td><input type="text" v-model="userData.experienceDetails.designation"></td>
+                        <td><input type="text" v-model="userData.experienceDetails[index].designation"></td>
                         <td>From: </td>
-                        <td><input type="date"  v-model="userData.experienceDetails.from_date"></td>
+                        <td><input type="date"  v-model="userData.experienceDetails[index].from_date"></td>
                         <td>TO:</td>
-                        <td><input type="date"  v-model="userData.experienceDetails.to_date"></td>
-                        <td><input type="button" class="btn" name="add" value="+ADD" >
-                        </td>
+                        <td><input type="date"  v-model="userData.experienceDetails[index].to_date"></td>
                     </tr>
+                    <tr>
+                    <td><input type="button" class="btn" value="+ADD" @click="addExperience()"> </td>
+                    <td><input type="button" class="btn"  value="-RMV" @click="removeExperience()"> </td>
+
+                    </tr>
+                       
                 </table>
             </fieldset>
             <fieldset>
@@ -206,18 +212,22 @@ export default {
           zipcode: null,
           dob: null,
         },
-        educationDetails: {
-          Selectedcourse: null,
-          university: null,
-          passing_year: null,
-          percentage: null,
-        },
-        experienceDetails: {
-          company_name: null,
-          designation: null,
-          from_date: null,
-          to_date: null,
-        },
+        educationDetails: [
+          {
+            Selectedcourse: null,
+            university: null,
+            passing_year: null,
+            percentage: null,
+          },
+        ],
+        experienceDetails: [
+          {
+            company_name: null,
+            designation: null,
+            from_date: null,
+            to_date: null,
+          },
+        ],
         knownLanguage: {
           read: [],
           write: [],
@@ -257,6 +267,33 @@ export default {
     this.user = JSON.parse(localStorage.getItem("user")) || [];
   },
   methods: {
+    addEducation() {
+      this.userData.educationDetails.push({
+        Selectedcourse: null,
+        university: null,
+        passing_year: null,
+        percentage: null,
+      });
+    },
+    removeEducation() {
+      if (this.userData.educationDetails.length > 1) {
+        this.userData.educationDetails.pop();
+      }
+      console.log(this.userData.educationDetails.length);
+    },
+    addExperience() {
+      this.userData.experienceDetails.push({
+        company_name: null,
+        designation: null,
+        from_date: null,
+        to_date: null,
+      });
+    },
+    removeExperience() {
+      if (this.userData.experienceDetails.length > 1) {
+        this.userData.experienceDetails.pop();
+      }
+    },
     submitData() {
       //   console.log(this.userData.id);
 
