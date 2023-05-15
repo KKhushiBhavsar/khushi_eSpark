@@ -28,7 +28,9 @@
                         <td>Phone No:</td>
                         <td><input type="text" v-model="userData.basicDetails.phoneno"></td>
                         <td>City</td>
-                        <td><input type="text"  v-model="userData.basicDetails.city"></td>
+                        <td><select name="city" v-model="userData.basicDetails.selectedcity">
+                                <option v-for="city in stateData.city" :key="city">{{city}}</option>
+                            </select></td>
                     </tr>
                     <tr>
                         <td colspan="2">Gender: <input type="radio"  name="radio_gen" value="male" v-model="userData.basicDetails.gender">Male
@@ -37,8 +39,8 @@
                         </td>
                         <td>State: </td>
                         <td>
-                            <select name="state" v-model="userData.basicDetails.selectedStates">
-                                <option v-for="state in states" :key="state">{{state}}</option>
+                            <select name="state" v-model="userData.basicDetails.selectedStates" @change="onStateChange($event)">
+                                <option v-for="state in stateData" :key="state">{{state.stateName}}</option>
                             </select>
                         </td>
                     </tr>
@@ -131,21 +133,13 @@
             <fieldset>
                 <legend>Reference Contact</legend>
                 <table>
-                    <tr>
+                    <tr v-for="ref in userData.reference.number" :key="ref">
                         <td> Name: </td>
-                        <td><input type="text"  v-model="userData.reference.refNameO"></td>
+                        <td><input type="text"  v-model="userData.reference.refName"></td>
                         <td>contact no: </td>
-                        <td><input type="text"  v-model="userData.reference.refCnO"></td>
+                        <td><input type="text"  v-model="userData.reference.refCn"></td>
                         <td>Relation </td>
-                        <td><input type="text"  v-model="userData.reference.refRelationO"></td>
-                    </tr>
-                    <tr>
-                        <td> Name: </td>
-                        <td><input type="text"  v-model="userData.reference.refNameT"></td>
-                        <td>contact no: </td>
-                        <td><input type="text" v-model="userData.reference.refCnT"></td>
-                        <td>Relation </td>
-                        <td><input type="text"  v-model="userData.reference.refRelationT"></td>
+                        <td><input type="text"  v-model="userData.reference.refRelation"></td>
                     </tr>
                 </table>
             </fieldset>
@@ -194,7 +188,19 @@ export default {
       course: ["BE", "ME", "diplome", "10th", "12th"],
       language: ["hindi", "english", "gujarati", "german"],
       technology: ["php", "MySql", "laravel", "oracle"],
-
+      optionCity: [],
+      stateData: [
+        {
+          stateId: 1,
+          stateName: "Gujarat",
+          city: ["Ahmedabad", "surat", "gandhinagar"],
+        },
+        {
+          stateId: 2,
+          stateName: "Maharashtra",
+          city: ["pune", "mumbai"],
+        },
+      ],
       userData: {
         id: Date.now().toString(36),
         basicDetails: {
@@ -230,6 +236,9 @@ export default {
         ],
         knownLanguage: {
           read: [],
+          refNameT: null,
+          refCnT: null,
+          refRelationT: null,
           write: [],
           speak: [],
           selectLanguage: [],
@@ -241,12 +250,10 @@ export default {
           selectedTechnology: [],
         },
         reference: {
-          refNameO: null,
-          refCnO: null,
-          refRelationO: null,
-          refNameT: null,
-          refCnT: null,
-          refRelationT: null,
+          number: 2,
+          refName: null,
+          refCn: null,
+          refRelation: null,
         },
         preference: {
           location: null,
@@ -262,11 +269,25 @@ export default {
   created() {
     // console.log("userData edited", this.editData);
     if (this.editData.length) {
-      this.userData = this.editData[0];
+      // this.userData = this.editData[0];
+      console.log("editDataaaaaaa", this.editData);
+      console.log("userDataaaaaaa", this.userData);
     }
     this.user = JSON.parse(localStorage.getItem("user")) || [];
   },
   methods: {
+    onStateChange(event) {
+      // alert("called");
+      console.log(event.target.value);
+      const SelectedState = event.target.value;
+      this.optionCity.push(
+        this.stateData.filter((state) => {
+          console.log("state", state);
+          state.stateName === SelectedState;
+        })
+      );
+      console.log(this.optionCity);
+    },
     addEducation() {
       this.userData.educationDetails.push({
         Selectedcourse: null,
@@ -309,7 +330,7 @@ export default {
       localStorage.setItem("user", JSON.stringify(this.user));
       //   console.log("index", indexUser);
 
-      this.$emit("userData", false);
+      this.$emit("onUserAdd", false);
     },
   },
 };

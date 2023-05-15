@@ -1,65 +1,61 @@
 <template>
   <div class="parent-container">
-    <table v-for="(user, index) in userData" :key="user.id" class="user-table">
+    <table v-for="user in userData" :key="user.id" class="user-table">
       <tr>
         <td>First Name:</td>
-        <td>{{ userData[index].basicDetails.fname }}</td>
+        <td>{{ user.basicDetails.fname }}</td>
       </tr>
 
       <tr>
         <td>Last Name:</td>
-        <td>{{ userData[index].basicDetails.lname }}</td>
+        <td>{{ user.basicDetails.lname }}</td>
       </tr>
       <tr>
         <td>Designation</td>
-        <td>{{ userData[index].basicDetails.designation }}</td>
+        <td>{{ user.basicDetails.designation }}</td>
       </tr>
       <tr>
         <td>Address1</td>
-        <td>{{ userData[index].basicDetails.address_one }}</td>
+        <td>{{ user.basicDetails.address_one }}</td>
       </tr>
       <tr>
         <td>email</td>
-        <td>{{ userData[index].basicDetails.email }}</td>
+        <td>{{ user.basicDetails.email }}</td>
       </tr>
       <tr>
         <td>Phone no:</td>
-        <td>{{ userData[index].basicDetails.phoneno }}</td>
+        <td>{{ user.basicDetails.phoneno }}</td>
       </tr>
       <tr>
         <td>City</td>
-        <td>{{ userData[index].basicDetails.city }}</td>
+        <td>{{ user.basicDetails.city }}</td>
       </tr>
       <tr>
         <td>state</td>
-        <td>{{ userData[index].basicDetails.selectedStates }}</td>
+        <td>{{ user.basicDetails.selectedStates }}</td>
       </tr>
       <tr>
         <td>Relationship Status</td>
-        <td>{{ userData[index].basicDetails.relation_status }}</td>
+        <td>{{ user.basicDetails.relation_status }}</td>
       </tr>
       <tr>
         <td>Zip code</td>
-        <td>{{ userData[index].basicDetails.zipcode }}</td>
+        <td>{{ user.basicDetails.zipcode }}</td>
       </tr>
       <tr>
         <td>Date of Birth</td>
-        <td>{{ userData[index].basicDetails.dob }}</td>
+        <td>{{ user.basicDetails.dob }}</td>
       </tr>
 
-      <button class="edit-btn" @click="editUser(userData[index].id)">
-        Edit
-      </button>
-      <button class="delete-btn" @click="deleteUser(userData[index].id)">
-        Delete
-      </button>
+      <button class="edit-btn" @click="editUser(user.id)">Edit</button>
+      <button class="delete-btn" @click="deleteUser(user.id)">Delete</button>
     </table>
   </div>
 </template>
 
 <script>
 export default {
-  name: "displayData",
+  name: "jobApplicationList",
   data() {
     return {
       userData: [],
@@ -74,10 +70,9 @@ export default {
   methods: {
     editUser(uid) {
       this.editUserData = this.userData.filter((user) => user.id === uid);
-      console.log(this.editUserData);
+      console.log("editdata before send", this.editUserData);
       console.log(this.userData);
-      this.$emit("editUser", {
-        displayUser: true,
+      this.$emit("onUserEdit", {
         editData: this.editUserData,
       });
     },

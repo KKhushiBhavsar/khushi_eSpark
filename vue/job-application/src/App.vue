@@ -4,35 +4,35 @@
 
   <jobApplication
     v-if="displayForm"
-    @userData="userData"
+    @onUserAdd="onUserAdd"
     :editData="editData"
   />
-  <displayData v-else @editUser="editUser" />
+  <jobApplicationList v-else @onUserEdit="onUserEdit" />
 </template>
 
 <script>
-import displayData from "./components/displayData.vue";
-import jobApplication from "./components/jobApplication.vue";
+import jobApplication from "@/components/jobApplication.vue";
+import jobApplicationList from "@/components/jobApplicationList.vue";
 
 export default {
   name: "App",
   components: {
     jobApplication,
-    displayData,
+    jobApplicationList,
   },
   data() {
     return {
       displayForm: true,
-      editData: [],
+      editData: {},
     };
   },
   methods: {
-    userData(displayUser) {
-      this.displayForm = displayUser;
+    onUserAdd() {
+      this.displayForm = true;
       this.editData = [];
     },
-    editUser({ displayUser, editData }) {
-      this.displayForm = displayUser;
+    onUserEdit({ editData }) {
+      this.displayForm = true;
       this.editData = editData;
     },
   },
