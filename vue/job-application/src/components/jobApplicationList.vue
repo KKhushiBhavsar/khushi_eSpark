@@ -16,7 +16,7 @@
       </tr>
       <tr>
         <td>Address1</td>
-        <td>{{ user.basicDetails.address_one }}</td>
+        <td>{{ user.basicDetails.addressOne }}</td>
       </tr>
       <tr>
         <td>email</td>
@@ -28,7 +28,7 @@
       </tr>
       <tr>
         <td>City</td>
-        <td>{{ user.basicDetails.city }}</td>
+        <td>{{ user.basicDetails.selectedCity }}</td>
       </tr>
       <tr>
         <td>state</td>
@@ -36,7 +36,7 @@
       </tr>
       <tr>
         <td>Relationship Status</td>
-        <td>{{ user.basicDetails.relation_status }}</td>
+        <td>{{ user.basicDetails.relationStatus }}</td>
       </tr>
       <tr>
         <td>Zip code</td>
@@ -70,11 +70,7 @@ export default {
   methods: {
     editUser(uid) {
       this.editUserData = this.userData.filter((user) => user.id === uid);
-      console.log("editdata before send", this.editUserData);
-      console.log(this.userData);
-      this.$emit("onUserEdit", {
-        editData: this.editUserData,
-      });
+      this.$emit("onUserEdit", this.editUserData);
     },
     deleteUser(uid) {
       this.userData = this.userData.filter((user) => user.id !== uid);

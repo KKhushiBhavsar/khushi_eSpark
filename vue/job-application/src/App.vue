@@ -27,11 +27,11 @@ export default {
     };
   },
   methods: {
-    onUserAdd() {
-      this.displayForm = true;
+    onUserAdd(isDisplayForm) {
+      this.displayForm = isDisplayForm;
       this.editData = [];
     },
-    onUserEdit({ editData }) {
+    onUserEdit(editData) {
       this.displayForm = true;
       this.editData = editData;
     },
