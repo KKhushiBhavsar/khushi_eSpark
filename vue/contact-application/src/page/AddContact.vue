@@ -29,7 +29,8 @@ export default {
         contactNo: null,
         emailId: null,
         isFavorite: false,
-        favoriteContacts: [],
+        profileName: null,
+        callLogs: [],
       },
       addContactDetails: [],
     };
@@ -40,8 +41,8 @@ export default {
   },
   methods: {
     addContact() {
+      this.contactDetails.profileName = this.contactDetails.name.charAt(0);
       this.addContactDetails.push(this.contactDetails);
-      console.log(this.addContactDetails);
       localStorage.setItem(
         "contactDetails",
         JSON.stringify(this.addContactDetails)

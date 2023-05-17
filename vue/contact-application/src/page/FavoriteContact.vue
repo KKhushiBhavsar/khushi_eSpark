@@ -2,6 +2,7 @@
   <h1>Favorites</h1>
   <div class="parent-div">
     <div v-for="favorites in showFav" :key="favorites" class="card-component">
+      <p class="profile">{{ favorites.profileName }}</p>
       {{ favorites.name }}
       <button @click="removeFav(favorites.id)">Remove Favorite</button>
     </div>
@@ -18,12 +19,10 @@ export default {
   },
   methods: {
     removeFav(favId) {
-      console.log(favId);
       this.allContacts.find(
         (contact) => contact.id === favId
       ).isFavorite = false;
       localStorage.setItem("contactDetails", JSON.stringify(this.allContacts));
-      console.log(this.allContacts);
       this.showFav = this.allContacts.filter(
         (contacts) => contacts.isFavorite === true
       );
@@ -34,7 +33,6 @@ export default {
     this.showFav = this.allContacts.filter(
       (contacts) => contacts.isFavorite === true
     );
-    console.log("showFav", this.showFav);
   },
 };
 </script>
@@ -60,5 +58,16 @@ button {
 button:hover {
   background-color: red;
   color: white;
+}
+.profile {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  background: #512da8;
+  font-size: 35px;
+  color: #fff;
+  text-align: center;
+  line-height: 150px;
+  margin: 20px 0;
 }
 </style>

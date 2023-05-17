@@ -6,6 +6,7 @@
         :key="contacts.id"
         class="card-component"
       >
+        <p class="profile">{{ contacts.profileName }}</p>
         <p>Name: {{ contacts.name }}</p>
         <p>contact no: {{ contacts.contactNo }}</p>
         <img
@@ -24,6 +25,7 @@
   <div v-else>
     <div class="call-component">
       <p>On the call with:</p>
+
       {{ callLog.callerId }}
       {{ callLog.callDuration }}
       <button @click="endCall()">End Call</button>
@@ -33,17 +35,10 @@
 
 <script>
 export default {
-  created() {
-    this.allContacts = JSON.parse(localStorage.getItem("contactDetails")) || [];
-    this.favoriteContacts =
-      JSON.parse(localStorage.getItem("FavoriteContacts")) || [];
-    // console.log("allContacts", this.allContacts);
-  },
   name: "AllContacts",
   components: {},
   data() {
     return {
-      isAddContact: false,
       allContacts: [],
       showMoreDetails: false,
       timerSecond: 0,
@@ -53,6 +48,9 @@ export default {
         callDuration: null,
       },
     };
+  },
+  created() {
+    this.allContacts = JSON.parse(localStorage.getItem("contactDetails")) || [];
   },
   methods: {
     makeCall(callerId) {
@@ -67,21 +65,33 @@ export default {
     },
     endCall() {
       this.timerSecond = 0;
-      console.log("call log", this.callLog);
+      this.allContacts
+        .find((contact) => contact.id === this.callLog.callerId)
+        .callLogs.push(this.callLog);
+      localStorage.setItem("contactDetails", JSON.stringify(this.allContacts));
       this.showCall = false;
     },
     addToFavorite(contactId) {
-      console.log(contactId);
       this.allContacts.find(
         (contact) => contact.id === contactId
       ).isFavorite = true;
       localStorage.setItem("contactDetails", JSON.stringify(this.allContacts));
-      console.log(this.allContacts);
     },
   },
 };
 </script>
 <style scoped>
+.profile {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  background: #512da8;
+  font-size: 35px;
+  color: #fff;
+  text-align: center;
+  line-height: 150px;
+  margin: 20px 0;
+}
 img {
   width: 30px;
   margin: 10px;
