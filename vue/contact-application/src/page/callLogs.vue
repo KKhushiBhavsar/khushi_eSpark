@@ -8,7 +8,6 @@
 <script>
 export default {
   name: "callLogs",
-
   data() {
     return {
       allContacts: [],
