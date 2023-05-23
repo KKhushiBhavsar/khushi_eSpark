@@ -36,6 +36,7 @@ export default {
       allContacts: JSON.parse(localStorage.getItem("contactDetails")) || [],
       showMoreDetails: false,
       timerSecond: 0,
+      intervalID: null,
       showCall: false,
       callUserDetails: [],
       callLog: {
@@ -53,7 +54,7 @@ export default {
     makeCall(callerId) {
       this.showCall = true;
       this.timerSecond = 0;
-      setInterval(() => {
+      this.intervalID = setInterval(() => {
         this.timerSecond += 1;
         this.callLog.callDuration = this.timerSecond;
       }, 1000);
@@ -67,6 +68,7 @@ export default {
     },
     endCall() {
       this.timerSecond = 0;
+      clearInterval(this.intervalID);
       this.allContacts
         .find((contact) => contact.id === this.callLog.callerId)
         .callLogs.push(this.callLog);
