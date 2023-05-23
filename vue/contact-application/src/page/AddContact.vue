@@ -18,7 +18,9 @@
     <button @click="addContact()">+SAVE</button>
   </div>
 </template>
+
 <script>
+import router from "@/routes";
 export default {
   name: "AddContact",
   data() {
@@ -32,12 +34,9 @@ export default {
         profileName: null,
         callLogs: [],
       },
-      addContactDetails: [],
+      addContactDetails:
+        JSON.parse(localStorage.getItem("contactDetails")) || [],
     };
-  },
-  created() {
-    this.addContactDetails =
-      JSON.parse(localStorage.getItem("contactDetails")) || [];
   },
   methods: {
     addContact() {
@@ -47,26 +46,42 @@ export default {
         "contactDetails",
         JSON.stringify(this.addContactDetails)
       );
+      router.push({
+        name: "AllContacts",
+      });
     },
   },
 };
 </script>
+
 <style scoped>
+.parent-container {
+  margin: 30px auto;
+  width: 900px;
+  padding: 30px 0;
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
 input {
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
   width: 40%;
   height: 20px;
   margin: 10px;
   padding: 10px;
 }
+
 button {
+  padding: 10px;
+  font-size: 1.2rem;
+  font-weight: 600;
   margin: 10px;
-  background-color: white;
-  color: black;
-  border: 2px solid green;
-  padding: 10px 20px;
-  text-align: center;
-  text-decoration: none;
-  display: inline-block;
+  border: none;
+  border-radius: 2px;
+  color: green;
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
 }
 
 button:hover {

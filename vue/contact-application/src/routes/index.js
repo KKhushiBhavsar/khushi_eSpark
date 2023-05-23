@@ -3,25 +3,29 @@ import AllContacts from "@/page/AllContacts.vue";
 import AddContact from "@/page/AddContact.vue";
 import FavoriteContact from "@/page/FavoriteContact.vue";
 import callLogs from "@/page/callLogs.vue";
-
+import pageNotFound from "@/page/pageNotFound.vue";
 const routes = [
   {
     path: "/",
+    redirect: "/all-contacts",
+  },
+  {
+    path: "/all-contacts",
     name: "AllContacts",
     component: AllContacts,
   },
   {
-    path: "/AddContact",
+    path: "/add-contact",
     name: "AddContact",
     component: AddContact,
   },
   {
-    path: "/FavoriteContact",
+    path: "/favorite-contact",
     name: "FavoriteContact",
     component: FavoriteContact,
   },
   {
-    path: "/callLogs",
+    path: "/call-logs",
     name: "callLogs",
     beforeEnter(to, from, next) {
       const allContacts =
@@ -32,16 +36,22 @@ const routes = [
 
       if (IsCallLog.length === 0) {
         console.log(IsCallLog, "null");
+        alert("Empty call logs");
         next({
           name: "AllContacts",
         });
       } else {
         next(true);
 
-        console.log(IsCallLog, "true");
+        // console.log(IsCallLog, "true");
       }
     },
     component: callLogs,
+  },
+  {
+    path: "/:pageNotFound(.*)",
+    name: "pageNotFound",
+    component: pageNotFound,
   },
 ];
 

@@ -1,11 +1,10 @@
 <template>
-  <!-- <button @click="$router.push('AddContact')">AddContact</button> -->
-  <!-- <button @click="$router.push('/')">All Contact</button> -->
-  <!-- <button @click="$router.push('/FavoriteContact')">Favorites</button> -->
-  <router-link to="/">All contacts</router-link>
-  <router-link to="/AddContact">AddContact</router-link>
-  <router-link to="/FavoriteContact">FavoriteContact</router-link>
-  <router-link to="/callLogs">Call Logs</router-link>
+  <div class="nav-bar">
+    <router-link to="/">All contacts</router-link>
+    <router-link :to="{ name: 'AddContact' }">AddContact</router-link>
+    <router-link :to="{ name: 'FavoriteContact' }">FavoriteContact</router-link>
+    <router-link :to="{ name: 'callLogs' }">Call Logs</router-link>
+  </div>
 
   <router-view></router-view>
 </template>
@@ -19,19 +18,22 @@ export default {
 <style scoped>
 a:link,
 a:visited {
-  margin: 10px;
-  background-color: white;
-  color: black;
-  border: 2px solid green;
-  padding: 10px 20px;
-  text-align: center;
-  text-decoration: none;
-  display: inline-block;
+  padding: 10px;
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin: 50px;
+  border: none;
+  border-radius: 2px;
+  color: green;
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
 }
 
 a:hover,
 a:active {
   background-color: green;
   color: white;
+}
+.nav-bar {
+  /* background-color: green; */
 }
 </style>

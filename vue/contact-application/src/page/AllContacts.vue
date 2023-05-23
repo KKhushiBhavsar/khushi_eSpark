@@ -1,58 +1,55 @@
 <template>
   <div v-if="!showCall">
-    <div class="parent-container">
-      <div
-        v-for="contacts in allContacts"
-        :key="contacts.id"
-        class="card-component"
-      >
-        <p class="profile">{{ contacts.profileName }}</p>
-        <p>Name: {{ contacts.name }}</p>
-        <p>contact no: {{ contacts.contactNo }}</p>
-        <img
-          src="@/assets/callIcon.png"
-          alt="call"
-          @click="makeCall(contacts.id)"
-        />
-        <p v-if="showMoreDetails">emailId: {{ contacts.emailId }}</p>
-        <button @click="showMoreDetails = !showMoreDetails">
-          {{ showMoreDetails ? "Hide Details" : "Show Details" }}
-        </button>
-        <button @click="addToFavorite(contacts.id)">Add To Favorite</button>
-      </div>
-    </div>
+    <contactsCard
+      v-for="user in allContacts"
+      :key="user.id"
+      :user="user"
+      :isAddToFavorite="true"
+      @callUser="callUser"
+    />
   </div>
   <div v-else>
-    <div class="call-component">
-      <p>On the call with:</p>
-
-      {{ callLog.callerId }}
-      {{ callLog.callDuration }}
-      <button @click="endCall()">End Call</button>
+    <div class="outer">
+      <div class="main">
+        <p>On the call with:</p>
+        <p class="profile">{{ callUserDetails.profileName }}</p>
+        <label>UserName {{ callUserDetails.name }}</label
+        ><br />
+        {{ callLog.callDuration }}<br />
+        <button @click="endCall()">End Call</button>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
+import router from "@/routes";
+import contactsCard from "@/components/contactsCard.vue";
+
 export default {
   name: "AllContacts",
-  components: {},
+  components: {
+    contactsCard,
+  },
   data() {
     return {
-      allContacts: [],
+      allContacts: JSON.parse(localStorage.getItem("contactDetails")) || [],
       showMoreDetails: false,
       timerSecond: 0,
       showCall: false,
+      callUserDetails: [],
       callLog: {
         callerId: null,
         callDuration: null,
       },
     };
   },
-  created() {
-    this.allContacts = JSON.parse(localStorage.getItem("contactDetails")) || [];
-  },
   methods: {
+    callUser({ callerId, showCall }) {
+      this.callLog.callerId = callerId;
+      this.showCall = showCall;
+      this.makeCall(callerId);
+    },
     makeCall(callerId) {
       this.showCall = true;
       this.timerSecond = 0;
@@ -60,8 +57,13 @@ export default {
         this.timerSecond += 1;
         this.callLog.callDuration = this.timerSecond;
       }, 1000);
-      alert(callerId);
+      this.callUserDetails = this.allContacts.find(
+        (contact) => contact.id === this.callLog.callerId
+      );
+
       this.callLog.callerId = callerId;
+      console.log(this.callLog);
+      this.callLog.callDuration = this.timerSecond;
     },
     endCall() {
       this.timerSecond = 0;
@@ -76,11 +78,45 @@ export default {
         (contact) => contact.id === contactId
       ).isFavorite = true;
       localStorage.setItem("contactDetails", JSON.stringify(this.allContacts));
+      router.push({ name: "FavoriteContact" });
     },
   },
 };
 </script>
 <style scoped>
+.outer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  background-color: rgba(0, 0, 0, 0.6);
+  width: 100%;
+  height: 100vh;
+}
+.main {
+  font-size: 20px;
+  padding: 20px 30px;
+  background-color: rgb(194, 212, 240);
+  width: 400px;
+  height: 500px;
+  position: fixed;
+  /* box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px,
+    rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px,
+    rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px; */
+  top: 100px;
+  left: 500px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.26);
+  z-index: 100;
+}
+button {
+  padding: 10px;
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin: 50px;
+  border: none;
+  border-radius: 2px;
+  color: green;
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+}
 .profile {
   width: 150px;
   height: 150px;
@@ -91,36 +127,5 @@ export default {
   text-align: center;
   line-height: 150px;
   margin: 20px 0;
-}
-img {
-  width: 30px;
-  margin: 10px;
-  padding: 10px;
-}
-.card-component {
-  width: 30%;
-  text-align: center;
-  border: 1px solid black;
-  margin: 10px;
-  padding: 10px;
-}
-button {
-  margin: 10px;
-  background-color: white;
-  color: black;
-  border: 2px solid green;
-  padding: 10px 20px;
-  text-align: center;
-  text-decoration: none;
-  display: inline-block;
-}
-
-button:hover {
-  background-color: green;
-  color: white;
-}
-.call-component {
-  width: 30%;
-  border: 1px solid black;
 }
 </style>
