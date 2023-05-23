@@ -35,9 +35,11 @@ import router from "@/routes";
 export default {
   name: "contactsCard",
   props: {
-    user: Object,
-    isAddToFavorite: Boolean,
-    callLogs: Boolean,
+    user: {
+      type: Object,
+    },
+    isAddToFavorite: { type: Boolean },
+    callLogs: { type: Boolean },
   },
   data() {
     return {
