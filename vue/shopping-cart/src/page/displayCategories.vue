@@ -1,10 +1,7 @@
 <template>
   <div class="parent-container">
-    <ul v-for="category in subcategory" :key="category.id">
-      <!-- <router-link
-        :to="`/${category.name}/${category.sid}`" , params: {subcategoryProp: category.name}
-      > -->
-      <li class="img-item">
+    <ul v-for="category in subcategory" :key="category.sid">
+      <li class="img-item" @click="subCategory(category.name)">
         <div class="card-container">
           <div class="img-container">
             <img :src="category.img" class="img" />
@@ -14,27 +11,33 @@
           </div>
         </div>
       </li>
-      <!-- </router-link> -->
     </ul>
   </div>
 </template>
 <script>
 export default {
   name: "displayCategories",
-  data() {
-    return {
-      categories: this.$store.state.categories,
-      subCategories: this.$store.state.subCategories,
-      subcategory: null,
-    };
-  },
   props: {
     category: {
       type: String,
     },
   },
+  data() {
+    return {
+      categories: JSON.parse(localStorage.getItem("categories")),
+      subCategories: JSON.parse(localStorage.getItem("subCategories")),
+      subcategory: null,
+    };
+  },
+  methods: {
+    subCategory(categoryName) {
+      this.$router.push({
+        name: "subCategoryPage",
+        params: { category: this.category, subcategory: categoryName },
+      });
+    },
+  },
   created() {
-    console.log(this.$store.state.categories);
     console.log("category", this.category);
     const displayData = this.categories.find(
       (category) => category.name === this.category

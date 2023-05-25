@@ -31,6 +31,13 @@ export default {
             totalPayment: null,
           },
         ],
+        cart: [
+          {
+            productid: null,
+            productName: null,
+            date: null,
+          },
+        ],
       },
     };
   },

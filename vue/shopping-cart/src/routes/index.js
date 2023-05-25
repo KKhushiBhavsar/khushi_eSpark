@@ -4,6 +4,8 @@ import pageNotFound from "@/page/pageNotFound.vue";
 import homePage from "@/page/homePage.vue";
 import createAccount from "@/page/createAccount.vue";
 import displayCategories from "@/page/displayCategories.vue";
+import subCategoryPage from "@/page/subCategoryPage.vue";
+import productDetails from "@/page/productDetails.vue";
 const routes = [
   {
     path: "/",
@@ -30,6 +32,19 @@ const routes = [
     component: displayCategories,
     props: true,
   },
+  {
+    path: "/:category/:subcategory",
+    name: "subCategoryPage",
+    component: subCategoryPage,
+    props: true,
+  },
+  {
+    path: "/:category/:subcategory/:subcategoryItem",
+    name: "productDetails",
+    component: productDetails,
+    props: true,
+  },
+
   {
     path: "/create-account",
     name: "createAccount",

@@ -19,7 +19,7 @@
           /></router-link>
         </div>
         <div class="img-icon img2">
-          <img src="../assets/nav-icon2.svg" alt="icon2" />
+          <img src="../assets/nav-icon2.svg" alt="icon2" @click="showCart" />
         </div>
       </div>
       <div class="nav-bar-links">
@@ -46,10 +46,22 @@
       </div>
     </div>
   </div>
+  <cartComponent v-if="isShowCart" @closePopUpBox="closePopUpBox" />
 </template>
+
 <script>
+import cartComponent from "./cartComponent.vue";
+
 export default {
   name: "AppHeader",
+  components: {
+    cartComponent,
+  },
+  data() {
+    return {
+      isShowCart: false,
+    };
+  },
   methods: {
     renderClass(page) {
       // alert(page)
@@ -67,36 +79,48 @@ export default {
         alert("Logout");
       }
     },
+    showCart() {
+      this.isShowCart = !this.isShowCart;
+    },
+    closePopUpBox() {
+      this.isShowCart = false;
+    },
   },
 };
 </script>
+
 <style scoped>
 .nav-bar {
-  background: rgb(97, 95, 95);
+  background: rgb(160, 159, 159);
   margin: 0 auto;
   display: flex;
-  border: 1px solid green;
+  /* border: 2px solid black; */
   padding: 10px;
 }
+
 .img-icon {
   float: left;
   width: 35px;
   border-radius: 20px;
 }
+
 .img-logo,
 .search-bar {
   margin: 10px;
 }
+
 .img1 {
   margin-left: auto;
   margin-right: 10px;
 }
+
 #search {
   margin-left: 100px;
   padding: 10px;
   width: 20pc;
   border-radius: 29px;
 }
+
 .nav-bar-links {
   padding: 10px;
   background: green;
@@ -104,14 +128,17 @@ export default {
   display: flex;
   font-size: 20px;
 }
+
 .nav-contact-us {
   float: left;
   margin: auto;
 }
+
 .nav-contact {
   margin: 0 20px;
   cursor: pointer;
 }
+
 button {
   color: black;
   padding: 12px 20px;
