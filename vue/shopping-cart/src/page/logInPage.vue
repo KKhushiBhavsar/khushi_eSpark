@@ -23,21 +23,7 @@ export default {
         Id: Date.now().toString(36),
         emailId: null,
         password: null,
-        orders: [
-          {
-            productid: null,
-            productName: null,
-            date: null,
-            totalPayment: null,
-          },
-        ],
-        cart: [
-          {
-            productid: null,
-            productName: null,
-            date: null,
-          },
-        ],
+        orders: [],
       },
     };
   },

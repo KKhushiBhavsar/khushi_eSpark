@@ -44,7 +44,6 @@ const routes = [
     component: productDetails,
     props: true,
   },
-
   {
     path: "/create-account",
     name: "createAccount",

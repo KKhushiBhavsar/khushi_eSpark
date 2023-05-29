@@ -5,7 +5,8 @@
         <button @click="$emit('closePopUpBox')">X</button>
       </div>
       <h1>Cart</h1>
-      <ul v-for="product in cartDetails" :key="product.productId">
+      <!-- {{ cartData.cartDetails[0].productId }} -->
+      <ul v-for="product in cartData.cartDetails" :key="product">
         <li>
           <div class="img-product">
             <img :src="product.productName" alt="" />
@@ -20,12 +21,12 @@
               Remove
             </button>
           </div>
-          <div class="total">
-            <span><strong>Total</strong>{{ product.total }}</span>
-          </div>
         </li>
       </ul>
-      <button class="checkout">checkOut</button>
+      <div class="total">
+        <span><strong>Total</strong>{{ cartData.total }}</span>
+      </div>
+      <button class="checkout" @click="checkOutItem()">checkOut</button>
     </div>
   </div>
 </template>
@@ -35,7 +36,7 @@ export default {
   name: "cartComponent",
   data() {
     return {
-      cartDetails: JSON.parse(localStorage.getItem("productCart")),
+      cartData: JSON.parse(localStorage.getItem("productCart")),
       quantity: 1,
     };
   },
@@ -48,36 +49,64 @@ export default {
     decreaseQty(product) {
       //   console.log(this.cartProduct);
       //   console.log(product);
-      const indexProduct = this.cartProduct.findIndex(
+      const indexProduct = this.cartProduct.cartDetails.findIndex(
         (productItem) => productItem.productId === product.productId
       );
       //   console.log(indexProduct);
-      if (this.cartProduct[indexProduct].quantity > 1) {
-        this.cartProduct[indexProduct].quantity--;
+      if (this.cartProduct.cartDetails[indexProduct].quantity > 1) {
+        this.cartProduct.cartDetails[indexProduct].quantity--;
 
         localStorage.setItem("productCart", JSON.stringify(this.cartProduct));
       }
     },
     increaseQty(product) {
-      const indexProduct = this.cartProduct.findIndex(
+      console.log(product);
+      console.log(this.cartProduct.cartDetails);
+      const indexProduct = this.cartProduct.cartDetails.findIndex(
         (productItem) => productItem.productId === product.productId
       );
       //   if (this.cartProduct[indexProduct].quantity < 5) {
-      this.cartProduct[indexProduct].quantity++;
+      this.cartProduct.cartDetails[indexProduct].quantity++;
 
       localStorage.setItem("productCart", JSON.stringify(this.cartProduct));
       //   }
     },
     removeItemFromCart(product) {
       //   console.log(product);
-      const productIndex = this.cartProduct.findIndex(
+      const productIndex = this.cartProduct.cartDetails.findIndex(
         (productItem) => productItem.productId === product.productId
       );
       //   this.cartProduct.total -= product.price * quantity;
 
-      this.cartProduct.splice(productIndex, 1);
+      this.cartProduct.cartDetails.splice(productIndex, 1);
 
       localStorage.setItem("productCart", JSON.stringify(this.cartProduct));
+    },
+    checkOutItem() {
+      const loggedInUser = JSON.parse(localStorage.getItem("loginUser"));
+      if (!loggedInUser) {
+        alert("You need to logIN first for checkOut");
+      } else {
+        console.log("loggedInUser", loggedInUser.orders);
+        loggedInUser.orders.push(this.cartProduct.cartDetails);
+
+        const checkOutCartData =
+          JSON.parse(localStorage.getItem("checkOutDetails")) ?? [];
+        console.log(checkOutCartData);
+        checkOutCartData.push({
+          userId: null,
+          checkedOutItems: this.cartProduct,
+          checkOutTime: new Date(),
+        });
+        localStorage.setItem(
+          "checkOutDetails",
+          JSON.stringify(checkOutCartData)
+        );
+        this.cartData.total = 0;
+        this.cartData.cartDetails = [];
+        localStorage.setItem("loginUser", JSON.stringify(loggedInUser));
+        localStorage.setItem("productCart", JSON.stringify(this.cartData));
+      }
     },
   },
 };

@@ -6,38 +6,30 @@ const store = createStore({
   },
   mutations: {
     addToCart(state, product) {
-      //   console.log("stateData", state.cartProduct);
+      // console.log("cartProduct", state.cartProduct.cartDetails[0].productId);
       if (!state.cartProduct) {
-        state.cartProduct = [
-          {
-            userId: null,
-            productId: product.sid,
-            productName: product.img,
-            price: product.price,
-            quantity: 1,
-            total: product.price,
-          },
-        ];
+        state.cartProduct = {
+          total: 0,
+          userId: null,
+          cartDetails: [],
+        };
       } else {
         // console.log("after if", state.cartProduct[1]["0"].productId);
-        const indexForProduct = state.cartProduct.findIndex(
+        const indexForProduct = state.cartProduct.cartDetails.findIndex(
           (cartProduct) => cartProduct.productId === product.sid
         );
-
-        console.log(indexForProduct);
-        console.log(state.cartProduct);
+        // console.log(state.cartProduct.cartDetails);
         if (indexForProduct === -1) {
-          state.cartProduct.push({
-            userId: null,
+          state.cartProduct.cartDetails.push({
             productId: product.sid,
             productName: product.img,
             price: product.price,
             quantity: 1,
-            total: state.cartProduct[0].total + product.price,
           });
+          state.cartProduct.total = +product.price;
         } else {
-          state.cartProduct[indexForProduct].quantity++;
-          state.cartProduct[indexForProduct].total += product.price;
+          state.cartProduct.cartDetails[indexForProduct].quantity++;
+          state.cartProduct.total += product.price;
         }
       }
       localStorage.setItem("productCart", JSON.stringify(state.cartProduct));
