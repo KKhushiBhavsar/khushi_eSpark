@@ -1,22 +1,26 @@
 <template>
   <div class="parent-container">
-    <ul v-for="category in subcategory" :key="category.sid">
-      <li class="img-item" @click="subCategory(category.name)">
-        <div class="card-container">
-          <div class="img-container">
-            <img :src="category.img" class="img" />
-          </div>
-          <div class="text-item">
-            {{ category.name }}
-          </div>
-        </div>
-      </li>
-    </ul>
+    <commonCart v-for="category in subcategory" :key="category.sid">
+      <template v-slot:displayImage>
+        <img
+          :src="category.img"
+          class="img"
+          @click="setSubCategory(category.name)"
+        />
+      </template>
+      <template v-slot:displayDetails>
+        {{ category.name }}
+      </template>
+    </commonCart>
   </div>
 </template>
 <script>
+import commonCart from "@/components/commonCart.vue";
 export default {
   name: "displayCategories",
+  components: {
+    commonCart,
+  },
   props: {
     category: {
       type: String,
@@ -30,7 +34,7 @@ export default {
     };
   },
   methods: {
-    subCategory(categoryName) {
+    setSubCategory(categoryName) {
       this.$router.push({
         name: "subCategoryPage",
         params: { category: this.category, subcategory: categoryName },

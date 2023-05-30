@@ -41,25 +41,36 @@
           <span class="nav-contact">Repair</span>
           <span class="nav-contact">Commercial</span>
           <span class="nav-contact">Our Stores</span>
+          <button class="nav-contact logout" @click="userPurchaseHistory">
+            Purchase History
+          </button>
           <button class="nav-contact logout" @click="logOutUser">LogOut</button>
         </div>
       </div>
     </div>
   </div>
   <cartComponent v-if="isShowCart" @closePopUpBox="closePopUpBox" />
+  <userHistory
+    v-if="isShowHistory"
+    @closeHistoryComponent="closeHistoryComponent"
+  />
 </template>
 
 <script>
 import cartComponent from "./cartComponent.vue";
+import userHistory from "./userHistory.vue";
 
 export default {
   name: "AppHeader",
   components: {
     cartComponent,
+    userHistory,
   },
   data() {
     return {
       isShowCart: false,
+      logInUser: JSON.parse(localStorage.getItem("loginUser")),
+      isShowHistory: false,
     };
   },
   methods: {
@@ -71,7 +82,7 @@ export default {
       });
     },
     logOutUser() {
-      const isUserLoggedIn = JSON.parse(localStorage.getItem("loginUser"));
+      const isUserLoggedIn = this.logInUser;
       if (!isUserLoggedIn) {
         alert("not logged in");
       } else {
@@ -79,11 +90,22 @@ export default {
         alert("Logout");
       }
     },
+    userPurchaseHistory() {
+      const isUserLoggedIn = this.logInUser;
+      if (!isUserLoggedIn) {
+        alert("not logged in");
+      } else {
+        this.isShowHistory = true;
+      }
+    },
     showCart() {
       this.isShowCart = !this.isShowCart;
     },
     closePopUpBox() {
       this.isShowCart = false;
+    },
+    closeHistoryComponent() {
+      this.isShowHistory = false;
     },
   },
 };

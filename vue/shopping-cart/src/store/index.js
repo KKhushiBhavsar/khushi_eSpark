@@ -29,7 +29,7 @@ const store = createStore({
           state.cartProduct.total = +product.price;
         } else {
           state.cartProduct.cartDetails[indexForProduct].quantity++;
-          state.cartProduct.total += product.price;
+          state.cartProduct.total += +product.price;
         }
       }
       localStorage.setItem("productCart", JSON.stringify(state.cartProduct));

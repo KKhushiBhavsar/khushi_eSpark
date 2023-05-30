@@ -55,7 +55,7 @@ export default {
       //   console.log(indexProduct);
       if (this.cartProduct.cartDetails[indexProduct].quantity > 1) {
         this.cartProduct.cartDetails[indexProduct].quantity--;
-
+        this.cartProduct.total -= +product.price;
         localStorage.setItem("productCart", JSON.stringify(this.cartProduct));
       }
     },
@@ -67,6 +67,7 @@ export default {
       );
       //   if (this.cartProduct[indexProduct].quantity < 5) {
       this.cartProduct.cartDetails[indexProduct].quantity++;
+      this.cartProduct.total += +product.price;
 
       localStorage.setItem("productCart", JSON.stringify(this.cartProduct));
       //   }
@@ -76,7 +77,7 @@ export default {
       const productIndex = this.cartProduct.cartDetails.findIndex(
         (productItem) => productItem.productId === product.productId
       );
-      //   this.cartProduct.total -= product.price * quantity;
+      // this.cartProduct.total -= product.price * quantity;
 
       this.cartProduct.cartDetails.splice(productIndex, 1);
 

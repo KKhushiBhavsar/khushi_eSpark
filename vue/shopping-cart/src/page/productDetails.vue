@@ -1,31 +1,34 @@
 <template>
   <h1>productDetails</h1>
-
-  <div class="card-container">
-    <div class="img-container">
+  <commonCart>
+    <template v-slot:displayImage>
       <img :src="productDetail.img" class="img" />
-    </div>
-    <div class="text-item">
-      <span>{{ this.subcategory }}</span>
-    </div>
-    <div class="text-item">
-      <span>Description</span>
-      {{ productDetail.description }}
-    </div>
-    <div class="text-item">
-      <span> Price </span>
-      {{ productDetail.price }}
-    </div>
-    <div class="text-item">
-      <span> Ratings </span>
-      {{ productDetail.rating }}
-    </div>
-    <button @click="addToCart(productDetail)">Add To Cart</button>
-  </div>
+    </template>
+    <template v-slot:displayDetails>
+      <div class="text-item">
+        <span>Description</span>
+        {{ productDetail.description }}
+      </div>
+      <div class="text-item">
+        <span> Price </span>
+        {{ productDetail.price }}
+      </div>
+      <div class="text-item">
+        <span> Ratings </span>
+        {{ productDetail.rating }}
+      </div>
+      <button @click="addToCart(productDetail)">Add To Cart</button>
+    </template>
+  </commonCart>
 </template>
 <script>
+import commonCart from "@/components/commonCart.vue";
+
 export default {
   name: "productDetails",
+  components: {
+    commonCart,
+  },
   props: {
     category: {
       type: String,

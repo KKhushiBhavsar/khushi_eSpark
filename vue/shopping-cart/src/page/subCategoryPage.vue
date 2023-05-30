@@ -1,38 +1,45 @@
 <template>
   <div class="parent-container">
-    <ul v-for="subcategory in subCategoryItemList" :key="subcategory.sid">
-      <li class="img-item">
-        <div class="card-container">
-          <div @click="showProductDetails(subcategory.sitem)">
-            <div class="img-container">
-              <img :src="subcategory.img" class="img" />
-            </div>
-            <div class="text-item">
-              <span>{{ this.subcategory }}</span>
-            </div>
-            <div class="text-item">
-              <span>Description</span>
-              {{ subcategory.description }}
-            </div>
-            <div class="text-item">
-              <span> Price </span>
-              {{ subcategory.price }}
-            </div>
-            <div class="text-item">
-              <span> Ratings </span>
-              {{ subcategory.rating }}
-            </div>
-          </div>
-          <button @click="addToCart(subcategory)">Add To Cart</button>
+    <commonCart
+      v-for="subcategory in subCategoryItemList"
+      :key="subcategory.sid"
+    >
+      <template v-slot:displayImage>
+        <img
+          :src="subcategory.img"
+          class="img"
+          @click="showProductDetails(subcategory.sitem)"
+        />
+      </template>
+      <template v-slot:displayDetails>
+        <div class="text-item">
+          <span>{{ this.subcategory }}</span>
         </div>
-      </li>
-    </ul>
+        <div class="text-item">
+          <span>Description</span>
+          {{ subcategory.description }}
+        </div>
+        <div class="text-item">
+          <span> Price </span>
+          {{ subcategory.price }}
+        </div>
+        <div class="text-item">
+          <span> Ratings </span>
+          {{ subcategory.rating }}
+        </div>
+        <button @click="addToCart(subcategory)">Add To Cart</button>
+      </template>
+    </commonCart>
   </div>
 </template>
 
 <script>
+import commonCart from "@/components/commonCart.vue";
 export default {
   name: "subCategoryPage",
+  components: {
+    commonCart,
+  },
   props: {
     category: {
       type: String,
