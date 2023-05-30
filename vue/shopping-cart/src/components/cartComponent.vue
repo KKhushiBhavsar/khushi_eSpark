@@ -113,7 +113,7 @@ export default {
 </script>
 
 <style scoped>
-/* .parent-container {
+.parent-container {
   border: 1px solid black;
   position: fixed;
   top: 0;
@@ -124,6 +124,7 @@ export default {
 }
 
 .cart-container {
+  overflow: auto;
   border-radius: 10px;
   padding: 20px 30px;
   background-color: lightslategray;
@@ -139,7 +140,7 @@ export default {
   z-index: 100;
   color: black;
   font-weight: bolder;
-} */
+}
 
 button {
   padding: 13px;

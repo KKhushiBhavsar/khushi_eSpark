@@ -1,6 +1,7 @@
 <template>
   <h1>sellProductList</h1>
   <div class="parent-container">
+    <div class="sell-container">Sell Will End IN {{ sellTimer }}</div>
     <ul v-for="saleProducts in saleProductList" :key="saleProducts.sid">
       <li class="img-item">
         <div class="card-container">
@@ -31,6 +32,11 @@ export default {
       saleProductList: [],
     };
   },
+  props: {
+    sellTimer: {
+      type: String,
+    },
+  },
   methods: {
     showProductDetails(sid) {
       console.log(sid);
@@ -59,6 +65,14 @@ export default {
 <style scoped>
 span {
   font-weight: bold;
+}
+.sell-container {
+  width: 100%;
+  padding: 10px;
+  color: #f2f2f2;
+  /* font-family: ui-monospace; */
+  font-size: larger;
+  background-color: green;
 }
 
 .img {
