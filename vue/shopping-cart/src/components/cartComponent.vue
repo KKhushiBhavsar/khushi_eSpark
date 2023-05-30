@@ -36,7 +36,7 @@ export default {
   name: "cartComponent",
   data() {
     return {
-      cartData: JSON.parse(localStorage.getItem("productCart")),
+      cartData: JSON.parse(localStorage.getItem("productCart")) || [],
       quantity: 1,
     };
   },
@@ -86,7 +86,7 @@ export default {
     checkOutItem() {
       const loggedInUser = JSON.parse(localStorage.getItem("loginUser"));
       if (!loggedInUser) {
-        alert("You need to logIN first for checkOut");
+        // alert("You need to logIN first for checkOut");
       } else {
         console.log("loggedInUser", loggedInUser.orders);
         loggedInUser.orders.push(this.cartProduct.cartDetails);

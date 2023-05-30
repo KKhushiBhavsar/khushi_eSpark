@@ -53,9 +53,8 @@ export default {
   },
   created() {
     // const trendingProductList = {};
-    const allCheckoutProducts = JSON.parse(
-      localStorage.getItem("checkOutDetails")
-    );
+    const allCheckoutProducts =
+      JSON.parse(localStorage.getItem("checkOutDetails")) || [];
     console.log("allCheckoutProducts", allCheckoutProducts);
     // allCheckoutProducts.forEach((trendingProduct) => {
     //   trendingProduct.checkedOutItems.cartDetails.forEach((product) => {

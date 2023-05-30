@@ -1,8 +1,7 @@
 <template>
-  <h1>sellProductList</h1>
   <div class="parent-container">
     <div class="sell-container">Sell Will End IN {{ sellTimer }}</div>
-    <ul v-for="saleProducts in saleProductList" :key="saleProducts.sid">
+    <ul v-for="saleProducts in saleProductList" :key="saleProducts">
       <li class="img-item">
         <div class="card-container">
           <div @click="showProductDetails(saleProducts.sid)">
@@ -51,14 +50,19 @@ export default {
     },
   },
   created() {
-    const allProduct = JSON.parse(localStorage.getItem("subCategoriesItems"));
+    const allProduct =
+      JSON.parse(localStorage.getItem("subCategoriesItems")) || [];
     console.log("subCategoriesItems", allProduct);
-    for (let index = 0; index < 5; index++) {
-      const randomProduct = Math.floor(Math.random() * allProduct.length);
-      console.log("randomProduct", randomProduct);
-      this.saleProductList.push(allProduct[randomProduct]);
+    if (allProduct.length === 0) {
+      console.log("no data found");
+    } else {
+      for (let index = 0; index < 5; index++) {
+        const randomProduct = Math.floor(Math.random() * allProduct.length);
+        console.log("randomProduct", randomProduct);
+        this.saleProductList.push(allProduct[randomProduct]);
+      }
+      console.log("saleProductList", this.saleProductList);
     }
-    console.log("saleProductList", this.saleProductList);
   },
 };
 </script>
@@ -67,11 +71,12 @@ span {
   font-weight: bold;
 }
 .sell-container {
+  text-align: center;
   width: 100%;
   padding: 10px;
   color: #f2f2f2;
   /* font-family: ui-monospace; */
-  font-size: larger;
+  font-size: 30px;
   background-color: green;
 }
 

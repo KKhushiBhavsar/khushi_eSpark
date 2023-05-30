@@ -1,69 +1,69 @@
 <template>
-  <AppHeader />
+  <appHeader />
   <router-view />
   <trendingProducts />
   <sellProductList v-if="isSaleOn" :sellTimer="timerCount" />
-  <AppFooter />
+  <appFooter />
 </template>
 
 <script>
-import AppHeader from "@/components/AppHeader.vue";
-import AppFooter from "@/components/AppFooter.vue";
 import trendingProducts from "@/components/trendingProducts.vue";
 import sellProductList from "@/components/sellProductList.vue";
+import appHeader from "@/components/appHeader.vue";
+import appFooter from "@/components/appFooter.vue";
 
 export default {
   name: "App",
   components: {
-    AppHeader,
-    AppFooter,
     trendingProducts,
     sellProductList,
+    appHeader,
+    appFooter,
   },
-  created() {
-    this.countDownTimer();
-  },
+  // created() {
+  //   this.countDownTimer();
+  // },
   data() {
     return {
       // categories: [
       //   {
       //     id: 1,
-      //     name: "imageAndSound",
+      //     name: "image-sound",
       //     text: "Image & Sound",
       //     alt: "Image & Sound",
       //     img: require("@/assets/imageSound.png"),
       //   },
       //   {
       //     id: 2,
-      //     name: "ComputersAndTablets",
+      //     name: "computers-tablets",
       //     text: "Computers & Tablets",
       //     alt: "Computers & Tablets",
       //     img: require("@/assets/computer.png"),
       //   },
       //   {
       //     id: 3,
-      //     name: "HouseHoldAndLiving",
+      //     name: "houseHold-living",
       //     text: "HouseHold & Living",
       //     alt: "HouseHold & Living",
       //     img: require("@/assets/houseHold.png"),
       //   },
       //   {
       //     id: 4,
-      //     name: "AppKitchen",
+      //     name: "app-kitchen",
       //     text: "kitchen",
       //     alt: "kitchen",
       //     img: require("@/assets/kitchen.png"),
       //   },
       //   {
       //     id: 5,
-      //     name: "SportAndcare",
+      //     name: "sports-care",
       //     text: "Sport & care",
       //     alt: "Sport & care",
       //     img: require("@/assets/sportsAndCare.png"),
       //   },
       //   {
       //     id: 6,
-      //     name: "AllCategories",
+      //     name: "all-categories",
       //     text: "All Categories",
       //     alt: "All Categories",
       //     img: require("@/assets/allCategories.png"),
@@ -79,13 +79,13 @@ export default {
       //   {
       //     sid: 2,
       //     categoryId: 1,
-      //     name: "television Accessories",
+      //     name: "television-accessories",
       //     img: require("@/assets/imageAndSound/accessories.jpeg"),
       //   },
       //   {
       //     sid: 3,
       //     categoryId: 1,
-      //     name: "home Cinema",
+      //     name: "home-cinema",
       //     img: require("@/assets/imageAndSound/homeCinema.jpeg"),
       //   },
       //   {
@@ -97,7 +97,7 @@ export default {
       //   {
       //     sid: 5,
       //     categoryId: 1,
-      //     name: "hifi & personal audio",
+      //     name: "hifi-personal-audio",
       //     img: require("@/assets/imageAndSound/speakers.png"),
       //   },
       //   {
@@ -115,7 +115,7 @@ export default {
       //   {
       //     sid: 8,
       //     categoryId: 2,
-      //     name: "Ereaders",
+      //     name: "ereaders",
       //     img: require("@/assets/computers/Ereaders.jpeg"),
       //   },
       //   {
@@ -133,7 +133,7 @@ export default {
       //   {
       //     sid: 11,
       //     categoryId: 2,
-      //     name: "networks & routers",
+      //     name: "networks-routers",
       //     img: require("@/assets/computers/routers.jpeg"),
       //   },
       //   {
@@ -145,25 +145,25 @@ export default {
       //   {
       //     sid: 13,
       //     categoryId: 2,
-      //     name: "storage & memory",
+      //     name: "storage-memory",
       //     img: require("@/assets/computers/storage.jpeg"),
       //   },
       //   {
       //     sid: 14,
       //     categoryId: 3,
-      //     name: "washing machine",
+      //     name: "washing-machine",
       //     img: require("@/assets/household/washingmachine.jpeg"),
       //   },
       //   {
       //     sid: 15,
       //     categoryId: 3,
-      //     name: "clothes dryer",
+      //     name: "clothes-dryer",
       //     img: require("@/assets/household/clothdryer.jpeg"),
       //   },
       //   {
       //     sid: 16,
       //     categoryId: 3,
-      //     name: "vaccum cleaners",
+      //     name: "vaccum-cleaners",
       //     img: require("@/assets/household/vaccumcleaner.jpeg"),
       //   },
       //   {
@@ -175,7 +175,7 @@ export default {
       //   {
       //     sid: 18,
       //     categoryId: 3,
-      //     name: "smart homes",
+      //     name: "smart-homes",
       //     img: require("@/assets/household/smarthome.jpeg"),
       //   },
       //   {
@@ -187,7 +187,7 @@ export default {
       //   {
       //     sid: 20,
       //     categoryId: 3,
-      //     name: "climate control",
+      //     name: "climate-control",
       //     img: require("@/assets/household/klimaatbeheersing.jpg"),
       //   },
       //   {
@@ -199,97 +199,97 @@ export default {
       //   {
       //     sid: 22,
       //     categoryId: 4,
-      //     name: "Freezers",
+      //     name: "freezers",
       //     img: require("@/assets/kitchen/vriezers.jpg"),
       //   },
       //   {
       //     sid: 23,
       //     categoryId: 4,
-      //     name: "Coffee",
+      //     name: "coffee",
       //     img: require("@/assets/kitchen/JuraZ10.jpg"),
       //   },
       //   {
       //     sid: 24,
       //     categoryId: 4,
-      //     name: "Microwaves & Ovens",
+      //     name: "microwaves-ovens",
       //     img: require("@/assets/kitchen/magnetrons.jpg"),
       //   },
       //   {
       //     sid: 25,
       //     categoryId: 4,
-      //     name: "Hobs & Cookers",
+      //     name: "hobs-cookers",
       //     img: require("@/assets/kitchen/kookplaten.jpg"),
       //   },
       //   {
       //     sid: 26,
       //     categoryId: 4,
-      //     name: "Kitchen machines & mixers",
+      //     name: "kitchen-machines-mixers",
       //     img: require("@/assets/kitchen/keukenmachine.jpg"),
       //   },
       //   {
       //     sid: 27,
       //     categoryId: 4,
-      //     name: "Juices & Drinks",
+      //     name: "juices-drinks",
       //     img: require("@/assets/kitchen/sappen.jpg"),
       //   },
       //   {
       //     sid: 28,
       //     categoryId: 4,
-      //     name: "Deep frying",
+      //     name: "deep-frying",
       //     img: require("@/assets/kitchen/frituren.jpg"),
       //   },
       //   {
       //     sid: 29,
       //     categoryId: 4,
-      //     name: "Waffle Irons & Gourmets",
+      //     name: "waffle-irons-gourmets",
       //     img: require("@/assets/kitchen/funcooking.jpg"),
       //   },
       //   {
       //     sid: 30,
       //     categoryId: 4,
-      //     name: "Kitchen appliances",
+      //     name: "kitchen-appliances",
       //     img: require("@/assets/kitchen/keukenapparaten.jpg"),
       //   },
       //   {
       //     sid: 31,
       //     categoryId: 4,
-      //     name: "Kitchenware",
+      //     name: "kitchenware",
       //     img: require("@/assets/kitchen/keukengerei.jpg"),
       //   },
       //   {
       //     sid: 32,
       //     categoryId: 4,
-      //     name: "Cooker hoods",
+      //     name: "cooker-hoods",
       //     img: require("@/assets/kitchen/afzuigkappen.jpg"),
       //   },
       //   {
       //     sid: 33,
       //     categoryId: 5,
-      //     name: "Shave",
+      //     name: "shave",
       //     img: require("@/assets/imageSound.png"),
       //   },
       //   {
       //     sid: 34,
       //     categoryId: 5,
-      //     name: "Hair removal",
+      //     name: "hair-removal",
       //     img: require("@/assets/imageSound.png"),
       //   },
       //   {
       //     sid: 35,
       //     categoryId: 5,
-      //     name: "Hair care",
+      //     name: "hair-care",
       //     img: require("@/assets/imageSound.png"),
       //   },
       //   {
       //     sid: 36,
       //     categoryId: 5,
-      //     name: "Oral care",
+      //     name: "oral-care",
       //     img: require("@/assets/imageSound.png"),
       //   },
       //   {
       //     sid: 37,
       //     categoryId: 5,
-      //     name: "Health",
+      //     name: "health",
       //     img: require("@/assets/imageSound.png"),
       //   },
       //   {
@@ -301,7 +301,7 @@ export default {
       //   {
       //     sid: 39,
       //     categoryId: 5,
-      //     name: "Baby stuff",
+      //     name: "baby-stuff",
       //     img: require("@/assets/imageSound.png"),
       //   },
       // ],

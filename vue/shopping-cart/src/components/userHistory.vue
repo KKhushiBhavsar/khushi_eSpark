@@ -33,23 +33,26 @@ export default {
   name: "userHistory",
   data() {
     return {
-      userOrders: JSON.parse(localStorage.getItem("loginUser")),
+      userOrders: JSON.parse(localStorage.getItem("loginUser")) || [],
       userOrderHistory: [],
       userProducts: [],
       subCheckout: [],
     };
   },
   created() {
-    this.userOrderHistory.push(this.userOrders.orders);
-    this.userOrderHistory.forEach((checkOutItems) => {
-      checkOutItems.forEach((products) => {
-        this.userProducts.push(products);
-        products.forEach((subCheckout) => {
-          this.subCheckout.push(subCheckout);
-          console.log("subCheckOut", subCheckout);
+    if (this.userOrders.length !== 0) {
+      this.userOrderHistory.push(this.userOrders.orders);
+      this.userOrderHistory.forEach((checkOutItems) => {
+        checkOutItems.forEach((products) => {
+          this.userProducts.push(products);
+          products.forEach((subCheckout) => {
+            this.subCheckout.push(subCheckout);
+            console.log("subCheckOut", subCheckout);
+          });
         });
       });
-    });
+    }
+
     // console.log("userOrderHistory", this.userOrderHistory);
     // console.log("userProducts", this.userProducts);
   },

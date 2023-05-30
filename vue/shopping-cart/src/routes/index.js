@@ -6,6 +6,8 @@ import createAccount from "@/page/createAccount.vue";
 import displayCategories from "@/page/displayCategories.vue";
 import subCategoryPage from "@/page/subCategoryPage.vue";
 import productDetails from "@/page/productDetails.vue";
+
+import isUserLoggedIn from "./routingGuards/loginUserGuard";
 const routes = [
   {
     path: "/",
@@ -16,15 +18,7 @@ const routes = [
     path: "/log-in",
     name: "logInPage",
     component: logInPage,
-    beforeEnter: (to, from, next) => {
-      const isUser = JSON.parse(localStorage.getItem("loginUser")) || [];
-      if (isUser.length === 0) {
-        next(true);
-      } else {
-        alert("user already logged in");
-        next(false);
-      }
-    },
+    beforeEnter: isUserLoggedIn,
   },
   {
     path: "/:category",

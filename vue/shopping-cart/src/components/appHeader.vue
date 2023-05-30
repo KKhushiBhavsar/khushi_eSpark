@@ -3,7 +3,7 @@
     <div class="header-child">
       <div class="nav-bar">
         <div class="img-logo">
-          <img src="../assets/logo.svg" alt="logo" />
+          <img src="../assets/logo.svg" alt="logo" @click="renderHomepage" />
         </div>
         <div class="search-bar">
           <input
@@ -23,9 +23,7 @@
         </div>
       </div>
       <div class="nav-bar-links">
-        <div class="menu-range">
-          <!-- <span @click="renderClass('AppAside')"> View Our Range</span> -->
-        </div>
+        <div class="menu-range"></div>
         <div class="nav-contact-us">
           <span class="nav-contact"
             ><img src="../assets/contact-nav.png" alt="" /> 124123423</span
@@ -33,11 +31,7 @@
           <span class="nav-contact"
             ><img src="../assets/wp-nav.png" alt="" /> WhatsApp</span
           >
-          <span class="nav-contact"
-            ><span @click="renderClass('CustomentService')"
-              >Customer Service</span
-            ></span
-          >
+          <span class="nav-contact"><span>Customer Service</span></span>
           <span class="nav-contact">Repair</span>
           <span class="nav-contact">Commercial</span>
           <span class="nav-contact">Our Stores</span>
@@ -69,34 +63,27 @@ export default {
   data() {
     return {
       isShowCart: false,
-      logInUser: JSON.parse(localStorage.getItem("loginUser")),
+      logInUser: JSON.parse(localStorage.getItem("loginUser")) || [],
       isShowHistory: false,
     };
   },
   methods: {
-    renderClass(page) {
-      // alert(page)
-      this.$emit("displayComponent", {
-        isShow: false,
-        container: page,
+    renderHomepage() {
+      this.$router.push({
+        name: "homePage",
       });
     },
     logOutUser() {
       const isUserLoggedIn = this.logInUser;
-      if (!isUserLoggedIn) {
-        alert("not logged in");
+      if ((isUserLoggedIn, length === 0)) {
+        // alert("not logged in");
       } else {
         localStorage.removeItem("loginUser");
-        alert("Logout");
+        // alert("Logout");
       }
     },
     userPurchaseHistory() {
-      const isUserLoggedIn = this.logInUser;
-      if (!isUserLoggedIn) {
-        alert("not logged in");
-      } else {
-        this.isShowHistory = true;
-      }
+      this.isShowHistory = true;
     },
     showCart() {
       this.isShowCart = !this.isShowCart;
