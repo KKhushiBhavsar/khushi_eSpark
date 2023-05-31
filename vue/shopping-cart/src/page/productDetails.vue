@@ -17,6 +17,7 @@
         <span> Ratings </span>
         {{ productDetail.rating }}
       </div>
+      <div v-if="productDetail.isSale" class="sale-product">On sale</div>
       <button @click="addToCart(productDetail)">Add To Cart</button>
     </template>
   </commonCart>
@@ -116,5 +117,9 @@ a {
 
 a:hover {
   color: green;
+}
+.sale-product {
+  color: green;
+  font-size: large;
 }
 </style>

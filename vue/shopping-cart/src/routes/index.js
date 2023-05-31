@@ -21,7 +21,7 @@ const routes = [
     beforeEnter: isUserLoggedIn,
   },
   {
-    path: "/:category",
+    path: "/category/:category",
     name: "displayCategories",
     component: displayCategories,
     props: true,

@@ -1,6 +1,6 @@
 <template>
   <div class="parent-container">
-    <div class="sell-container">Sell Will End IN {{ sellTimer }}</div>
+    <div class="sell-container">Sale Will End IN {{ timerCount }}</div>
     <ul v-for="saleProducts in saleProductList" :key="saleProducts">
       <li class="img-item">
         <div class="card-container">
@@ -16,6 +16,7 @@
               <span> Ratings </span>
               {{ saleProducts.rating }}
             </div>
+            <div v-if="saleProducts.isSale" class="sale-product">On Sale</div>
           </div>
           <button @click="addToCart(saleProducts)">Add To Cart</button>
         </div>
@@ -25,18 +26,24 @@
 </template>
 <script>
 export default {
-  name: "sellProductList",
+  name: "saleProductList",
   data() {
     return {
-      saleProductList: [],
+      isSaleOn: true,
+      timerCount: 3,
+      timeOutId: null,
     };
   },
   props: {
     sellTimer: {
-      type: String,
+      type: Number,
     },
   },
   methods: {
+    addToCart(product) {
+      console.log(product);
+      this.$store.dispatch("addProductToCart", product);
+    },
     showProductDetails(sid) {
       console.log(sid);
       // this.$router.push({
@@ -48,21 +55,28 @@ export default {
       //   },
       // });
     },
+    countDownTimer() {
+      if (this.timerCount > 0) {
+        this.timeOutId = setTimeout(() => {
+          this.timerCount -= 1;
+          this.countDownTimer();
+        }, 1000);
+      } else {
+        this.isSaleOn = false;
+        clearTimeout(this.timeOutId);
+        this.$store.dispatch("endSale");
+      }
+      this.$emit("isSaleOn", this.isSaleOn);
+    },
+  },
+  computed: {
+    saleProductList() {
+      return this.$store.getters.saleProducts;
+    },
   },
   created() {
-    const allProduct =
-      JSON.parse(localStorage.getItem("subCategoriesItems")) || [];
-    console.log("subCategoriesItems", allProduct);
-    if (allProduct.length === 0) {
-      console.log("no data found");
-    } else {
-      for (let index = 0; index < 5; index++) {
-        const randomProduct = Math.floor(Math.random() * allProduct.length);
-        console.log("randomProduct", randomProduct);
-        this.saleProductList.push(allProduct[randomProduct]);
-      }
-      console.log("saleProductList", this.saleProductList);
-    }
+    this.countDownTimer();
+    this.$store.dispatch("startSale");
   },
 };
 </script>
@@ -129,5 +143,9 @@ a {
 
 a:hover {
   color: green;
+}
+.sale-product {
+  color: green;
+  font-size: large;
 }
 </style>

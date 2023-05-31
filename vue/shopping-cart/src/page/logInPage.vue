@@ -27,10 +27,23 @@ export default {
       },
     };
   },
+  computed: {
+    userCredentials() {
+      return this.$store.getters.user;
+    },
+  },
   methods: {
     logIn() {
+      this.userCredentials.forEach((user) => {
+        console.log(user);
+        if (
+          user.email === this.logInUser.emailId &&
+          user.password === this.logInUser.password
+        ) {
+          router.push({ name: "homePage" });
+        }
+      });
       localStorage.setItem("loginUser", JSON.stringify(this.logInUser));
-      router.push({ name: "homePage" });
     },
   },
 };

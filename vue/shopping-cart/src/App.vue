@@ -1,28 +1,25 @@
 <template>
-  <appHeader />
+  <appHeader :isSaleOn="isSaleOn" />
   <router-view />
   <trendingProducts />
-  <sellProductList v-if="isSaleOn" :sellTimer="timerCount" />
+  <saleProductList v-if="isSaleOn" @isSaleOn="changeSale" />
   <appFooter />
 </template>
 
 <script>
 import trendingProducts from "@/components/trendingProducts.vue";
-import sellProductList from "@/components/sellProductList.vue";
 import appHeader from "@/components/appHeader.vue";
 import appFooter from "@/components/appFooter.vue";
+import saleProductList from "@/components/saleProductList.vue";
 
 export default {
   name: "App",
   components: {
     trendingProducts,
-    sellProductList,
     appHeader,
     appFooter,
+    saleProductList,
   },
-  // created() {
-  //   this.countDownTimer();
-  // },
   data() {
     return {
       // categories: [
@@ -36,6 +33,7 @@ export default {
       //   {
       //     id: 2,
       //     name: "computers-tablets",
+      //     isSale: false,
       //     text: "Computers & Tablets",
       //     alt: "Computers & Tablets",
       //     img: require("@/assets/computer.png"),
@@ -307,10 +305,11 @@ export default {
       // ],
       // subCategoriesItems: [
       //   {
-      //     sid: 1,
+      //     sid: 10,
       //     sitem: 1,
       //     img: require("@/assets/subcategories/televisies.png"),
       //     price: 10000,
+      //     isSale: false,
       //     rating: "4.4",
       //     description: "television description",
       //   },
@@ -319,6 +318,7 @@ export default {
       //     sitem: 2,
       //     img: require("@/assets/subcategories/televisies.png"),
       //     price: 10000,
+      //     isSale: false,
       //     rating: "4.4",
       //     description: "television description",
       //   },
@@ -327,6 +327,7 @@ export default {
       //     sitem: 1,
       //     img: require("@/assets/subcategories/televisies.png"),
       //     price: 20000,
+      //     isSale: false,
       //     rating: "3.5",
       //     description: "description",
       //   },
@@ -336,6 +337,7 @@ export default {
       //     sitem: 1,
       //     img: require("@/assets/subcategories/televisies.png"),
       //     price: 10000,
+      //     isSale: false,
       //     rating: "3.6",
       //     description: "description",
       //   },
@@ -344,6 +346,7 @@ export default {
       //     sitem: 1,
       //     img: require("@/assets/subcategories/televisies.png"),
       //     price: 10000,
+      //     isSale: false,
       //     rating: "4.0",
       //     description: "description",
       //   },
@@ -352,6 +355,7 @@ export default {
       //     sitem: 1,
       //     img: require("@/assets/subcategories/televisies.png"),
       //     price: 1000,
+      //     isSale: false,
       //     rating: "3.4",
       //     description: "description",
       //   },
@@ -360,6 +364,7 @@ export default {
       //     sitem: 1,
       //     img: require("@/assets/subcategories/televisies.png"),
       //     price: 19000,
+      //     isSale: false,
       //     rating: "3.6",
       //     description: "description",
       //   },
@@ -368,6 +373,7 @@ export default {
       //     sitem: 1,
       //     img: require("@/assets/subcategories/televisies.png"),
       //     price: 19000,
+      //     isSale: false,
       //     rating: "3.6",
       //     description: "description",
       //   },
@@ -376,6 +382,7 @@ export default {
       //     sitem: 1,
       //     img: require("@/assets/subcategories/televisies.png"),
       //     price: 19000,
+      //     isSale: false,
       //     rating: "3.6",
       //     description: "description",
       //   },
@@ -384,6 +391,7 @@ export default {
       //     sitem: 1,
       //     img: require("@/assets/subcategories/televisies.png"),
       //     price: 19000,
+      //     isSale: false,
       //     rating: "3.6",
       //     description: "description",
       //   },
@@ -392,6 +400,7 @@ export default {
       //     sitem: 1,
       //     img: require("@/assets/subcategories/televisies.png"),
       //     price: 19000,
+      //     isSale: false,
       //     rating: "3.6",
       //     description: "description",
       //   },
@@ -400,6 +409,7 @@ export default {
       //     sitem: 1,
       //     img: require("@/assets/subcategories/televisies.png"),
       //     price: 19000,
+      //     isSale: false,
       //     rating: "3.6",
       //     description: "description",
       //   },
@@ -408,6 +418,7 @@ export default {
       //     sitem: 1,
       //     img: require("@/assets/subcategories/televisies.png"),
       //     price: 19000,
+      //     isSale: false,
       //     rating: "3.6",
       //     description: "description",
       //   },
@@ -416,6 +427,7 @@ export default {
       //     sitem: 1,
       //     img: require("@/assets/subcategories/televisies.png"),
       //     price: 19000,
+      //     isSale: false,
       //     rating: "3.6",
       //     description: "description",
       //   },
@@ -424,6 +436,7 @@ export default {
       //     sitem: 1,
       //     img: require("@/assets/subcategories/televisies.png"),
       //     price: 19000,
+      //     isSale: false,
       //     rating: "3.6",
       //     description: "description",
       //   },
@@ -432,6 +445,7 @@ export default {
       //     sitem: 1,
       //     img: require("@/assets/subcategories/televisies.png"),
       //     price: 19000,
+      //     isSale: false,
       //     rating: "3.6",
       //     description: "description",
       //   },
@@ -440,6 +454,7 @@ export default {
       //     sitem: 1,
       //     img: require("@/assets/subcategories/televisies.png"),
       //     price: 19000,
+      //     isSale: false,
       //     rating: "3.6",
       //     description: "description",
       //   },
@@ -448,6 +463,7 @@ export default {
       //     sitem: 1,
       //     img: require("@/assets/subcategories/televisies.png"),
       //     price: 19000,
+      //     isSale: false,
       //     rating: "3.6",
       //     description: "description",
       //   },
@@ -456,6 +472,7 @@ export default {
       //     sitem: 1,
       //     img: require("@/assets/subcategories/televisies.png"),
       //     price: 19000,
+      //     isSale: false,
       //     rating: "3.6",
       //     description: "description",
       //   },
@@ -464,6 +481,7 @@ export default {
       //     sitem: 1,
       //     img: require("@/assets/subcategories/televisies.png"),
       //     price: 19000,
+      //     isSale: false,
       //     rating: "3.6",
       //     description: "description",
       //   },
@@ -472,6 +490,7 @@ export default {
       //     sitem: 1,
       //     img: require("@/assets/subcategories/televisies.png"),
       //     price: 19000,
+      //     isSale: false,
       //     rating: "3.6",
       //     description: "description",
       //   },
@@ -480,6 +499,7 @@ export default {
       //     sitem: 1,
       //     img: require("@/assets/subcategories/televisies.png"),
       //     price: 19000,
+      //     isSale: false,
       //     rating: "3.6",
       //     description: "description",
       //   },
@@ -488,6 +508,7 @@ export default {
       //     sitem: 1,
       //     img: require("@/assets/subcategories/televisies.png"),
       //     price: 19000,
+      //     isSale: false,
       //     rating: "3.6",
       //     description: "description",
       //   },
@@ -496,6 +517,7 @@ export default {
       //     sitem: 1,
       //     img: require("@/assets/subcategories/televisies.png"),
       //     price: 19000,
+      //     isSale: false,
       //     rating: "3.6",
       //     description: "description",
       //   },
@@ -504,6 +526,7 @@ export default {
       //     sitem: 1,
       //     img: require("@/assets/subcategories/televisies.png"),
       //     price: 19000,
+      //     isSale: false,
       //     rating: "3.6",
       //     description: "description",
       //   },
@@ -512,6 +535,7 @@ export default {
       //     sitem: 1,
       //     img: require("@/assets/subcategories/televisies.png"),
       //     price: 19000,
+      //     isSale: false,
       //     rating: "3.6",
       //     description: "description",
       //   },
@@ -520,6 +544,7 @@ export default {
       //     sitem: 1,
       //     img: require("@/assets/subcategories/televisies.png"),
       //     price: 19000,
+      //     isSale: false,
       //     rating: "3.6",
       //     description: "description",
       //   },
@@ -528,6 +553,7 @@ export default {
       //     sitem: 1,
       //     img: require("@/assets/subcategories/televisies.png"),
       //     price: 19000,
+      //     isSale: false,
       //     rating: "3.6",
       //     description: "description",
       //   },
@@ -536,6 +562,7 @@ export default {
       //     sitem: 1,
       //     img: require("@/assets/subcategories/televisies.png"),
       //     price: 19000,
+      //     isSale: false,
       //     rating: "3.6",
       //     description: "description",
       //   },
@@ -544,6 +571,7 @@ export default {
       //     sitem: 1,
       //     img: require("@/assets/subcategories/televisies.png"),
       //     price: 19000,
+      //     isSale: false,
       //     rating: "3.6",
       //     description: "description",
       //   },
@@ -552,6 +580,7 @@ export default {
       //     sitem: 1,
       //     img: require("@/assets/subcategories/televisies.png"),
       //     price: 19000,
+      //     isSale: false,
       //     rating: "3.6",
       //     description: "description",
       //   },
@@ -560,6 +589,7 @@ export default {
       //     sitem: 1,
       //     img: require("@/assets/subcategories/televisies.png"),
       //     price: 19000,
+      //     isSale: false,
       //     rating: "3.6",
       //     description: "description",
       //   },
@@ -568,6 +598,7 @@ export default {
       //     sitem: 1,
       //     img: require("@/assets/subcategories/televisies.png"),
       //     price: 19000,
+      //     isSale: false,
       //     rating: "3.6",
       //     description: "description",
       //   },
@@ -576,6 +607,7 @@ export default {
       //     sitem: 1,
       //     img: require("@/assets/subcategories/televisies.png"),
       //     price: 19000,
+      //     isSale: false,
       //     rating: "3.6",
       //     description: "description",
       //   },
@@ -584,6 +616,7 @@ export default {
       //     sitem: 1,
       //     img: require("@/assets/subcategories/televisies.png"),
       //     price: 19000,
+      //     isSale: false,
       //     rating: "3.6",
       //     description: "description",
       //   },
@@ -592,6 +625,7 @@ export default {
       //     sitem: 1,
       //     img: require("@/assets/subcategories/televisies.png"),
       //     price: 19000,
+      //     isSale: false,
       //     rating: "3.6",
       //     description: "description",
       //   },
@@ -600,6 +634,7 @@ export default {
       //     sitem: 1,
       //     img: require("@/assets/subcategories/televisies.png"),
       //     price: 19000,
+      //     isSale: false,
       //     rating: "3.6",
       //     description: "description",
       //   },
@@ -608,6 +643,7 @@ export default {
       //     sitem: 1,
       //     img: require("@/assets/subcategories/televisies.png"),
       //     price: 19000,
+      //     isSale: false,
       //     rating: "3.6",
       //     description: "description",
       //   },
@@ -616,6 +652,7 @@ export default {
       //     sitem: 1,
       //     img: require("@/assets/subcategories/televisies.png"),
       //     price: 19000,
+      //     isSale: false,
       //     rating: "3.6",
       //     description: "description",
       //   },
@@ -624,13 +661,30 @@ export default {
       //     sitem: 1,
       //     img: require("@/assets/subcategories/televisies.png"),
       //     price: 19000,
+      //     isSale: false,
       //     rating: "3.6",
       //     description: "description",
       //   },
       // ],
+      userCredentials: [
+        {
+          id: 1,
+          email: "user1",
+          password: "123",
+          isLogIn: false,
+          cartData: [],
+          orderHistory: [],
+        },
+        {
+          id: 2,
+          email: "user2",
+          password: "123",
+          isLogIn: false,
+          cartData: [],
+          orderHistory: [],
+        },
+      ],
       isSaleOn: true,
-      timerCount: 30,
-      timeOutId: null,
       productCart: {
         total: null,
         userId: null,
@@ -646,25 +700,15 @@ export default {
     };
   },
   methods: {
-    countDownTimer() {
-      if (this.timerCount > 0) {
-        this.timeOutId = setTimeout(() => {
-          this.timerCount -= 1;
-          this.countDownTimer();
-        }, 1000);
-      } else {
-        this.isSaleOn = false;
-        clearTimeout(this.timeOutId);
-      }
+    changeSale(isSale) {
+      this.isSaleOn = isSale;
     },
   },
-  // created() {
-  //   localStorage.setItem("categories", JSON.stringify(this.categories));
-  //   localStorage.setItem("subCategories", JSON.stringify(this.subCategories));
-  //   localStorage.setItem(
-  //     "subCategoriesItems",
-  //     JSON.stringify(this.subCategoriesItems)
-  //   );
-  // },
+  created() {
+    localStorage.setItem(
+      "userCredentials",
+      JSON.stringify(this.userCredentials)
+    );
+  },
 };
 </script>

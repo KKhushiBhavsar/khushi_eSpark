@@ -14,9 +14,11 @@
           />
         </div>
         <div class="img-icon img1">
-          <router-link :to="{ name: 'logInPage' }"
-            ><img src="../assets/nav-icon1.svg" alt="icon1"
-          /></router-link>
+          <div v-if="!isUserLogin">
+            <router-link :to="{ name: 'logInPage' }"
+              ><img src="../assets/nav-icon1.svg" alt="icon1"
+            /></router-link>
+          </div>
         </div>
         <div class="img-icon img2">
           <img src="../assets/nav-icon2.svg" alt="icon2" @click="showCart" />
@@ -29,8 +31,8 @@
             ><img src="../assets/contact-nav.png" alt="" /> 124123423</span
           >
           <span class="nav-contact"
-            ><img src="../assets/wp-nav.png" alt="" /> WhatsApp</span
-          >
+            ><img src="../assets/wp-nav.png" alt="" /> WhatsApp
+          </span>
           <span class="nav-contact"><span>Customer Service</span></span>
           <span class="nav-contact">Repair</span>
           <span class="nav-contact">Commercial</span>
@@ -38,10 +40,17 @@
           <button class="nav-contact logout" @click="userPurchaseHistory">
             Purchase History
           </button>
-          <button class="nav-contact logout" @click="logOutUser">LogOut</button>
+          <button
+            class="nav-contact logout"
+            @click="logOutUser"
+            v-if="isUserLogin"
+          >
+            LogOut
+          </button>
         </div>
       </div>
     </div>
+    <div v-if="isSaleOn" class="sale-component"><p>Sale is On !!!</p></div>
   </div>
   <cartComponent v-if="isShowCart" @closePopUpBox="closePopUpBox" />
   <userHistory
@@ -60,9 +69,15 @@ export default {
     cartComponent,
     userHistory,
   },
+  props: {
+    isSaleOn: {
+      type: Boolean,
+    },
+  },
   data() {
     return {
       isShowCart: false,
+      isUserLogin: JSON.parse(localStorage.getItem("loginUser")) ? true : false,
       logInUser: JSON.parse(localStorage.getItem("loginUser")) || [],
       isShowHistory: false,
     };
@@ -75,11 +90,12 @@ export default {
     },
     logOutUser() {
       const isUserLoggedIn = this.logInUser;
-      if ((isUserLoggedIn, length === 0)) {
+      if (isUserLoggedIn.length === 0) {
         // alert("not logged in");
       } else {
+        this.isUserLogin = false;
         localStorage.removeItem("loginUser");
-        // alert("Logout");
+        this.$router.push({ name: "homePage" });
       }
     },
     userPurchaseHistory() {
@@ -158,5 +174,14 @@ button {
 
 button:hover {
   background-color: #45a049;
+}
+.sale-component {
+  padding: 8px 550px;
+  margin: 10px 0;
+  text-align: center;
+  background: rgb(189, 211, 189);
+  color: black;
+  display: flex;
+  font-size: 20px;
 }
 </style>

@@ -1,6 +1,5 @@
 <template>
   <ul v-for="categories in category" :key="categories.id">
-    <!-- <router-link :to="`/${categories.name}`"> -->
     <li class="img-item">
       <router-link
         :to="{
@@ -14,7 +13,6 @@
         <div class="text-item">
           {{ categories.text }}
         </div>
-        <!-- </router-link> -->
       </router-link>
     </li>
   </ul>

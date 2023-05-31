@@ -20,10 +20,7 @@
           </div>
         </ul>
       </ul>
-      <div class="total">
-        <!-- <span><strong>Total</strong>{{ cartData.total }}</span> -->
-      </div>
-      <!-- <button class="checkout" @click="checkOutItem()">checkOut</button> -->
+      <div class="total"></div>
     </div>
   </div>
 </template>
@@ -33,28 +30,28 @@ export default {
   name: "userHistory",
   data() {
     return {
-      userOrders: JSON.parse(localStorage.getItem("loginUser")) || [],
+      user: JSON.parse(localStorage.getItem("loginUser")) || [],
       userOrderHistory: [],
       userProducts: [],
       subCheckout: [],
     };
   },
   created() {
-    if (this.userOrders.length !== 0) {
-      this.userOrderHistory.push(this.userOrders.orders);
-      this.userOrderHistory.forEach((checkOutItems) => {
-        checkOutItems.forEach((products) => {
-          this.userProducts.push(products);
-          products.forEach((subCheckout) => {
-            this.subCheckout.push(subCheckout);
-            console.log("subCheckOut", subCheckout);
+    if (this.user.length !== 0) {
+      const checkoutData = JSON.parse(localStorage.getItem("productCart"));
+      if (checkoutData !== null) {
+        this.userOrderHistory.push(this.user.orders);
+        this.userOrderHistory.forEach((checkOutItems) => {
+          checkOutItems.forEach((products) => {
+            this.userProducts.push(products);
+            products.forEach((subCheckout) => {
+              this.subCheckout.push(subCheckout);
+              console.log("subCheckOut", subCheckout);
+            });
           });
         });
-      });
+      }
     }
-
-    // console.log("userOrderHistory", this.userOrderHistory);
-    // console.log("userProducts", this.userProducts);
   },
 };
 </script>

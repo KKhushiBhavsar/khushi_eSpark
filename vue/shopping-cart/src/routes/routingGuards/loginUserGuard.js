@@ -6,5 +6,6 @@ const isUserLoggedIn = (to, from, next) => {
     // alert("user already logged in");
     next(false);
   }
+  // next(true);
 };
 module.exports = isUserLoggedIn;

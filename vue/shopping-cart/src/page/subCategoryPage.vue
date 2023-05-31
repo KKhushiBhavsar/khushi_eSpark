@@ -27,6 +27,7 @@
           <span> Ratings </span>
           {{ subcategory.rating }}
         </div>
+        <div v-if="subcategory.isSale" class="sale-product">On Sale</div>
         <button @click="addToCart(subcategory)">Add To Cart</button>
       </template>
     </commonCart>
@@ -139,5 +140,9 @@ a {
 
 a:hover {
   color: green;
+}
+.sale-product {
+  color: green;
+  font-size: large;
 }
 </style>

@@ -52,46 +52,19 @@ export default {
     },
   },
   created() {
-    // const trendingProductList = {};
-    const allCheckoutProducts =
-      JSON.parse(localStorage.getItem("checkOutDetails")) || [];
-    console.log("allCheckoutProducts", allCheckoutProducts);
-    // allCheckoutProducts.forEach((trendingProduct) => {
-    //   trendingProduct.checkedOutItems.cartDetails.forEach((product) => {
-    //     const isProductInList = this.trendingProducts.filter(
-    //       (productList) => productList.productId === product.productId
-    //     );
-    //     console.log(isProductInList);
-    //     if (isProductInList.length === 0) {
-    //       this.trendingProducts.push({
-    //         productId: product.productId,
-    //         quantity: product.quantity,
-    //       });
-    //     } else {
-    //       console.log("!!!!!!!", this.trendingProducts);
-    //     }
-    //   });
-    // });
-
-    const allCheckoutProduct = {};
-    allCheckoutProducts.forEach((product) => {
-      product.checkedOutItems.cartDetails.forEach((productCheckout) => {
-        if (!allCheckoutProduct["Product" + productCheckout.productId]) {
-          allCheckoutProduct["Product" + productCheckout.productId] =
-            productCheckout;
-        } else {
-          allCheckoutProduct["Product" + productCheckout.productId].quantity +=
-            productCheckout.quantity;
-        }
+    const checkoutData = JSON.parse(localStorage.getItem("productCart"));
+    if (checkoutData !== null) {
+      const allCheckoutProducts =
+        JSON.parse(localStorage.getItem("checkOutDetails")) || [];
+      console.log("allCheckoutProducts", allCheckoutProducts);
+      allCheckoutProducts.forEach((checkoutProducts) => {
+        checkoutProducts.checkedOutItems.forEach((checkedOutItems) => {
+          checkedOutItems.cartDetails.forEach((cartData) => {
+            this.trendingProducts.push(cartData);
+          });
+        });
       });
-    });
-    for (let x of Object.entries(allCheckoutProduct)) {
-      console.log(x);
-      this.trendingProducts.push(x[1]);
     }
-
-    console.log("!!!!!!!!!!!!!!!!!!", allCheckoutProduct);
-    console.log("trendingProducts", this.trendingProducts);
   },
 };
 </script>
