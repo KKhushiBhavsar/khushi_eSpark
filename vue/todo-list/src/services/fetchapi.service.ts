@@ -1,4 +1,9 @@
-import { axiosDelete, axiosGet, axiosPut } from "@/plugins/axios.plugin";
+import {
+  axiosDelete,
+  axiosGet,
+  axiosPost,
+  axiosPut,
+} from "@/plugins/axios.plugin";
 const url = "https://jsonplaceholder.typicode.com/todos/";
 export const FetchTodoList = () => {
   return axiosGet(url);
@@ -11,4 +16,7 @@ export const deleteTodoFromList = (listId: any) => {
 };
 export const updateTodo = (id: string, data: any) => {
   return axiosPut(url + id, data);
+};
+export const addTodoList = (data: any) => {
+  return axiosPost(url, data);
 };

@@ -14,4 +14,8 @@ export default {
   GET_VIEW_TODO_LIST(state: any, data: any) {
     state.viewTodo = data;
   },
+  ADD_TODO_LIST(state: any, data: any) {
+    state.todoList.push = data;
+    console.log(state.todoList);
+  },
 };

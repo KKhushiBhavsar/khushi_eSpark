@@ -12,4 +12,7 @@ export default {
   fetchviewTodoList(context: any, data: any) {
     context.commit("GET_VIEW_TODO_LIST", data);
   },
+  addIntoTodoList(context: any, data: any) {
+    context.commit("ADD_TODO_LIST", data);
+  },
 };
