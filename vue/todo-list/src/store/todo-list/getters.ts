@@ -1,11 +1,11 @@
 export default {
-  todoList(state: any) {
+  getTodoList(state: any) {
     return state.todoList;
   },
-  editTodo(state: any) {
+  getEditTodo(state: any) {
     return state.editTodo;
   },
-  viewTodo(state: any) {
+  getViewTodo(state: any) {
     return state.viewTodo;
   },
 };

@@ -2,10 +2,10 @@
   <h1>viewToDoPage</h1>
   <div class="card-container">
     <ul>
-      <li><span>userId: </span> {{ viewTodo?.userId }}</li>
-      <li><span>Id</span> {{ viewTodo?.id }}</li>
-      <li><span>Title</span> {{ viewTodo?.title }}</li>
-      <li><span>Completed</span> {{ viewTodo?.completed }}</li>
+      <li><span>userId: </span> {{ getViewTodo?.userId }}</li>
+      <li><span>Id</span> {{ getViewTodo?.id }}</li>
+      <li><span>Title</span> {{ getViewTodo?.title }}</li>
+      <li><span>Completed</span> {{ getViewTodo?.completed }}</li>
     </ul>
   </div>
 </template>
@@ -20,21 +20,15 @@ export default {
     };
   },
   computed: {
-    ...mapGetters("todoList", ["viewTodo"]),
+    ...mapGetters("todoList", ["getViewTodo"]),
   },
   methods: {
-    ...mapActions("todoList", ["getviewTodoList"]),
+    ...mapActions("todoList", ["fetchviewTodoList"]),
   },
-  //   created() {
-  //     console.log("list id", this.listId);
-  //     console.log("viewTodo", this.viewTodo);
-  //     this.getviewTodoList(this.listId);
-
-  //   },
   async created() {
     try {
       const response = await getSelectedToDoList(this.listId);
-      this.getviewTodoList(response.data);
+      this.fetchviewTodoList(response.data);
     } catch (error) {
       console.log(error);
       if (error.status === 500) {

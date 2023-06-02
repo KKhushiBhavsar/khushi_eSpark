@@ -1,7 +1,7 @@
 <template>
   <h1>To-Do list</h1>
   <div class="parent-container">
-    <ul v-for="list in todoList" :key="list.userId">
+    <ul v-for="list in getTodoList" :key="list.userId">
       <div class="card-container">
         <li><span>userId: </span>{{ list.userId }}</li>
         <li><span>Id</span>{{ list.id }}</li>
@@ -25,7 +25,7 @@ export default {
   async created() {
     try {
       const response = await FetchTodoList();
-      this.getTodoList(response.data);
+      this.fetchTodoList(response.data);
     } catch (error) {
       console.log(error);
       if (error.status === 500) {
@@ -41,13 +41,13 @@ export default {
     // );
   },
   computed: {
-    ...mapGetters("todoList", ["todoList"]),
+    ...mapGetters("todoList", ["getTodoList"]),
     // allTodoList() {
     //   return this.todoList;
     // },
   },
   methods: {
-    ...mapActions("todoList", ["getTodoList", "removeFromList"]),
+    ...mapActions("todoList", ["fetchTodoList", "removeFromList"]),
 
     editList(listId) {
       this.$router.push({
