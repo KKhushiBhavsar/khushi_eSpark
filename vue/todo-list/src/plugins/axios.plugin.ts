@@ -24,7 +24,10 @@ axios.interceptors.response.use(
     return Promise.reject(error);
   }
 );
-
+interface axiosInterface {
+  url: string;
+  data: any;
+}
 export const axiosGet = (url: string, data = {}, option = {}) => {
   return axios.get(url, data);
 };

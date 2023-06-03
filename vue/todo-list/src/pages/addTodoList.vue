@@ -36,7 +36,7 @@ export default {
         userId: null,
         id: null,
         title: null,
-        comppleted: null,
+        completed: null,
       },
     };
   },
@@ -52,13 +52,15 @@ export default {
     async addTodo() {
       try {
         const response = await addTodoList(this.addListItems);
-        // console.log("jfgdhfd", response);
-        if (response.status === 201) {
-          this.$router.push({
-            name: "allTodoList",
-          });
-        }
+        this.addIntoTodoList(this.addListItems);
+        console.log("jfgdhfd", response);
+        // if (response.status === 201) {
+        //   this.$router.push({
+        //     name: "allTodoList",
+        //   });
+        // }
       } catch (error) {
+        console.log(error);
         console.log(error);
         if (error.status === 500) {
           console.log("internal server error");
@@ -86,7 +88,7 @@ button {
   margin: 10px;
   padding: 10px;
   border-radius: 10px;
-  border: 1px soloid black;
+  border: 1px solid black;
   color: white;
   background-color: midnightblue;
 }

@@ -15,7 +15,7 @@ export default {
     state.viewTodo = data;
   },
   ADD_TODO_LIST(state: any, data: any) {
-    state.todoList.push = data;
-    console.log(state.todoList);
+    state.todoList.push(data);
+    console.log("add into todo", state.todoList);
   },
 };
