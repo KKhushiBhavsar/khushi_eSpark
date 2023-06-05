@@ -54,11 +54,11 @@ export default {
         const response = await addTodoList(this.addListItems);
         this.addIntoTodoList(this.addListItems);
         console.log("jfgdhfd", response);
-        // if (response.status === 201) {
-        //   this.$router.push({
-        //     name: "allTodoList",
-        //   });
-        // }
+        if (response.status === 201) {
+          this.$router.push({
+            name: "allTodoList",
+          });
+        }
       } catch (error) {
         console.log(error);
         console.log(error);

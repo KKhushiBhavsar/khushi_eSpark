@@ -16,7 +16,7 @@
 </template>
 <script>
 import { mapActions, mapGetters } from "vuex";
-import { FetchTodoList } from "@/services/fetchapi.service";
+import { FetchTodoList, deleteTodoFromList } from "@/services/fetchapi.service";
 export default {
   name: "allTodoList",
   data() {
@@ -65,35 +65,20 @@ export default {
         },
       });
     },
-    deleteFromList(listId) {
-      this.removeFromList(listId);
+    async deleteFromList(listId) {
+      try {
+        const response = await deleteTodoFromList(listId);
+        console.log(response);
+        if (response.status === 200) {
+          this.removeFromList(listId);
+        }
+      } catch (error) {
+        console.log(error);
+        if (error.status === 500) {
+          console.log("internal server error");
+        }
+      }
     },
   },
 };
 </script>
-<style scoped>
-ul {
-  list-style: none;
-}
-.card-container {
-  border: 1px solid midnightblue;
-  padding: 10px;
-  width: 50%;
-  margin: 10px;
-  border-radius: 10px;
-  font-size: 20px;
-  color: midnightblue;
-  background-color: whitesmoke;
-}
-button {
-  margin: 10px;
-  padding: 10px;
-  border-radius: 10px;
-  border: 1px soloid black;
-  color: white;
-  background-color: midnightblue;
-}
-span {
-  margin: 10px;
-}
-</style>
