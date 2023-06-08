@@ -1,151 +1,56 @@
 <template>
-  <!-- <VDataTable
-      :headers="headers"
-      :items="transaction"
-      class="elevation-1"
-    ></VDataTable> -->
-  <VCard class="ma-10"> </VCard>
   <VCard class="pa-10">
-    <VMenu>
-      <template v-slot:activator="{ props: menu }">
-        <VTooltip location="top">
-          <template v-slot:activator="{ props: tooltip }">
-            <VBtn color="primary" v-bind="mergeProps(menu, tooltip)">
-              Group By
-            </VBtn>
-          </template>
-          <span>Get All Transactions in specific Group</span>
-        </VTooltip>
+    <v-menu>
+      <template v-slot:activator="{ props }">
+        <v-btn color="primary" v-bind="props"> Group By </v-btn>
       </template>
+      <ChildComponent :data="item" :getData="getData" />
+      <!-- it will send item to childcomponent-->
+
       <v-list>
-        <v-list-item v-for="(item, index) in groupByTags" :key="index">
-          <v-list-item-title>{{ item.title }}</v-list-item-title>
+        <v-list-item
+          v-for="(item, index) in groupByTags"
+          :key="index"
+          :value="index"
+        >
+          <v-list-item-title @click="groupByTransaction(item.key)">{{
+            item.title
+          }}</v-list-item-title>
         </v-list-item>
       </v-list>
-    </VMenu>
-    <VTextField
-      v-model="search"
-      append-icon="mdi-magnify"
-      label="Search"
-      single-line
-      hide-details
-    ></VTextField>
+    </v-menu>
   </VCard>
-  <VCard class="pa-10">
-    <VTable>
-      <thead>
-        <tr>
-          <th v-for="heading in headers" :key="heading">
-            <!-- <v-icon icon="mdi-calendar-range-outline"></v-icon> -->
-            <v-chip :prepend-icon="heading.headerIcon" variant="text"
-              >{{ heading.title
-              }}<v-icon
-                icon="mdi-swap-vertical-bold"
-                @click="sortField(heading.title)"
-              ></v-icon
-            ></v-chip>
-          </th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="transaction in transaction" :key="transaction.id">
-          <td>
-            <v-chip label>{{ transaction.transactionDate }} </v-chip>
-          </td>
-          <td>
-            <v-chip label>{{ transaction.monthYear }} </v-chip>
-          </td>
-          <td>
-            <v-chip label>{{ transaction.transactionType }} </v-chip>
-          </td>
-          <td>
-            <v-chip label>{{ transaction.fromAccount }} </v-chip>
-          </td>
-          <td>
-            <v-chip label>{{ transaction.toAccount }} </v-chip>
-          </td>
-          <td>
-            <v-chip label>{{ transaction.amount }} </v-chip>
-          </td>
-          <td>
-            <v-img
-              :width="100"
-              aspect-ratio="16/9"
-              cover
-              :src="transaction.receipt"
-            ></v-img>
-          </td>
-          <td>{{ transaction.notes }}</td>
-          <td>
-            <v-btn @click="getViewDetails(transaction.id)"></v-btn>
-          </td>
-        </tr>
-      </tbody>
-    </VTable>
-  </VCard>
+  <div v-if="groupByObject">
+    <CommonTransaction
+      :data="groups"
+      :isGroupBy="true"
+      v-for="(groups, key) in groupByObject"
+      :key="key"
+    >
+      <v-chip> {{ groups }} </v-chip>
+      <!-- <v-divider class="border-opacity-75" color="success"></v-divider> -->
+    </CommonTransaction>
+  </div>
+  <CommonTransaction v-else :data="transaction" :isGroupBy="false" />
 </template>
 <script>
-import {
-  getAllTransactionList,
-  sortByFiledName,
-} from "@/services/transactions/transactions.services";
+import CommonTransaction from "@/components/common/CommonTransaction.vue";
 import { mergeProps } from "vue";
+import {
+  groupByValues,
+  getAllTransactionList,
+} from "@/services/transactions/transactions.services";
 export default {
   name: "AllTransactions",
+  components: {
+    CommonTransaction,
+  },
   data() {
     return {
-      IsSortingOrderAsc: true,
-      headers: [
-        {
-          title: "Transaction Date",
-          align: "end",
-          key: "transactionDate",
-          headerIcon: "mdi-calendar-range-outline",
-        },
-        { title: "Month Year", align: "end", key: "monthYear", headerIcon: "" },
-        {
-          title: "Transaction Type",
-          align: "end",
-          key: "transactionType",
-          headerIcon: "mdi-play-circle-outline",
-        },
-        {
-          title: "From Account",
-          align: "end",
-          key: "fromAccount",
-          headerIcon: "mdi-play-circle-outline",
-        },
-        {
-          title: "To Account",
-          align: "end",
-          key: "toAccount",
-          headerIcon: "mdi-play-circle-outline",
-        },
-        {
-          title: "Amount",
-          align: "end",
-          key: "amount",
-          headerIcon: "mdi-pound",
-        },
-        {
-          title: "Receipt",
-          align: "end",
-          key: "receipt",
-          headerIcon: "mdi-attachment",
-        },
-        {
-          title: "Notes",
-          align: "end",
-          key: "notes",
-          headerIcon: "mdi-format-letter-case",
-        },
-        {
-          title: "Action",
-          align: "end",
-          key: "Action",
-          headerIcon: "mdi-format-list-bulleted-square",
-        },
-      ],
+      transaction: getAllTransactionList(),
+
+      groupByTitle: null,
+      groupByObject: null,
       groupByTags: [
         { title: "Month Year", align: "end", key: "monthYear", headerIcon: "" },
         {
@@ -167,42 +72,19 @@ export default {
           headerIcon: "mdi-play-circle-outline",
         },
       ],
-      transaction: getAllTransactionList(),
-      dialog: false,
     };
   },
+  computed: {
+    search: {},
+  },
   methods: {
-    getViewDetails(transactionId) {
-      //   alert("view");
-
-      this.$router.push({
-        name: "ViewTransaction",
-        params: {
-          transactionId: transactionId,
-        },
-      });
-    },
-    sortField(transactionTitle) {
-      if (this.IsSortingOrderAsc) {
-        sortByFiledName(transactionTitle, "asc");
-        this.IsSortingOrderAsc = false;
-      }
-      //   console.log(transactionId);
-      //   if (this.IsSortingOrderAsc) {
-      //     console.log(
-      //       this.transaction.sort((x, y) =>
-      //         x[transactionId] > y[transactionId] ? -1 : 1
-      //       )
-      //     );
-      //     this.IsSortingOrderAsc = false;
-      //   } else {
-      //     this.transaction.sort((x, y) =>
-      //       x[transactionId] < y[transactionId] ? -1 : 1
-      //     );
-      //     this.IsSortingOrderAsc = true;
-      //   }
-    },
     mergeProps,
+    groupByTransaction(transactionType) {
+      // alert(transactionType);
+      const groupByObject = groupByValues(transactionType);
+      console.log("GroupByObject", groupByObject);
+      this.groupByObject = groupByObject;
+    },
   },
 };
 </script>

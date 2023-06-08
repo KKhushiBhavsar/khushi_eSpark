@@ -5,12 +5,13 @@
         <VTextField v-model="user.userName" label="User Name"></VTextField>
         <VTextField v-model="user.emailId" label="Email Id"></VTextField>
         <VTextField v-model="user.password" label="Password"></VTextField>
-        <VBtn type="submit">Submit</VBtn>
+        <VBtn type="submit" @click="registerUser()">Submit</VBtn>
       </VForm>
     </VCard>
   </VContainer>
 </template>
 <script>
+import { userRegistration } from "@/services/users/users.services";
 export default {
   name: "RegisterPage",
   data() {
@@ -21,6 +22,11 @@ export default {
         password: null,
       },
     };
+  },
+  methods: {
+    registerUser() {
+      userRegistration(this.user);
+    },
   },
 };
 </script>

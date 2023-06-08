@@ -23,7 +23,8 @@
       </tr>
       <tr>
         <td>Receipt</td>
-        <td>{{ viewTransactionData.receipt }}</td>
+        <!-- <td>{{ viewTransactionData.receipt }}</td> -->
+        <td><img :src="viewTransactionData.receipt" alt="img" /></td>
       </tr>
       <tr>
         <td>Notes</td>
@@ -63,5 +64,9 @@ table {
 td {
   border: 1px solid black;
   padding: 10px;
+}
+img {
+  width: 400px;
+  height: 400px;
 }
 </style>

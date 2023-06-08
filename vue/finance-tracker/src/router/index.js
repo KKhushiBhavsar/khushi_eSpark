@@ -5,21 +5,20 @@ import RegisterPage from "@/pages/users/RegisterPage";
 import AllTransactions from "@/pages/transactions/AllTransactions";
 import ViewTransaction from "@/pages/transactions/ViewTransaction";
 import CreateTransaction from "@/pages/transactions/CreateTransaction";
-import EditTransaction from "@/pages/transactions/EditTransaction";
 
-import AddTransactionForm from "@/pages/AddTransactionForm";
 import PageNotFound from "@/pages/PageNotFound";
-import HomePage from "@/components/common/HomePage.vue";
-import AllTransaction from "@/pages/AllTransaction";
+
+import { isUserLoggedIn } from "@/router/routingGuards/user.routingguards";
 const routes = [
   {
     path: "/",
-    name: "HomePage",
-    component: HomePage,
+    name: "logIn",
+    component: LoginPage,
   },
   {
     path: "/login",
     name: "LoginPage",
+    beforeEnter: isUserLoggedIn,
     component: LoginPage,
   },
   {
@@ -30,43 +29,21 @@ const routes = [
   {
     path: "/all-transactions",
     name: "AllTransactions",
+    // beforeEnter: isUserLoggedIn,
     component: AllTransactions,
   },
   {
     path: "/view-transactions/:transactionId",
     name: "ViewTransaction",
+    // beforeEnter: isUserLoggedIn,
     component: ViewTransaction,
   },
   {
     path: "/create-transactions",
     name: "CreateTransaction",
+    // beforeEnter: isUserLoggedIn,
     component: CreateTransaction,
   },
-  {
-    path: "/edit-transactions",
-    name: "EditTransaction",
-    component: EditTransaction,
-  },
-  {
-    path: "/add-transaction/",
-    name: "AddTransactionForm",
-    component: AddTransactionForm,
-  },
-  {
-    path: "/all-transaction/",
-    name: "AllTransaction",
-    component: AllTransaction,
-  },
-  //   {
-  //     path: "/edit-todo-task/:listId",
-  //     name: "editTodoPage",
-  //     component: editTodoPage,
-  //   },
-  //   {
-  //     path: "/view-todo-task/:listId",
-  //     name: "viewToDoPage",
-  //     component: viewToDoPage,
-  //   },
   {
     path: "/:PageNotFound(.*)",
     name: "PageNotFound",
