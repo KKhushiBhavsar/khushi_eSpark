@@ -227,8 +227,13 @@ export const groupByValues = (transactionType: any) => {
   return GroupedObject;
 };
 
-export const SearchTransaction = (searchValue: any, transactionType: any) => {
-  const allTransaction = getAllTransactionList() || [];
+export const SearchTransaction = (
+  searchValue: any,
+  transactionType: any,
+  allTransaction: any
+) => {
+  // const allTransaction = getAllTransactionList() || [];
+  console.log(allTransaction);
   let searchObj;
   if (transactionType) {
     searchObj = allTransaction.filter((transaction: any) =>
@@ -236,7 +241,9 @@ export const SearchTransaction = (searchValue: any, transactionType: any) => {
         .toUpperCase()
         .includes(searchValue.toUpperCase())
     );
-    return searchObj;
+    if (searchObj) {
+      return searchObj;
+    }
   } else {
     return allTransaction;
   }

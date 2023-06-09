@@ -204,7 +204,11 @@ export default {
   },
   watch: {
     search(newSearch) {
-      const searchValue = SearchTransaction(newSearch, this.transactionType);
+      const searchValue = SearchTransaction(
+        newSearch,
+        this.transactionType,
+        this.transaction
+      );
       this.transaction = searchValue;
     },
   },
