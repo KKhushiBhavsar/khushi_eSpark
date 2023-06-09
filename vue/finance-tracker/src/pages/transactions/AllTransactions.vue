@@ -3,6 +3,10 @@
     <v-menu>
       <template v-slot:activator="{ props }">
         <v-btn color="primary" v-bind="props"> Group By </v-btn>
+
+        <v-chip label v-if="groupByType" color="primary">{{
+          groupByType
+        }}</v-chip>
       </template>
       <ChildComponent :data="item" :getData="getData" />
       <!-- it will send item to childcomponent-->
@@ -13,9 +17,10 @@
           :key="index"
           :value="index"
         >
-          <v-list-item-title @click="groupByTransaction(item.key)">{{
-            item.title
-          }}</v-list-item-title>
+          <v-list-item-title
+            @click="groupByTransaction(item.key, item.title)"
+            >{{ item.title }}</v-list-item-title
+          >
         </v-list-item>
       </v-list>
     </v-menu>
@@ -51,6 +56,7 @@ export default {
 
       groupByTitle: null,
       groupByObject: null,
+      groupByType: null,
       groupByTags: [
         { title: "Month Year", align: "end", key: "monthYear", headerIcon: "" },
         {
@@ -79,7 +85,8 @@ export default {
   },
   methods: {
     mergeProps,
-    groupByTransaction(transactionType) {
+    groupByTransaction(transactionType, transactionTitle) {
+      this.groupByType = transactionTitle;
       // alert(transactionType);
       const groupByObject = groupByValues(transactionType);
       console.log("GroupByObject", groupByObject);

@@ -34,9 +34,12 @@
       ></VSelect>
 
       <VTextField
+        type="number"
         v-model="transaction.amount"
         label="Amount"
         :selectRule="selectRule"
+        @change="currency()"
+        ref="currency"
       >
       </VTextField>
 
@@ -158,6 +161,13 @@ export default {
         console.log(this);
         this.transaction.receipt = base64.currentTarget.result;
       };
+    },
+    currency() {
+      const amount = this.$refs.currency.value;
+      this.transaction.amount = new Intl.NumberFormat("en-IN", {
+        style: "currency",
+        currency: "INR",
+      }).format(amount);
     },
   },
 };

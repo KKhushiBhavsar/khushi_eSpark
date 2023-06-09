@@ -1,6 +1,28 @@
 <template>
   <VCard class="ma-10"> </VCard>
   <VCard class="pa-10">
+    <v-menu>
+      <template v-slot:activator="{ props }">
+        <v-btn color="primary" v-bind="props">Search </v-btn>
+
+        <v-chip label v-if="searchTitle" color="primary">{{
+          searchTitle
+        }}</v-chip>
+      </template>
+      <ChildComponent :data="item" :getData="getData" />
+      <!-- it will send item to childcomponent-->
+
+      <v-list>
+        <v-list-item
+          v-for="(item, index) in SearchTags"
+          :key="index"
+          @click="searchInTransaction(item.key, item.title)"
+          :value="index"
+        >
+          <v-list-item-title>{{ item.title }}</v-list-item-title>
+        </v-list-item>
+      </v-list>
+    </v-menu>
     <VTextField
       v-model="search"
       append-icon="mdi-magnify"
@@ -29,22 +51,26 @@
       <tbody>
         <tr v-for="transaction in transaction" :key="transaction.id">
           <td>
-            <v-chip label>{{ transaction.transactionDate }} </v-chip>
+            <v-chip label color="red"
+              >{{ transaction.transactionDate }}
+            </v-chip>
           </td>
           <td>
-            <v-chip label>{{ transaction.monthYear }} </v-chip>
+            <v-chip label color="blue">{{ transaction.monthYear }} </v-chip>
           </td>
           <td>
-            <v-chip label>{{ transaction.transactionType }} </v-chip>
+            <v-chip label color="green"
+              >{{ transaction.transactionType }}
+            </v-chip>
           </td>
           <td>
-            <v-chip label>{{ transaction.fromAccount }} </v-chip>
+            <v-chip label color="pink">{{ transaction.fromAccount }} </v-chip>
           </td>
           <td>
-            <v-chip label>{{ transaction.toAccount }} </v-chip>
+            <v-chip label color="purple">{{ transaction.toAccount }} </v-chip>
           </td>
           <td>
-            <v-chip label>{{ transaction.amount }} </v-chip>
+            <v-chip label color="red">{{ transaction.amount }} </v-chip>
           </td>
           <td>
             <v-img
@@ -94,6 +120,9 @@ export default {
   },
   data() {
     return {
+      searchTitle: null,
+      transactionType: null,
+      searchType: null,
       transaction: this.data,
       IsSortingOrderAsc: true,
       search: null,
@@ -148,7 +177,7 @@ export default {
           headerIcon: "mdi-format-list-bulleted-square",
         },
       ],
-      groupByTags: [
+      SearchTags: [
         { title: "Month Year", align: "end", key: "monthYear", headerIcon: "" },
         {
           title: "Transaction Type",
@@ -175,7 +204,8 @@ export default {
   },
   watch: {
     search(newSearch) {
-      SearchTransaction(newSearch);
+      const searchValue = SearchTransaction(newSearch, this.transactionType);
+      this.transaction = searchValue;
     },
   },
   methods: {
@@ -247,6 +277,11 @@ export default {
           this.IsSortingOrderAsc = !this.IsSortingOrderAsc;
           break;
       }
+    },
+    searchInTransaction(transactionType, transactionTitle) {
+      console.log(transactionTitle, transactionType);
+      this.transactionType = transactionType;
+      this.searchTitle = transactionTitle;
     },
     mergeProps,
   },

@@ -15,11 +15,6 @@ interface transactionInterface {
 }
 
 export const getAllTransactionList = () => {
-  // const allTransaction: transactionInterface = JSON.parse(
-  //   localStorage.getItem("transaction") || ""
-  // );
-  // return allTransaction;
-
   const allTransaction = localStorage.getItem("transaction");
   if (allTransaction) return JSON.parse(allTransaction);
 };
@@ -157,7 +152,6 @@ export const sortFromAccount = (order: boolean, transaction: any) => {
     return sortedOrderd;
   }
 };
-
 export const sortToAccount = (order: boolean, transaction: any) => {
   const sortedTransaction = transaction;
   if (order) {
@@ -233,27 +227,18 @@ export const groupByValues = (transactionType: any) => {
   return GroupedObject;
 };
 
-export const SearchTransaction = (searchValue: any) => {
-  // const allTransaction = getAllTransactionList() || [];
-  // const variable: any = allTransaction.forEach((transaction: any) =>
-  //   transaction.filter((transactions: any) => {
-  //     transactions.transactionDate
-  //       .toLowerCase()
-  //       .includes(searchValue.toLowerCase()) ||
-  //       transactions.monthYear
-  //         .toLowerCase()
-  //         .includes(searchValue.toLowerCase()) ||
-  //       transactions.transactionType
-  //         .toLowerCase()
-  //         .includes(searchValue.toLowerCase()) ||
-  //       transactions.fromAccount
-  //         .toLowerCase()
-  //         .includes(searchValue.toLowerCase()) ||
-  //       transactions.toAccount
-  //         .toLowerCase()
-  //         .includes(searchValue.toLowerCase()) ||
-  //       transactions.amount.toLowerCase().includes(searchValue.toLowerCase());
-  //   })
-  // );
-  // console.log(variable);
+export const SearchTransaction = (searchValue: any, transactionType: any) => {
+  const allTransaction = getAllTransactionList() || [];
+  let searchObj;
+  if (transactionType) {
+    searchObj = allTransaction.filter((transaction: any) =>
+      transaction[transactionType]
+        .toUpperCase()
+        .includes(searchValue.toUpperCase())
+    );
+    return searchObj;
+  } else {
+    return allTransaction;
+  }
+  console.log(searchValue, transactionType);
 };

@@ -8,11 +8,16 @@ import CreateTransaction from "@/pages/transactions/CreateTransaction";
 
 import PageNotFound from "@/pages/PageNotFound";
 
-import { isUserLoggedIn } from "@/router/routingGuards/user.routingguards";
+import {
+  isUserLoggedIn,
+  userLoggedIn,
+} from "@/router/routingGuards/user.routingguards";
 const routes = [
   {
     path: "/",
     name: "logIn",
+    beforeEnter: isUserLoggedIn,
+
     component: LoginPage,
   },
   {
@@ -29,19 +34,19 @@ const routes = [
   {
     path: "/all-transactions",
     name: "AllTransactions",
-    // beforeEnter: isUserLoggedIn,
+    beforeEnter: userLoggedIn,
     component: AllTransactions,
   },
   {
     path: "/view-transactions/:transactionId",
     name: "ViewTransaction",
-    // beforeEnter: isUserLoggedIn,
+    beforeEnter: userLoggedIn,
     component: ViewTransaction,
   },
   {
     path: "/create-transactions",
     name: "CreateTransaction",
-    // beforeEnter: isUserLoggedIn,
+    beforeEnter: userLoggedIn,
     component: CreateTransaction,
   },
   {

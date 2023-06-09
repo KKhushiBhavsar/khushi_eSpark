@@ -4,6 +4,10 @@
       <VForm @submit.prevent>
         <VTextField v-model="user.emailId" label="Email Id"></VTextField>
         <VTextField v-model="user.password" label="Password"></VTextField>
+        <VLable
+          >Register
+          <router-link :to="{ name: 'RegisterPage' }">here</router-link></VLable
+        ><br />
         <VBtn type="submit" @click="loggedUser()">Submit</VBtn>
       </VForm>
     </VCard>
