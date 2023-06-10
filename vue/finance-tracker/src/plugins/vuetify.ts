@@ -15,36 +15,10 @@ import { VDataTable } from "vuetify/labs/VDataTable";
 // import "@mdi/font/css/materialdesignicons.css";
 import "font-awesome/css/font-awesome.min.css";
 
-const customDarkTheme = {
-  dark: true,
-  colors: {
-    background: "#15202b",
-    surface: "#15202b",
-    primary: "#3f51b5",
-    secondary: "#03dac6",
-    error: "#ff5722",
-  },
-};
-
-const customLightTheme = {
-  dark: true,
-  colors: {
-    background: "#15202b",
-    surface: "#15202b",
-    primary: "#3f51b5",
-    secondary: "#03dac6",
-    error: "#f44336",
-    info: "#2196F3",
-    success: "#4caf50",
-    warning: "#fb8c00",
-  },
-};
 export default createVuetify({
   theme: {
     defaultTheme: "light",
-    themes: {
-      customDarkTheme,
-    },
+    themes: {},
   },
   // https://vuetifyjs.com/en/introduction/why-vuetify/#feature-guides
   icons: {

@@ -13,15 +13,15 @@
           >
             {{ item.title }}
           </VTab>
+          <v-switch
+            inset
+            color="info"
+            v-model="darkMode"
+            @change="toggleTheme()"
+            :label="`It's ${darkMode ? 'Dark' : 'Light'}!`"
+          ></v-switch>
         </VTabs>
       </template>
-      <v-switch
-        inset
-        color="info"
-        v-model="darkMode"
-        @change="toggleTheme()"
-        :label="`It's ${darkMode ? 'Dark' : 'Light'}!`"
-      ></v-switch>
     </VToolbar>
     <!-- <VWindow v-model="tab">
       <VWindowItem v-for="item in items" :key="item" :value="item">

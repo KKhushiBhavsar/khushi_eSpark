@@ -238,14 +238,28 @@ export const SearchTransaction = (
   if (transactionType) {
     searchObj = allTransaction.filter((transaction: any) =>
       transaction[transactionType]
-        .toUpperCase()
+        ?.toUpperCase()
         .includes(searchValue.toUpperCase())
     );
-    if (searchObj) {
+    if (searchObj.length) {
       return searchObj;
     }
   } else {
     return allTransaction;
   }
   console.log(searchValue, transactionType);
+};
+
+export const editTransactionInDatabase = (editdata: any) => {
+  const allTransaction = getAllTransactionList() || [];
+  console.log(allTransaction);
+  allTransaction.splice(
+    allTransaction.findIndex(
+      (transactions: any) => transactions.id === editdata.id
+    ),
+    1,
+    editdata
+  );
+  localStorage.setItem("transaction", JSON.stringify(allTransaction));
+  return allTransaction;
 };

@@ -3,7 +3,7 @@
   <VCard class="pa-10">
     <v-menu>
       <template v-slot:activator="{ props }">
-        <v-btn color="primary" v-bind="props">Search </v-btn>
+        <v-btn color="primary" v-bind="props">Search List</v-btn>
 
         <v-chip label v-if="searchTitle" color="primary">{{
           searchTitle
@@ -48,8 +48,8 @@
         </tr>
       </thead>
 
-      <tbody>
-        <tr v-for="transaction in transaction" :key="transaction.id">
+      <tbody v-if="transactionData">
+        <tr v-for="transaction in transactionData" :key="transaction.id">
           <td>
             <v-chip label color="red"
               >{{ transaction.transactionDate }}
@@ -70,7 +70,9 @@
             <v-chip label color="purple">{{ transaction.toAccount }} </v-chip>
           </td>
           <td>
-            <v-chip label color="red">{{ transaction.amount }} </v-chip>
+            <v-chip label color="red">{{
+              currency(transaction.amount)
+            }}</v-chip>
           </td>
           <td>
             <v-img
@@ -85,10 +87,34 @@
             <v-btn @click="getViewDetails(transaction.id)" color="primary"
               >View</v-btn
             >
+            <v-btn @click="editDetails(transaction.id)" color="primary"
+              >Edit</v-btn
+            >
           </td>
         </tr>
       </tbody>
     </VTable>
+    <v-menu>
+      <template v-slot:activator="{ props }">
+        <v-btn color="primary" v-bind="props">{{ pageTitle }}</v-btn>
+      </template>
+      <v-list>
+        <v-list-item
+          v-for="item in pageNo"
+          :key="item"
+          @click="onPagination(item)"
+          :value="item"
+        >
+          <v-list-item-title>{{ item }}</v-list-item-title>
+        </v-list-item>
+      </v-list>
+    </v-menu>
+
+    <v-pagination
+      v-model="page"
+      :length="noOfPages"
+      rounded="circle"
+    ></v-pagination>
   </VCard>
 </template>
 <script>
@@ -106,6 +132,7 @@ import {
 import { mergeProps } from "vue";
 import { transactions } from "@/store/transactions";
 import { SearchTransaction } from "@/services/transactions/transactions.services";
+
 // import { transactions } from "@/store/transactions";
 
 export default {
@@ -120,12 +147,17 @@ export default {
   },
   data() {
     return {
+      page: 1,
+      pageTitle: 1,
+      noOfPages: null,
       searchTitle: null,
+      pageNo: [1, 2, 3, 5, 10, 15],
       transactionType: null,
       searchType: null,
       transaction: this.data,
       IsSortingOrderAsc: true,
       search: null,
+
       headers: [
         {
           title: "Transaction Date",
@@ -202,22 +234,33 @@ export default {
       dialog: false,
     };
   },
-  watch: {
-    search(newSearch) {
-      const searchValue = SearchTransaction(
-        newSearch,
-        this.transactionType,
-        this.transaction
-      );
-      this.transaction = searchValue;
-    },
+  created() {
+    this.noOfPages = Math.ceil(this.data.length / this.pageTitle);
   },
   methods: {
+    changePage(no) {
+      console.log("new page", no);
+    },
+    onPagination(no) {
+      this.pageTitle = no;
+
+      this.noOfPages = Math.ceil(this.data.length / no);
+
+      console.log(no, "page");
+    },
     getViewDetails(transactionId) {
       //   alert("view");
 
       this.$router.push({
         name: "ViewTransaction",
+        params: {
+          transactionId: transactionId,
+        },
+      });
+    },
+    editDetails(transactionId) {
+      this.$router.push({
+        name: "EditTransaction",
         params: {
           transactionId: transactionId,
         },
@@ -283,11 +326,41 @@ export default {
       }
     },
     searchInTransaction(transactionType, transactionTitle) {
-      console.log(transactionTitle, transactionType);
+      console.log(transactionTitle, transactionType, "{DERFTGYUFRDEQ frtgy");
       this.transactionType = transactionType;
       this.searchTitle = transactionTitle;
     },
+
+    currency(amount) {
+      // const amount = this.$refs.currency.value;
+      console.log(amount);
+      return Intl.NumberFormat("en-IN", {
+        style: "currency",
+        currency: "INR",
+      }).format(amount);
+    },
     mergeProps,
+  },
+  watch: {
+    search(newSearch) {
+      const searchValue = SearchTransaction(
+        newSearch,
+        this.transactionType,
+        this.data
+      );
+      this.transaction = searchValue;
+      console.log("search return data", searchValue);
+    },
+  },
+  computed: {
+    transactionData() {
+      return this.transaction?.filter((_, index) => {
+        return (
+          index < this.pageTitle + this.page - 1 &&
+          index >= (this.page - 1) * this.pageTitle
+        );
+      });
+    },
   },
 };
 </script>

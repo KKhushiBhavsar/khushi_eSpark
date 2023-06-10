@@ -1,33 +1,33 @@
 <template>
-  <VCard class="pa-10 ma-7" title="Add Transactions">
+  <div>
     <form @submit.prevent="submit">
       <VTextField
         type="date"
-        v-model="transaction.transactionDate"
+        v-model="editTransactionData.transactionDate"
         label="Transaction Date"
       ></VTextField>
       <VSelect
-        v-model="transaction.monthYear"
+        v-model="editTransactionData.monthYear"
         :items="monthVal"
         label="Select"
         :selectRule="selectRule"
       ></VSelect>
       <VSelect
-        v-model="transaction.transactionType"
+        v-model="editTransactionData.transactionType"
         :items="transactionTypeOption"
         label="Transaction Type"
         :selectRule="selectRule"
       ></VSelect>
 
       <VSelect
-        v-model="transaction.fromAccount"
+        v-model="editTransactionData.fromAccount"
         :items="accountTypeOption"
         label="From Account"
         :selectRule="selectRule"
       ></VSelect>
 
       <VSelect
-        v-model="transaction.toAccount"
+        v-model="editTransactionData.toAccount"
         :items="accountTypeOption"
         label="To Account"
         :selectRule="selectRule"
@@ -35,7 +35,7 @@
 
       <VTextField
         type="number"
-        v-model="transaction.amount"
+        v-model="editTransactionData.amount"
         label="Amount"
         :selectRule="selectRule"
         ref="currency"
@@ -44,12 +44,14 @@
 
       <VFileInput
         show-size
+        v-model="imgDemo"
         counter
         label="Receipt"
         accept=".png"
         @change="getImage()"
         ref="file"
       ></VFileInput>
+
       <!-- <input
         type="file"
         accept="image/*;capture=camera"
@@ -62,20 +64,17 @@
         bg-color="grey-lighten-2"
         color="cyan"
         label="Notes"
-        v-model="transaction.notes"
+        v-model="editTransactionData.notes"
         :rules="rules"
       ></VTextarea>
       <VBtn
         class="me-4"
         type="submit"
-        @click="
-          loading = !loading;
-          addToTransaction();
-        "
+        @click="editData()"
         color="primary"
         :loading="loading"
       >
-        submit
+        Edit
         <template v-slot:loader>
           <v-progress-linear indeterminate></v-progress-linear>
         </template>
@@ -83,31 +82,20 @@
 
       <VBtn @click="handleReset"> clear </VBtn>
     </form>
-  </VCard>
+  </div>
 </template>
 <script>
-import { addTransaction } from "@/services/transactions/transactions.services";
-import { required } from "@vuelidate/validators";
-
+import {
+  getViewTransactionDetails,
+  editTransactionInDatabase,
+} from "@/services/transactions/transactions.services";
 export default {
-  name: "CreateTransaction",
-
+  name: "ViewTransaction",
   data() {
     return {
-      loading: false,
-      transaction: {
-        id: Date.now().toString(36),
-        transactionDate: null,
-        monthYear: null,
-        transactionType: null,
-        fromAccount: null,
-        toAccount: null,
-        amount: null,
-        receipt: null,
-        notes: null,
-      },
-      rules: [(value) => (value || "").length <= 20 || "Max 20 characters"],
-      selectRule: required,
+      dialog: false,
+      transactionId: this.$route.params.transactionId,
+      editTransactionData: null,
       monthVal: [
         "Jan 2023",
         "Feb 2023",
@@ -131,21 +119,23 @@ export default {
         "Core Realtors",
         "Big Block",
       ],
+      imgDemo: null,
     };
   },
-  watch: {
-    loading(val) {
-      if (!val) return;
-      setTimeout(() => (this.loading = false), 2000);
-    },
+  created() {
+    const editData = getViewTransactionDetails(this.transactionId);
+    this.editTransactionData = editData;
+
+    const dataUrl = editData.receipt;
+    fetch(dataUrl)
+      .then((response) => response.blob())
+      .then((blob) => {
+        const file = new File([blob], "sample.png", { type: blob.type });
+        this.imgDemo = [file];
+        console.log(file); //File object
+      });
   },
   methods: {
-    addToTransaction() {
-      addTransaction(this.transaction);
-      this.$router.push({
-        name: "AllTransactions",
-      });
-    },
     getImage() {
       const img = this.$refs.file;
       console.log(img);
@@ -158,9 +148,32 @@ export default {
         // localStorage["receipt"] = base64.currentTarget.result;
         // console.log(base64.currentTarget.result);
         console.log(this);
-        this.transaction.receipt = base64.currentTarget.result;
+        this.editTransactionData.receipt = base64.currentTarget.result;
       };
+    },
+    editData() {
+      const response = editTransactionInDatabase(this.editTransactionData);
+      if (response) {
+        this.$router.push({
+          name: "AllTransactions",
+        });
+      }
     },
   },
 };
 </script>
+<style scoped>
+table {
+  margin: 10px;
+  padding: 10px;
+  /* border: 1px solid black; */
+}
+td {
+  /* border: 1px solid black; */
+  padding: 10px;
+}
+img {
+  width: 400px;
+  height: 400px;
+}
+</style>

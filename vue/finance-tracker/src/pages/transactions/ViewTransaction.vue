@@ -34,7 +34,7 @@
         </tr>
         <tr>
           <td>Amount</td>
-          <td>{{ viewTransactionData.amount }}</td>
+          <td>{{ currency(viewTransactionData.amount) }}</td>
         </tr>
       </table>
     </v-sheet>
@@ -42,7 +42,6 @@
 </template>
 <script>
 import { getViewTransactionDetails } from "@/services/transactions/transactions.services";
-
 export default {
   name: "ViewTransaction",
   data() {
@@ -51,6 +50,16 @@ export default {
       transactionId: this.$route.params.transactionId,
       viewTransactionData: null,
     };
+  },
+  methods: {
+    currency(amount) {
+      // const amount = this.$refs.currency.value;
+      console.log(amount);
+      return Intl.NumberFormat("en-IN", {
+        style: "currency",
+        currency: "INR",
+      }).format(amount);
+    },
   },
   created() {
     const viewData = getViewTransactionDetails(this.transactionId);

@@ -6,6 +6,7 @@ import AllTransactions from "@/pages/transactions/AllTransactions";
 import ViewTransaction from "@/pages/transactions/ViewTransaction";
 import CreateTransaction from "@/pages/transactions/CreateTransaction";
 
+import EditTransaction from "@/pages/transactions/EditTransaction";
 import PageNotFound from "@/pages/PageNotFound";
 
 import {
@@ -48,6 +49,12 @@ const routes = [
     name: "CreateTransaction",
     beforeEnter: userLoggedIn,
     component: CreateTransaction,
+  },
+  {
+    path: "/edit-transactions/:transactionId",
+    name: "EditTransaction",
+    beforeEnter: userLoggedIn,
+    component: EditTransaction,
   },
   {
     path: "/:PageNotFound(.*)",
