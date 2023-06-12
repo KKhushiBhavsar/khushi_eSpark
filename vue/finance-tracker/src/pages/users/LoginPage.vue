@@ -1,9 +1,17 @@
 <template>
   <VContainer class="pa-10">
-    <VCard title="Log In" class="pa-10 ma-10">
-      <VForm @submit.prevent>
-        <VTextField v-model="user.emailId" label="Email Id"></VTextField>
-        <VTextField v-model="user.password" label="Password"></VTextField>
+    <VCard title="Log In" ref="form" class="pa-10 ma-10">
+      <VForm ref="form">
+        <VTextField
+          v-model="user.emailId"
+          label="Email Id"
+          :rules="userRules.email"
+        ></VTextField>
+        <VTextField
+          v-model="user.password"
+          label="Password"
+          :rules="userRules.password"
+        ></VTextField>
         <VLable
           >Register
           <router-link :to="{ name: 'RegisterPage' }">here</router-link></VLable
@@ -14,6 +22,7 @@
   </VContainer>
 </template>
 <script>
+import { userLoginRules } from "@/helper/userValidatinRules";
 import { loginUser } from "@/services/users/users.services";
 export default {
   name: "LoginPage",
@@ -24,15 +33,19 @@ export default {
         password: null,
         transactionHistory: null,
       },
+      userRules: userLoginRules,
     };
   },
   methods: {
     async loggedUser() {
-      const isUser = await loginUser(this.user);
-      if (isUser) {
-        this.$router.push({
-          name: "AllTransactions",
-        });
+      const validate = await this.$refs.form.validate();
+      if (validate.valid) {
+        const isUser = await loginUser(this.user);
+        if (isUser) {
+          this.$router.push({
+            name: "AllTransactions",
+          });
+        }
       }
     },
   },

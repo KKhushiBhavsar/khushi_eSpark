@@ -1,44 +1,45 @@
 <template>
   <VCard class="pa-10 ma-7" title="Add Transactions">
-    <form @submit.prevent="submit">
+    <VForm ref="form">
       <VTextField
         type="date"
         v-model="transaction.transactionDate"
         label="Transaction Date"
+        :rules="rules.date"
       ></VTextField>
       <VSelect
         v-model="transaction.monthYear"
         :items="monthVal"
         label="Select"
-        :selectRule="selectRule"
+        :rules="rules.select"
       ></VSelect>
       <VSelect
         v-model="transaction.transactionType"
         :items="transactionTypeOption"
         label="Transaction Type"
-        :selectRule="selectRule"
+        :rules="rules.select"
       ></VSelect>
 
       <VSelect
         v-model="transaction.fromAccount"
         :items="accountTypeOption"
         label="From Account"
-        :selectRule="selectRule"
+        :rules="rules.select"
       ></VSelect>
 
       <VSelect
         v-model="transaction.toAccount"
         :items="accountTypeOption"
         label="To Account"
-        :selectRule="selectRule"
+        :rules="rules.select"
       ></VSelect>
 
       <VTextField
         type="number"
         v-model="transaction.amount"
         label="Amount"
-        :selectRule="selectRule"
         ref="currency"
+        :rules="rules.currency"
       >
       </VTextField>
 
@@ -63,18 +64,9 @@
         color="cyan"
         label="Notes"
         v-model="transaction.notes"
-        :rules="rules"
+        :rules="rules.notes"
       ></VTextarea>
-      <VBtn
-        class="me-4"
-        type="submit"
-        @click="
-          loading = !loading;
-          addToTransaction();
-        "
-        color="primary"
-        :loading="loading"
-      >
+      <VBtn class="me-4" @click="addToTransaction()" color="primary">
         submit
         <template v-slot:loader>
           <v-progress-linear indeterminate></v-progress-linear>
@@ -82,13 +74,13 @@
       </VBtn>
 
       <VBtn @click="handleReset"> clear </VBtn>
-    </form>
+    </VForm>
   </VCard>
 </template>
 <script>
 import { addTransaction } from "@/services/transactions/transactions.services";
-import { required } from "@vuelidate/validators";
 
+import { transactionValidation } from "@/helper/transactionValidation";
 export default {
   name: "CreateTransaction",
 
@@ -106,8 +98,7 @@ export default {
         receipt: null,
         notes: null,
       },
-      rules: [(value) => (value || "").length <= 20 || "Max 20 characters"],
-      selectRule: required,
+      rules: transactionValidation,
       monthVal: [
         "Jan 2023",
         "Feb 2023",
@@ -140,11 +131,15 @@ export default {
     },
   },
   methods: {
-    addToTransaction() {
-      addTransaction(this.transaction);
-      this.$router.push({
-        name: "AllTransactions",
-      });
+    async addToTransaction() {
+      const validate = await this.$refs.form.validate();
+      console.log("adfasdfasdf", validate);
+      if (validate.valid) {
+        addTransaction(this.transaction);
+        this.$router.push({
+          name: "AllTransactions",
+        });
+      }
     },
     getImage() {
       const img = this.$refs.file;
