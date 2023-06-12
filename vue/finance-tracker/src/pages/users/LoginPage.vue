@@ -42,6 +42,10 @@ export default {
       if (validate.valid) {
         const isUser = await loginUser(this.user);
         if (isUser) {
+          localStorage.setItem(
+            "token",
+            "3r8wb7frfb347rfb34rfb3749brf9378rfb023tf23"
+          );
           this.$router.push({
             name: "AllTransactions",
           });

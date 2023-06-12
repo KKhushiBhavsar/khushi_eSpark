@@ -1,43 +1,55 @@
 <template>
   <div>
-    <v-sheet class="pa-12" color="grey-lighten-3">
-      <div></div>
-      <table>
-        <tr>
-          <td>Transaction Date</td>
-          <td>{{ viewTransactionData.transactionDate }}</td>
-        </tr>
-        <tr>
-          <td>Month Year</td>
-          <td>{{ viewTransactionData.monthYear }}</td>
-        </tr>
-        <tr>
-          <td>Transaction Type</td>
-          <td>{{ viewTransactionData.transactionType }}</td>
-        </tr>
-        <tr>
-          <td>From Account</td>
-          <td>{{ viewTransactionData.fromAccount }}</td>
-        </tr>
-        <tr>
-          <td>To Account</td>
-          <td>{{ viewTransactionData.toAccount }}</td>
-        </tr>
-        <tr>
-          <td>Receipt</td>
-
-          <td><img :src="viewTransactionData.receipt" alt="img" /></td>
-        </tr>
-        <tr>
-          <td>Notes</td>
-          <td>{{ viewTransactionData.notes }}</td>
-        </tr>
-        <tr>
-          <td>Amount</td>
-          <td>{{ currency(viewTransactionData.amount) }}</td>
-        </tr>
-      </table>
-    </v-sheet>
+    <VCard class="pa-20 ma-20">
+      <v-sheet class="pa-12" color="grey-lighten-3">
+        <div></div>
+        <VCard
+          class="pa-5 ma-5"
+          width="400"
+          title="Transaction Date"
+          :text="viewTransactionData.transactionDate"
+        ></VCard>
+        <VCard
+          class="pa-5 ma-5"
+          width="400"
+          title="Month Year"
+          :text="viewTransactionData.monthYear"
+        ></VCard>
+        <VCard
+          class="pa-5 ma-5"
+          width="400"
+          title="Transaction Type"
+          :text="viewTransactionData.transactionType"
+        ></VCard>
+        <VCard
+          class="pa-5 ma-5"
+          width="400"
+          title="From Account"
+          :text="viewTransactionData.fromAccount"
+        ></VCard>
+        <VCard
+          class="pa-5 ma-5"
+          width="400"
+          title="To Account"
+          :text="viewTransactionData.toAccount"
+        ></VCard>
+        <VCard class="pa-5 mx-5" width="400" title="Receipt">
+          <VImg height="200" :src="viewTransactionData.receipt"></VImg>
+        </VCard>
+        <VCard
+          class="pa-5 ma-5"
+          width="400"
+          title="Notes"
+          :text="viewTransactionData.notes"
+        ></VCard>
+        <VCard
+          class="pa-5 ma-5"
+          width="400"
+          title="Amount"
+          :text="currency(viewTransactionData.amount)"
+        ></VCard>
+      </v-sheet>
+    </VCard>
   </div>
 </template>
 <script>

@@ -1,120 +1,121 @@
 <template>
-  <VCard class="ma-10"> </VCard>
-  <VCard class="pa-10">
-    <v-menu>
-      <template v-slot:activator="{ props }">
-        <v-btn color="primary" v-bind="props">Search List</v-btn>
-
-        <v-chip label v-if="searchTitle" color="primary">{{
-          searchTitle
-        }}</v-chip>
-      </template>
-      <ChildComponent :data="item" :getData="getData" />
-      <!-- it will send item to childcomponent-->
-
-      <v-list>
-        <v-list-item
-          v-for="(item, index) in SearchTags"
-          :key="index"
-          @click="searchInTransaction(item.key, item.title)"
-          :value="index"
-        >
-          <v-list-item-title>{{ item.title }}</v-list-item-title>
-        </v-list-item>
-      </v-list>
-    </v-menu>
-    <VTextField
-      v-model="search"
-      append-icon="mdi-magnify"
-      label="Search"
-      single-line
-      hide-details
-    ></VTextField>
+  <VCard class="ma-10 pa-10" v-if="!data">
+    No transactions found at this moment
   </VCard>
-  <VCard class="pa-10">
-    <VTable>
-      <thead>
-        <tr>
-          <th v-for="heading in headers" :key="heading">
-            <!-- <v-icon icon="mdi-calendar-range-outline"></v-icon> -->
-            <v-chip :prepend-icon="heading.headerIcon" variant="text"
-              >{{ heading.title
-              }}<v-icon
-                icon="mdi-swap-vertical-bold"
-                @click="sortField(heading.title)"
-              ></v-icon
-            ></v-chip>
-          </th>
-        </tr>
-      </thead>
+  <VCard v-else>
+    <VCard class="pa-10">
+      <v-menu>
+        <template v-slot:activator="{ props }">
+          <v-btn color="primary" v-bind="props">Search List</v-btn>
+          <v-chip label v-if="searchTitle" color="primary">{{
+            searchTitle
+          }}</v-chip>
+        </template>
+        <ChildComponent :data="item" :getData="getData" />
+        <v-list>
+          <v-list-item
+            v-for="(item, index) in SearchTags"
+            :key="index"
+            @click="searchInTransaction(item.key, item.title)"
+            :value="index"
+          >
+            <v-list-item-title>{{ item.title }}</v-list-item-title>
+          </v-list-item>
+        </v-list>
+      </v-menu>
+      <VTextField
+        v-model="search"
+        append-icon="mdi-magnify"
+        label="Search"
+        single-line
+        hide-details
+      ></VTextField>
+    </VCard>
+    <VCard class="pa-10">
+      <VTable>
+        <thead>
+          <tr>
+            <th v-for="heading in headers" :key="heading">
+              <!-- <v-icon icon="mdi-calendar-range-outline"></v-icon> -->
+              <v-chip :prepend-icon="heading.headerIcon" variant="text"
+                >{{ heading.title
+                }}<v-icon
+                  icon="mdi-swap-vertical-bold"
+                  @click="sortField(heading.title)"
+                ></v-icon
+              ></v-chip>
+            </th>
+          </tr>
+        </thead>
 
-      <tbody v-if="transactionData">
-        <tr v-for="transaction in transactionData" :key="transaction.id">
-          <td>
-            <v-chip label color="red"
-              >{{ transaction.transactionDate }}
-            </v-chip>
-          </td>
-          <td>
-            <v-chip label color="blue">{{ transaction.monthYear }} </v-chip>
-          </td>
-          <td>
-            <v-chip label color="green"
-              >{{ transaction.transactionType }}
-            </v-chip>
-          </td>
-          <td>
-            <v-chip label color="pink">{{ transaction.fromAccount }} </v-chip>
-          </td>
-          <td>
-            <v-chip label color="purple">{{ transaction.toAccount }} </v-chip>
-          </td>
-          <td>
-            <v-chip label color="red">{{
-              currency(transaction.amount)
-            }}</v-chip>
-          </td>
-          <td>
-            <v-img
-              :width="100"
-              aspect-ratio="16/9"
-              cover
-              :src="transaction.receipt"
-            ></v-img>
-          </td>
-          <td>{{ transaction.notes }}</td>
-          <td>
-            <v-btn @click="getViewDetails(transaction.id)" color="primary"
-              >View</v-btn
-            >
-            <v-btn @click="editDetails(transaction.id)" color="primary"
-              >Edit</v-btn
-            >
-          </td>
-        </tr>
-      </tbody>
-    </VTable>
-    <v-menu>
-      <template v-slot:activator="{ props }">
-        <v-btn color="primary" v-bind="props">{{ pageTitle }}</v-btn>
-      </template>
-      <v-list>
-        <v-list-item
-          v-for="item in pageNo"
-          :key="item"
-          @click="onPagination(item)"
-          :value="item"
-        >
-          <v-list-item-title>{{ item }}</v-list-item-title>
-        </v-list-item>
-      </v-list>
-    </v-menu>
+        <tbody v-if="transactionData">
+          <tr v-for="transaction in transactionData" :key="transaction.id">
+            <td>
+              <v-chip label color="red"
+                >{{ transaction.transactionDate }}
+              </v-chip>
+            </td>
+            <td>
+              <v-chip label color="blue">{{ transaction.monthYear }} </v-chip>
+            </td>
+            <td>
+              <v-chip label color="green"
+                >{{ transaction.transactionType }}
+              </v-chip>
+            </td>
+            <td>
+              <v-chip label color="pink">{{ transaction.fromAccount }} </v-chip>
+            </td>
+            <td>
+              <v-chip label color="purple">{{ transaction.toAccount }} </v-chip>
+            </td>
+            <td>
+              <v-chip label color="red">{{
+                currency(transaction.amount)
+              }}</v-chip>
+            </td>
+            <td>
+              <v-img
+                :width="100"
+                aspect-ratio="16/9"
+                cover
+                :src="transaction.receipt"
+              ></v-img>
+            </td>
+            <td>{{ transaction.notes }}</td>
+            <td>
+              <v-btn @click="getViewDetails(transaction.id)" color="primary"
+                >View</v-btn
+              >
+              <v-btn @click="editDetails(transaction.id)" color="primary"
+                >Edit</v-btn
+              >
+            </td>
+          </tr>
+        </tbody>
+      </VTable>
+      <v-menu>
+        <template v-slot:activator="{ props }">
+          <v-btn color="primary" v-bind="props">{{ pageTitle }}</v-btn>
+        </template>
+        <v-list>
+          <v-list-item
+            v-for="item in pageNo"
+            :key="item"
+            @click="onPagination(item)"
+            :value="item"
+          >
+            <v-list-item-title>{{ item }}</v-list-item-title>
+          </v-list-item>
+        </v-list>
+      </v-menu>
 
-    <v-pagination
-      v-model="page"
-      :length="noOfPages"
-      rounded="circle"
-    ></v-pagination>
+      <v-pagination
+        v-model="page"
+        :length="noOfPages"
+        rounded="circle"
+      ></v-pagination>
+    </VCard>
   </VCard>
 </template>
 <script>
@@ -132,8 +133,6 @@ import {
 import { mergeProps } from "vue";
 import { transactions } from "@/store/transactions";
 import { SearchTransaction } from "@/services/transactions/transactions.services";
-
-// import { transactions } from "@/store/transactions";
 
 export default {
   name: "AllTransactions",
@@ -235,7 +234,9 @@ export default {
     };
   },
   created() {
-    this.noOfPages = Math.ceil(this.data.length / this.pageTitle);
+    if (this.data) {
+      this.noOfPages = Math.ceil(this.data.length / this.pageTitle);
+    }
   },
   methods: {
     changePage(no) {
@@ -249,8 +250,6 @@ export default {
       console.log(no, "page");
     },
     getViewDetails(transactionId) {
-      //   alert("view");
-
       this.$router.push({
         name: "ViewTransaction",
         params: {
@@ -326,7 +325,7 @@ export default {
       }
     },
     searchInTransaction(transactionType, transactionTitle) {
-      console.log(transactionTitle, transactionType, "{DERFTGYUFRDEQ frtgy");
+      // console.log(transactionTitle, transactionType, "{DERFTGYUFRDEQ frtgy");
       this.transactionType = transactionType;
       this.searchTitle = transactionTitle;
     },

@@ -144,7 +144,6 @@ export default {
   methods: {
     async addToTransaction() {
       const validate = await this.$refs.form.validate();
-      console.log("adfasdfasdf", validate);
       if (validate.valid) {
         addTransaction(this.transaction);
         this.$router.push({

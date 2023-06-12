@@ -1,5 +1,5 @@
 <template>
-  <VCard class="pa-10">
+  <VCard class="pa-10" v-if="data">
     <v-menu>
       <template v-slot:activator="{ props }">
         <v-btn color="primary" v-bind="props"> Group By </v-btn>
@@ -9,6 +9,7 @@
         }}</v-chip>
       </template>
       <ChildComponent :data="item" :getData="getData" />
+
       <v-list>
         <v-list-item
           v-for="(item, index) in groupByTags"

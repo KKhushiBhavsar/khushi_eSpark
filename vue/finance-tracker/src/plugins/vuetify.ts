@@ -10,9 +10,7 @@ import * as components from "vuetify/components";
 import * as directives from "vuetify/directives";
 import { VDataTable } from "vuetify/labs/VDataTable";
 
-// import { fa } from "vuetify/iconsets/fa";
-// import { aliases, mdi } from "vuetify/lib/iconsets/mdi";
-// import "@mdi/font/css/materialdesignicons.css";
+
 import "font-awesome/css/font-awesome.min.css";
 
 export default createVuetify({

@@ -162,18 +162,3 @@ export default {
   },
 };
 </script>
-<style scoped>
-table {
-  margin: 10px;
-  padding: 10px;
-  /* border: 1px solid black; */
-}
-td {
-  /* border: 1px solid black; */
-  padding: 10px;
-}
-img {
-  width: 400px;
-  height: 400px;
-}
-</style>

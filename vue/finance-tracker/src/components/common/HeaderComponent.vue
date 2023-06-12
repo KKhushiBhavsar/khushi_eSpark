@@ -23,13 +23,6 @@
         </VTabs>
       </template>
     </VToolbar>
-    <!-- <VWindow v-model="tab">
-      <VWindowItem v-for="item in items" :key="item" :value="item">
-        <VCard flat>
-          <VCardText>{{ text }}</VCardText>
-        </VCard>
-      </VWindowItem>
-    </VWindow> -->
   </VCard>
 </template>
 <script>

@@ -1,6 +1,6 @@
 export const transactionValidation = {
   select: [
-    (value: any) => {
+    (value: string) => {
       if (!value) {
         return "Select Field";
       }
@@ -9,7 +9,7 @@ export const transactionValidation = {
     },
   ],
   date: [
-    (value: any) => {
+    (value: string) => {
       if (!value) {
         return "Select date";
       }
@@ -18,7 +18,7 @@ export const transactionValidation = {
     },
   ],
   currency: [
-    (value: any) => {
+    (value: string) => {
       if (!value) {
         return "Select currency";
       }
@@ -27,7 +27,7 @@ export const transactionValidation = {
     },
   ],
   notes: [
-    (value: any) => {
+    (value: string) => {
       if (!value) {
         return "Select notes";
       }
