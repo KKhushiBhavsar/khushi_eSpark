@@ -24,14 +24,16 @@
         v-model="transaction.fromAccount"
         :items="accountTypeOption"
         label="From Account"
-        :rules="rules.select"
+        :rules="accountTypeRule.account"
+        :customRules="rules.transactionType"
       ></VSelect>
 
       <VSelect
         v-model="transaction.toAccount"
         :items="accountTypeOption"
         label="To Account"
-        :rules="rules.select"
+        :rules="accountTypeRule.account"
+        :customRules="rules.transactionType"
       ></VSelect>
 
       <VTextField
@@ -128,6 +130,15 @@ export default {
     loading(val) {
       if (!val) return;
       setTimeout(() => (this.loading = false), 2000);
+    },
+  },
+  computed: {
+    accountTypeRule() {
+      console.log(this.transaction.fromAccount === this.transaction.toAccount);
+      const valid = this.transaction.fromAccount === this.transaction.toAccount;
+      return {
+        account: [() => !valid || "Account can not be same"],
+      };
     },
   },
   methods: {

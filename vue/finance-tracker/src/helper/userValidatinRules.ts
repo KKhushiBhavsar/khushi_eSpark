@@ -12,4 +12,10 @@ export const userLoginRules = {
       return "Must be greater than 5";
     },
   ],
+  name: [
+    (value: any) => {
+      if (value?.length > 2) return true;
+      return "Name Needs atleast 2 character";
+    },
+  ],
 };

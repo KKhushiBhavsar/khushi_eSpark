@@ -9,8 +9,6 @@
         }}</v-chip>
       </template>
       <ChildComponent :data="item" :getData="getData" />
-      <!-- it will send item to childcomponent-->
-
       <v-list>
         <v-list-item
           v-for="(item, index) in groupByTags"
