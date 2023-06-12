@@ -1,28 +1,30 @@
 <template>
-  <VCard class="pa-10" v-if="data">
-    <v-menu>
-      <template v-slot:activator="{ props }">
-        <v-btn color="primary" v-bind="props"> Group By </v-btn>
+  <VCard>
+    <VCard class="pa-10" v-if="transaction">
+      <v-menu>
+        <template v-slot:activator="{ props }">
+          <v-btn color="primary" v-bind="props"> Group By </v-btn>
 
-        <v-chip label v-if="groupByType" color="primary">{{
-          groupByType
-        }}</v-chip>
-      </template>
-      <ChildComponent :data="item" :getData="getData" />
+          <v-chip label v-if="groupByType" color="primary">{{
+            groupByType
+          }}</v-chip>
+        </template>
+        <ChildComponent :data="item" :getData="getData" />
 
-      <v-list>
-        <v-list-item
-          v-for="(item, index) in groupByTags"
-          :key="index"
-          :value="index"
-        >
-          <v-list-item-title
-            @click="groupByTransaction(item.key, item.title)"
-            >{{ item.title }}</v-list-item-title
+        <v-list>
+          <v-list-item
+            v-for="(item, index) in groupByTags"
+            :key="index"
+            :value="index"
           >
-        </v-list-item>
-      </v-list>
-    </v-menu>
+            <v-list-item-title
+              @click="groupByTransaction(item.key, item.title)"
+              >{{ item.title }}</v-list-item-title
+            >
+          </v-list-item>
+        </v-list>
+      </v-menu>
+    </VCard>
   </VCard>
   <div v-if="groupByObject">
     <CommonTransaction
@@ -32,7 +34,6 @@
       :key="key"
     >
       <v-chip> {{ groups }} </v-chip>
-      <!-- <v-divider class="border-opacity-75" color="success"></v-divider> -->
     </CommonTransaction>
   </div>
   <CommonTransaction v-else :data="transaction" :isGroupBy="false" />
@@ -52,8 +53,6 @@ export default {
   data() {
     return {
       transaction: getAllTransactionList(),
-
-      groupByTitle: null,
       groupByObject: null,
       groupByType: null,
       groupByTags: [
@@ -79,16 +78,12 @@ export default {
       ],
     };
   },
-  computed: {
-    search: {},
-  },
   methods: {
     mergeProps,
     groupByTransaction(transactionType, transactionTitle) {
       this.groupByType = transactionTitle;
-      // alert(transactionType);
       const groupByObject = groupByValues(transactionType);
-      console.log("GroupByObject", groupByObject);
+      // console.log("GroupByObject", groupByObject);
       this.groupByObject = groupByObject;
     },
   },

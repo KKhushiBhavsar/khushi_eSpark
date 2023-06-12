@@ -37,4 +37,17 @@ export const transactionValidation = {
       return true;
     },
   ],
+  files: [
+    (value: any) => {
+      if (!value) {
+        return "Select Files";
+      }
+      return (
+        !value ||
+        !value.length ||
+        value[0].size < 1000000 ||
+        "file size should be less than 1 MB!"
+      );
+    },
+  ],
 };

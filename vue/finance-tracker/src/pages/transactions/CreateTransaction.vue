@@ -49,8 +49,9 @@
         show-size
         counter
         label="Receipt"
-        accept=".png"
+        accept="['.png','.jpg','.jpeg']"
         @change="getImage()"
+        :rules="rules.files"
         ref="file"
       ></VFileInput>
       <!-- <input
@@ -134,7 +135,6 @@ export default {
   },
   computed: {
     accountTypeRule() {
-      console.log(this.transaction.fromAccount === this.transaction.toAccount);
       const valid = this.transaction.fromAccount === this.transaction.toAccount;
       return {
         account: [() => !valid || "Account can not be same"],
@@ -153,16 +153,14 @@ export default {
     },
     getImage() {
       const img = this.$refs.file;
-      console.log(img);
       const files = img.files[0];
       var reader = new FileReader();
 
       reader.readAsDataURL(files);
       reader.onload = (base64) => {
-        // console.log("transaction receipt", this.transaction.receipt);
         // localStorage["receipt"] = base64.currentTarget.result;
         // console.log(base64.currentTarget.result);
-        console.log(this);
+
         this.transaction.receipt = base64.currentTarget.result;
       };
     },

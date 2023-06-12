@@ -1,53 +1,55 @@
 <template>
   <div>
-    <form @submit.prevent="submit">
+    <VForm ref="form">
       <VTextField
         type="date"
         v-model="editTransactionData.transactionDate"
         label="Transaction Date"
+        :rules="rules.date"
       ></VTextField>
       <VSelect
         v-model="editTransactionData.monthYear"
         :items="monthVal"
         label="Select"
-        :selectRule="selectRule"
+        :rules="rules.select"
       ></VSelect>
       <VSelect
         v-model="editTransactionData.transactionType"
         :items="transactionTypeOption"
         label="Transaction Type"
-        :selectRule="selectRule"
+        :rules="rules.select"
       ></VSelect>
 
       <VSelect
         v-model="editTransactionData.fromAccount"
         :items="accountTypeOption"
         label="From Account"
-        :selectRule="selectRule"
+        :rules="accountTypeRule.account"
       ></VSelect>
 
       <VSelect
         v-model="editTransactionData.toAccount"
         :items="accountTypeOption"
         label="To Account"
-        :selectRule="selectRule"
+        :rules="accountTypeRule.account"
       ></VSelect>
 
       <VTextField
         type="number"
         v-model="editTransactionData.amount"
         label="Amount"
-        :selectRule="selectRule"
+        :rules="rules.currency"
         ref="currency"
       >
       </VTextField>
 
       <VFileInput
         show-size
-        v-model="imgDemo"
+        v-model="receiptImg"
         counter
         label="Receipt"
         accept=".png"
+        :rules="rules.files"
         @change="getImage()"
         ref="file"
       ></VFileInput>
@@ -65,15 +67,9 @@
         color="cyan"
         label="Notes"
         v-model="editTransactionData.notes"
-        :rules="rules"
+        :rules="rules.notes"
       ></VTextarea>
-      <VBtn
-        class="me-4"
-        type="submit"
-        @click="editData()"
-        color="primary"
-        :loading="loading"
-      >
+      <VBtn class="me-4" @click="editData()" color="primary" :loading="loading">
         Edit
         <template v-slot:loader>
           <v-progress-linear indeterminate></v-progress-linear>
@@ -81,10 +77,12 @@
       </VBtn>
 
       <VBtn @click="handleReset"> clear </VBtn>
-    </form>
+    </VForm>
   </div>
 </template>
 <script>
+import { transactionValidation } from "@/helper/transactionValidation";
+
 import {
   getViewTransactionDetails,
   editTransactionInDatabase,
@@ -93,7 +91,7 @@ export default {
   name: "ViewTransaction",
   data() {
     return {
-      dialog: false,
+      rules: transactionValidation,
       transactionId: this.$route.params.transactionId,
       editTransactionData: null,
       monthVal: [
@@ -119,7 +117,7 @@ export default {
         "Core Realtors",
         "Big Block",
       ],
-      imgDemo: null,
+      receiptImg: null,
     };
   },
   created() {
@@ -131,9 +129,19 @@ export default {
       .then((response) => response.blob())
       .then((blob) => {
         const file = new File([blob], "sample.png", { type: blob.type });
-        this.imgDemo = [file];
+        this.receiptImg = [file];
         console.log(file); //File object
       });
+  },
+  computed: {
+    accountTypeRule() {
+      const valid =
+        this.editTransactionData.fromAccount ===
+        this.editTransactionData.toAccount;
+      return {
+        account: [() => !valid || "Account can not be same"],
+      };
+    },
   },
   methods: {
     getImage() {
@@ -144,19 +152,18 @@ export default {
 
       reader.readAsDataURL(files);
       reader.onload = (base64) => {
-        // console.log("transaction receipt", this.transaction.receipt);
-        // localStorage["receipt"] = base64.currentTarget.result;
-        // console.log(base64.currentTarget.result);
-        console.log(this);
         this.editTransactionData.receipt = base64.currentTarget.result;
       };
     },
-    editData() {
-      const response = editTransactionInDatabase(this.editTransactionData);
-      if (response) {
-        this.$router.push({
-          name: "AllTransactions",
-        });
+    async editData() {
+      const validate = await this.$refs.form.validate();
+      if (validate.valid) {
+        const response = editTransactionInDatabase(this.editTransactionData);
+        if (response) {
+          this.$router.push({
+            name: "AllTransactions",
+          });
+        }
       }
     },
   },

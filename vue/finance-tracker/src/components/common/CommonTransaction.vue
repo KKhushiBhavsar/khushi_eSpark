@@ -41,7 +41,7 @@
                 >{{ heading.title
                 }}<v-icon
                   icon="mdi-swap-vertical-bold"
-                  @click="sortField(heading.title)"
+                  @click="sortField(heading.key)"
                 ></v-icon
               ></v-chip>
             </th>
@@ -120,15 +120,9 @@
 </template>
 <script>
 import {
+  sortAllTransaction,
   getAllTransactionList,
   sortByFiledName,
-  sortMonthYear,
-  sortTransactionDate,
-  sortTransactionType,
-  sortFromAccount,
-  sortToAccount,
-  sortAmount,
-  sortNotes,
 } from "@/services/transactions/transactions.services";
 import { mergeProps } from "vue";
 import { transactions } from "@/store/transactions";
@@ -147,7 +141,7 @@ export default {
   data() {
     return {
       page: 1,
-      pageTitle: 1,
+      pageTitle: 5,
       noOfPages: null,
       searchTitle: null,
       pageNo: [1, 2, 3, 5, 10, 15],
@@ -230,7 +224,6 @@ export default {
         },
       ],
       // transaction: getAllTransactionList(),
-      dialog: false,
     };
   },
   created() {
@@ -239,9 +232,6 @@ export default {
     }
   },
   methods: {
-    changePage(no) {
-      console.log("new page", no);
-    },
     onPagination(no) {
       this.pageTitle = no;
 
@@ -265,64 +255,17 @@ export default {
         },
       });
     },
-    seachValue(value) {
-      console.log(value);
-    },
+
     sortField(transactionTitle) {
       let sortedOrderd = [];
-      switch (transactionTitle) {
-        case "Transaction Date":
-          sortedOrderd = sortTransactionDate(
-            this.IsSortingOrderAsc,
-            this.transaction
-          );
-          this.transaction = sortedOrderd;
-          this.IsSortingOrderAsc = !this.IsSortingOrderAsc;
-          break;
-        case "Month Year":
-          sortedOrderd = sortMonthYear(
-            this.IsSortingOrderAsc,
-            this.transaction
-          );
-          this.transaction = sortedOrderd;
-          this.IsSortingOrderAsc = !this.IsSortingOrderAsc;
-          break;
-        case "Transaction Type":
-          console.log("this.transaction", this.transaction);
-          sortedOrderd = sortTransactionType(
-            this.IsSortingOrderAsc,
-            this.transaction
-          );
-          this.transaction = sortedOrderd;
-          this.IsSortingOrderAsc = !this.IsSortingOrderAsc;
-          break;
-        case "From Account":
-          sortedOrderd = sortFromAccount(
-            this.IsSortingOrderAsc,
-            this.transaction
-          );
-          this.transaction = sortedOrderd;
-          this.IsSortingOrderAsc = !this.IsSortingOrderAsc;
-          break;
-        case "To Account":
-          sortedOrderd = sortToAccount(
-            this.IsSortingOrderAsc,
-            this.transaction
-          );
-          this.transaction = sortedOrderd;
-          this.IsSortingOrderAsc = !this.IsSortingOrderAsc;
-          break;
-        case "Amount":
-          sortedOrderd = sortAmount(this.IsSortingOrderAsc, this.transaction);
-          this.transaction = sortedOrderd;
-          this.IsSortingOrderAsc = !this.IsSortingOrderAsc;
-          break;
-        case "Notes":
-          sortedOrderd = sortNotes(this.IsSortingOrderAsc, this.transaction);
-          this.transaction = sortedOrderd;
-          this.IsSortingOrderAsc = !this.IsSortingOrderAsc;
-          break;
-      }
+      const sortedData = sortAllTransaction(
+        this.IsSortingOrderAsc,
+        this.transaction,
+        transactionTitle
+      );
+      this.transaction = sortedData;
+      this.IsSortingOrderAsc = !this.IsSortingOrderAsc;
+      // console.log(sortedData);
     },
     searchInTransaction(transactionType, transactionTitle) {
       // console.log(transactionTitle, transactionType, "{DERFTGYUFRDEQ frtgy");
@@ -332,7 +275,6 @@ export default {
 
     currency(amount) {
       // const amount = this.$refs.currency.value;
-      console.log(amount);
       return Intl.NumberFormat("en-IN", {
         style: "currency",
         currency: "INR",

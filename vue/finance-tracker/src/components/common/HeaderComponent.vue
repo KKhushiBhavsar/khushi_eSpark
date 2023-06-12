@@ -47,7 +47,6 @@ export default {
   },
   methods: {
     gotoPage(page) {
-      console.log(page);
       this.$router.push({
         name: page.key,
       });
@@ -66,6 +65,6 @@ const darkMode = ref(false);
 const toggleTheme = () => {
   theme.global.name.value = darkMode.value ? "dark" : "light";
   // Optional: Get value of current theme
-  console.log(`Current theme is dark? ${theme.global.current.value.dark}`);
+  // console.log(`Current theme is dark? ${theme.global.current.value.dark}`);
 };
 </script>

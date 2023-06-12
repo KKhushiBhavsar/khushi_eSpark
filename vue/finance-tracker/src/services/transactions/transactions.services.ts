@@ -51,14 +51,18 @@ export const getViewTransactionDetails = (
 //     return sortedOrderd;
 //   }
 // };
-
-export const sortTransactionDate = (order: string, transaction: any) => {
+export const sortAllTransaction = (
+  order: string,
+  transaction: any,
+  transactionTitle: any
+) => {
   const sortedTransaction = transaction;
+  console.log("transactionTitle", transactionTitle);
   if (order) {
     const sortedOrderd = sortedTransaction.sort((x: any, y: any) => {
-      return x.monthYear == y.monthYear
+      return x[transactionTitle] == y[transactionTitle]
         ? 0
-        : x.monthYear > y.monthYear
+        : x[transactionTitle] > y[transactionTitle]
         ? 1
         : -1;
     });
@@ -67,144 +71,11 @@ export const sortTransactionDate = (order: string, transaction: any) => {
   } else {
     console.log("decending");
     const sortedOrderd = sortedTransaction.sort((x: any, y: any) => {
-      return x.monthYear == y.monthYear
+      return x[transactionTitle] == y[transactionTitle]
         ? 0
-        : x.monthYear < y.monthYear
+        : x[transactionTitle] < y[transactionTitle]
         ? 1
         : -1;
-    });
-    return sortedOrderd;
-  }
-};
-
-export const sortMonthYear = (order: boolean, transaction: any) => {
-  const sortedTransaction = transaction;
-  if (order) {
-    const sortedOrderd = sortedTransaction.sort((x: any, y: any) => {
-      return x.monthYear == y.monthYear
-        ? 0
-        : x.monthYear > y.monthYear
-        ? 1
-        : -1;
-    });
-    console.log("in function", sortedOrderd);
-    return sortedOrderd;
-  } else {
-    console.log("decending");
-    const sortedOrderd = sortedTransaction.sort((x: any, y: any) => {
-      return x.monthYear == y.monthYear
-        ? 0
-        : x.monthYear < y.monthYear
-        ? 1
-        : -1;
-    });
-    return sortedOrderd;
-  }
-};
-
-export const sortTransactionType = (order: boolean, transaction: any) => {
-  const sortedTransaction = transaction;
-  if (order) {
-    const sortedOrderd = sortedTransaction.sort((x: any, y: any) => {
-      return x.transactionType == y.transactionType
-        ? 0
-        : x.transactionType > y.transactionType
-        ? 1
-        : -1;
-    });
-    console.log("in function", sortedOrderd);
-    return sortedOrderd;
-  } else {
-    console.log("decending");
-    const sortedOrderd = sortedTransaction.sort((x: any, y: any) => {
-      return x.transactionType == y.transactionType
-        ? 0
-        : x.transactionType < y.transactionType
-        ? 1
-        : -1;
-    });
-    return sortedOrderd;
-  }
-};
-
-export const sortFromAccount = (order: boolean, transaction: any) => {
-  // const sortedTransaction = getAllTransactionList() || [];
-  const sortedTransaction = transaction;
-  if (order) {
-    const sortedOrderd = sortedTransaction.sort((x: any, y: any) => {
-      return x.fromAccount == y.fromAccount
-        ? 0
-        : x.fromAccount > y.fromAccount
-        ? 1
-        : -1;
-    });
-    console.log("in function", sortedOrderd);
-    return sortedOrderd;
-  } else {
-    console.log("decending");
-    const sortedOrderd = sortedTransaction.sort((x: any, y: any) => {
-      return x.fromAccount == y.fromAccount
-        ? 0
-        : x.fromAccount < y.fromAccount
-        ? 1
-        : -1;
-    });
-    return sortedOrderd;
-  }
-};
-export const sortToAccount = (order: boolean, transaction: any) => {
-  const sortedTransaction = transaction;
-  if (order) {
-    const sortedOrderd = sortedTransaction.sort((x: any, y: any) => {
-      return x.toAccount == y.toAccount
-        ? 0
-        : x.toAccount > y.toAccount
-        ? 1
-        : -1;
-    });
-    console.log("in function", sortedOrderd);
-    return sortedOrderd;
-  } else {
-    console.log("decending");
-    const sortedOrderd = sortedTransaction.sort((x: any, y: any) => {
-      return x.toAccount == y.toAccount
-        ? 0
-        : x.toAccount < y.toAccount
-        ? 1
-        : -1;
-    });
-    return sortedOrderd;
-  }
-};
-
-export const sortAmount = (order: boolean, transaction: any) => {
-  const sortedTransaction = transaction;
-  if (order) {
-    const sortedOrderd = sortedTransaction.sort((x: any, y: any) => {
-      return parseInt(x.amount) > parseInt(y.amount) ? 1 : -1;
-    });
-    console.log("in function", sortedOrderd);
-    return sortedOrderd;
-  } else {
-    console.log("decending");
-    const sortedOrderd = sortedTransaction.sort((x: any, y: any) => {
-      return parseInt(x.amount) < parseInt(y.amount) ? 1 : -1;
-    });
-    return sortedOrderd;
-  }
-};
-export const sortNotes = (order: boolean, transaction: any) => {
-  const sortedTransaction = transaction;
-  if (order) {
-    const sortedOrderd = sortedTransaction.sort((x: any, y: any) => {
-      return x.notes == y.notes ? 0 : x.notes > y.notes ? 1 : -1;
-    });
-    console.log("in function", sortedOrderd);
-    return sortedOrderd;
-  } else {
-    console.log("decending");
-    const sortedOrderd = sortedTransaction.sort((x: any, y: any) => {
-      return x.notes == y.notes ? 0 : x.notes < y.notes ? 1 : -1;
     });
     return sortedOrderd;
   }
