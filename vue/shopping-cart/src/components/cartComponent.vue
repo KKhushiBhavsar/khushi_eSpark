@@ -31,6 +31,7 @@
 </template>
 
 <script>
+import { mapGetters } from "vuex";
 export default {
   name: "cartComponent",
   data() {
@@ -39,8 +40,9 @@ export default {
     };
   },
   computed: {
+    ...mapGetters({ cart: "cart" }),
     cartProduct() {
-      return this.$store.getters.cart;
+      return this.cart;
     },
   },
   methods: {

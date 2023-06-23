@@ -1,6 +1,6 @@
 <template>
   <div class="parent-container">
-    <div class="sell-container">Sale Will End IN {{ timerCount }}</div>
+    <div class="sell-container">Sale Will End IN 00 : {{ timerCount }}</div>
     <ul v-for="saleProducts in saleProductList" :key="saleProducts">
       <li class="img-item">
         <div class="card-container">
@@ -25,12 +25,13 @@
   </div>
 </template>
 <script>
+import { mapGetters } from "vuex";
 export default {
   name: "saleProductList",
   data() {
     return {
       isSaleOn: true,
-      timerCount: 3,
+      timerCount: 59,
       timeOutId: null,
     };
   },
@@ -70,8 +71,9 @@ export default {
     },
   },
   computed: {
+    ...mapGetters({ saleProducts: "saleProducts" }),
     saleProductList() {
-      return this.$store.getters.saleProducts;
+      return this.saleProducts;
     },
   },
   created() {

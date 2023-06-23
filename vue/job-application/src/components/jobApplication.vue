@@ -181,6 +181,9 @@ export default {
     editData: {
       type: Object,
     },
+    isEdit: {
+      type: Boolean,
+    },
   },
   data() {
     return {
@@ -306,14 +309,11 @@ export default {
       }
     },
     submitData() {
-      console.log("submit data", this.userData.reference);
-      const indexUser = this.user.findIndex((user) => {
-        return user.id === this.userData.id;
-      });
-      if (indexUser === -1) {
-        this.user.push(this.userData);
+      console.log(this.isEdit);
+      if (this.IsEdit) {
+        this.user.splice(1, 1, this.userData);
       } else {
-        this.user.splice(indexUser, 1, this.userData);
+        this.user.push(this.userData);
       }
       localStorage.setItem("user", JSON.stringify(this.user));
 

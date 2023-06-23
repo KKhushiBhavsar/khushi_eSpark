@@ -6,6 +6,7 @@
     v-if="displayForm"
     @onUserAdd="onUserAdd"
     :editData="editData"
+    :isEdit="isEdit"
   />
   <jobApplicationList v-else @onUserEdit="onUserEdit" />
 </template>
@@ -24,14 +25,17 @@ export default {
     return {
       displayForm: true,
       editData: {},
+      isEdit: null,
     };
   },
   methods: {
     onUserAdd(isDisplayForm) {
       this.displayForm = isDisplayForm;
       this.editData = [];
+      this.isEdit = false;
     },
     onUserEdit(editData) {
+      this.isEdit = true;
       this.displayForm = true;
       this.editData = editData;
     },

@@ -15,6 +15,7 @@
 
 <script>
 import router from "@/routes";
+import { mapGetters } from "vuex";
 export default {
   name: "logInPage",
   data() {
@@ -28,8 +29,9 @@ export default {
     };
   },
   computed: {
+    ...mapGetters({ user: "user" }),
     userCredentials() {
-      return this.$store.getters.user;
+      return this.user;
     },
   },
   methods: {
