@@ -1,20 +1,26 @@
 "use strict";
 const { Model } = require("sequelize");
-const whishlist = require("./whishlist");
 module.exports = (sequelize, DataTypes) => {
   class Product extends Model {
     static associate(models) {
-      Product.belongsTo(models.Cart, { foreignKey: "product_id" });
-      Product.hasMany(models.Category, { foreignKey: "category_id" });
-      Product.belongsTo(models.Whishlist, { foreignKey: "product_id" });
-      Product.belongsTo(models.Orderitem, { foreignKey: "product_id" });
+      Product.belongsTo(models.Category, {
+        foreignKey: "category_id",
+      });
+      Product.belongsToMany(models.Cart, {
+        through: "Cart_Product",
+        as: "products",
+        foreignKey: "product_id",
+      });
+      Product.belongsTo(models.Whishlist, {
+        foreignKey: "whishlist_id",
+      });
+      Product.belongsTo(models.Orderitem, {
+        foreignKey: "orderitem_id",
+      });
     }
   }
   Product.init(
     {
-      product_id: {
-        type: DataTypes.INTEGER,
-      },
       description: {
         type: DataTypes.STRING,
       },
@@ -23,6 +29,13 @@ module.exports = (sequelize, DataTypes) => {
       },
       stock: {
         type: DataTypes.INTEGER,
+      },
+      category_id: {
+        type: DataTypes.INTEGER,
+        references: {
+          model: "Categories",
+          key: "id",
+        },
       },
     },
     {

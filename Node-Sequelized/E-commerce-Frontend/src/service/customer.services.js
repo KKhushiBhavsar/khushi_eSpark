@@ -1,9 +1,14 @@
 // import { http } from "@/plugins/axios/axios.plugins";
 import axios from "axios";
 
-const customerServices = async (params) => {
+const getCustomer = async (params) => {
   console.log("params:::::::::", params);
   return await axios(`http://localhost:3000/get-customers` + params);
   // return http.get("/get-customer");
 };
-export { customerServices };
+
+const getCustomerDetails = async (params) => {
+  console.log("::::::PARAMS:::::::", params);
+  return await axios(`http://localhost:3000/user-data` + params);
+};
+export { getCustomer, getCustomerDetails };

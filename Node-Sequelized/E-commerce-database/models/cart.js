@@ -3,14 +3,29 @@ const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
   class Cart extends Model {
     static associate(models) {
-      Cart.hasMany(models.Customer, { foreignKey: "customer_id" });
-      Cart.hasMany(models.Product, { foreignKey: "product_id" });
+      Cart.hasOne(models.Customer, { foreignKey: "cart_id" });
+      Cart.belongsToMany(models.Product, {
+        through: "Cart_Product",
+        as: "cart",
+        foreignKey: "cart_id",
+      });
     }
   }
   Cart.init(
     {
-      cart_id: {
+      customer_id: {
         type: DataTypes.INTEGER,
+        references: {
+          model: "Customers",
+          key: "id",
+        },
+      },
+      product_id: {
+        type: DataTypes.INTEGER,
+        references: {
+          model: "Products",
+          key: "id",
+        },
       },
       quantity: {
         type: DataTypes.INTEGER,

@@ -1,4 +1,7 @@
 <template>
+  <!-- <VCard v-if="wishlistItems">
+    {{ wishlistItems }}
+  </VCard> -->
   <VCard class="pa-10 ma-10">
     <VCard class="ma-10 pa-10" v-if="!customerData">
       No Customer found at this moment
@@ -37,28 +40,98 @@
           </tr>
         </thead>
         <tbody v-if="customerData">
-          <tr v-for="item in customerData" :key="item.id">
+          <tr v-for="customer in customerData" :key="customer.id">
             <td>
-              <v-chip label color="red">{{ item.first_name }} </v-chip>
+              <v-chip label color="red">{{ customer.first_name }} </v-chip>
             </td>
             <td>
-              <v-chip label color="blue">{{ item.last_name }} </v-chip>
+              <v-chip label color="blue">{{ customer.last_name }} </v-chip>
             </td>
             <td>
-              <v-chip label color="green">{{ item.email }} </v-chip>
+              <v-chip label color="indigo">{{ customer.email }} </v-chip>
             </td>
             <td>
-              <v-chip label color="pink">{{ item.phone_number }} </v-chip>
+              <v-chip label color="pink">{{ customer.phone_number }} </v-chip>
             </td>
             <td>
-              <v-chip label color="black">{{ item.address }} </v-chip>
+              <v-chip label color="black">{{ customer.address }} </v-chip>
             </td>
+            <!-- <td>
+              <v-btn @click="viewWishList(customer.id)">View WishList</v-btn>
+            </td> -->
+            <v-dialog v-model="dialog" width="auto">
+              <template v-slot:activator="{ props }">
+                <v-btn
+                  color="green"
+                  v-bind="props"
+                  @click="viewWishList(customer.id)"
+                  >Wish List
+                </v-btn>
+              </template>
+              <v-card>
+                <v-card-text>
+                  <v-card-text v-if="!wishlistItems">
+                    "NO WISH LIST FOUND"
+                  </v-card-text>
+                  <v-card-text v-else>
+                    <!-- {{ wishlistItems }} -->
+                    <VTable>
+                      <thead>
+                        <tr>
+                          <th v-for="heading in whislistheaders" :key="heading">
+                            <!-- <v-icon icon="mdi-calendar-range-outline"></v-icon> -->
+                            <v-chip
+                              :prepend-icon="heading.headerIcon"
+                              variant="text"
+                              >{{ heading.title
+                              }}<v-icon
+                                icon="mdi-swap-vertical-bold"
+                                @click="sortWhishlist(heading.key)"
+                              ></v-icon
+                            ></v-chip>
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody v-if="wishlistItems">
+                        <tr v-for="items in wishlistItems" :key="items.id">
+                          <td>
+                            <v-chip label color="red"
+                              >{{ items.description }}
+                            </v-chip>
+                          </td>
+                          <td>
+                            <v-chip label color="blue"
+                              >{{ items.price }}
+                            </v-chip>
+                          </td>
+                          <td>
+                            <v-chip label color="pink"
+                              >{{ items.stock }}
+                            </v-chip>
+                          </td>
+                          <td>
+                            <v-chip label color="blue"
+                              >{{ items.createdAt }}
+                            </v-chip>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </VTable>
+                  </v-card-text>
+                </v-card-text>
+                <v-card-actions>
+                  <v-btn color="indigo" block @click="dialog = false"
+                    >Close Dialog</v-btn
+                  >
+                </v-card-actions>
+              </v-card>
+            </v-dialog>
           </tr>
         </tbody>
       </VTable>
       <v-menu>
         <template v-slot:activator="{ props }">
-          <v-btn color="primary" v-bind="props">{{ pageTitle }}</v-btn>
+          <v-btn color="green" v-bind="props">{{ pageTitle }}</v-btn>
         </template>
         <v-list>
           <v-list-item
@@ -83,11 +156,13 @@
 </template>
 <script>
 import { ref } from "vue";
-import { customerServices } from "@/service/customer.services";
+import { getCustomer, getCustomerDetails } from "@/service/customer.services";
 
 export default {
   name: "AllItems",
   setup() {
+    const userId = ref(null);
+    const wishlistItems = ref(null);
     const loading = ref(true);
     const customerData = ref(null);
     const IsSortingOrderAsc = ref(true);
@@ -99,6 +174,7 @@ export default {
     const searchTitleKey = ref(null);
     const search = ref(null);
     const order = ref("asc");
+    const dialog = ref("false");
     const headers = ref([
       {
         title: "First Name",
@@ -111,18 +187,39 @@ export default {
         title: "Email",
         align: "end",
         key: "email",
-        headerIcon: "mdi-play-circle-outline",
+        headerIcon: "mdi-email",
       },
       {
         title: "Phone Number",
         align: "end",
         key: "phone_number",
-        headerIcon: "mdi-play-circle-outline",
+        headerIcon: "mdi-dialpad",
       },
       {
         title: "Address",
         align: "end",
         key: "address",
+        headerIcon: "mdi-domain",
+      },
+    ]);
+    const whislistheaders = ref([
+      {
+        title: "Product Description",
+        align: "end",
+        key: "description",
+        headerIcon: "mdi-calendar-range-outline",
+      },
+      { title: "Price", align: "end", key: "price", headerIcon: "" },
+      {
+        title: "Stock",
+        align: "end",
+        key: "stock",
+        headerIcon: "mdi-play-circle-outline",
+      },
+      {
+        title: "Added On",
+        align: "end",
+        key: "createdAt",
         headerIcon: "mdi-play-circle-outline",
       },
     ]);
@@ -130,11 +227,11 @@ export default {
       try {
         // setTimeout(async () => {
         loading.value = false;
-        // const data = await customerServices();
+        // const data = await getCustomer();
         // customerData.value = data.data.data;
         // console.log(customerData.value);
 
-        const responseData = await customerServices(
+        const responseData = await getCustomer(
           `?page=${page.value}&limit=${pageTitle.value}`
         );
         customerData.value = responseData.data.data;
@@ -150,12 +247,26 @@ export default {
         }
       }
     };
+    const viewWishList = async (id) => {
+      userId.value = id;
+      const responseData = await getCustomerDetails(`?where={"id":"${id}"}`);
+      console.log(
+        ":::::::RESPONSE DATA::::::::::::::::",
+        responseData.data?.data[0]?.Whishlist?.Products
+      );
 
+      wishlistItems.value =
+        responseData.data?.data[0]?.Whishlist?.Products || null;
+      if (wishlistItems?.value?.length === 0) {
+        wishlistItems.value = null;
+      }
+      console.log(wishlistItems.value);
+    };
     getfunction();
 
     const sortField = async (sortFieldTitle) => {
       console.log(sortFieldTitle);
-      const customerValue = await customerServices(
+      const customerValue = await getCustomer(
         `?sort={"${sortFieldTitle}":"${order.value}"}`
       );
       if (order.value === "asc") {
@@ -165,31 +276,46 @@ export default {
       }
       customerData.value = customerValue.data.data;
       console.log("All Data::::::", customerData.value);
-      // // console.log("allItems", allItems.data.data);
+    };
+    const sortWhishlist = async (sortField) => {
+      console.log(sortField);
+      const responseData = await getCustomerDetails(
+        `?where={"id":"${userId.value}"}&sort={"${sortField}":"${order.value}"}`
+      );
+      if (order.value === "asc") {
+        order.value = "desc";
+      } else {
+        order.value = "asc";
+      }
+      wishlistItems.value = responseData.data?.data[0]?.Whishlist?.Products;
+      console.log(responseData.data.data);
     };
     const onPagination = (no) => {
       pageTitle.value = no;
       page.value = 1;
       getfunction();
-      // console.log(no, "page");
     };
     const searchInItems = (key, title) => {
       searchTitleKey.value = key;
       searchTitle.value = title;
-      // console.log(key, title);
     };
 
     const searchItem = async () => {
       console.log("search title", searchTitleKey.value);
       console.log("search value ", search.value);
-      const allCustomer = await customerServices(
+      const allCustomer = await getCustomer(
         `?where={"${searchTitleKey.value}": "${search.value}"}`
       );
       customerData.value = allCustomer.data.data;
       console.log("searchValue::::::::::::::", customerData.value);
     };
     return {
+      userId,
+      whislistheaders,
+      sortWhishlist,
+      dialog,
       customerData,
+      wishlistItems,
       getfunction,
       headers,
       sortField,
@@ -205,6 +331,7 @@ export default {
       searchItem,
       searchTitleKey,
       loading,
+      viewWishList,
     };
   },
 };

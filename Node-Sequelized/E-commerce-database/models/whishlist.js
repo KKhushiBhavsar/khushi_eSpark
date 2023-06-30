@@ -3,20 +3,27 @@ const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
   class Whishlist extends Model {
     static associate(models) {
-      Whishlist.belongsTo(models.Customer, { foreignKey: "whishlist_id" });
-      Whishlist.hasMany(models.Product, { foreignKey: "product_id" });
+      Whishlist.hasMany(models.Customer, { foreignKey: "whishlist_id" });
+      Whishlist.hasMany(models.Product, {
+        foreignKey: "whishlist_id",
+      });
     }
   }
   Whishlist.init(
     {
-      whishlist_id: {
+      product_id: {
         type: DataTypes.INTEGER,
+        references: {
+          model: "Products",
+          key: "id",
+        },
       },
-      whishlist_product_id: {
+      customer_id: {
         type: DataTypes.INTEGER,
-      },
-      whishlist_product: {
-        type: DataTypes.STRING,
+        references: {
+          model: "Customers",
+          key: "id",
+        },
       },
     },
     {

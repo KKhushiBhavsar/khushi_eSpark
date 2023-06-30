@@ -3,15 +3,12 @@ const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
   class Payment extends Model {
     static associate(models) {
-      Payment.belongsTo(models.Order, { foreignKey: "payment_id" });
-      Payment.hasMany(models.Customer, { foreignKey: "customer_id" });
+      Payment.hasMany(models.Order, { foreignKey: "payment_id" });
+      Payment.hasMany(models.Customer, { foreignKey: "payment_id" });
     }
   }
   Payment.init(
     {
-      payment_id: {
-        type: DataTypes.INTEGER,
-      },
       payment_date: {
         type: DataTypes.DATE,
       },
@@ -20,6 +17,13 @@ module.exports = (sequelize, DataTypes) => {
       },
       amount: {
         type: DataTypes.INTEGER,
+      },
+      customer_id: {
+        type: DataTypes.INTEGER,
+        references: {
+          model: "Customers",
+          key: "id",
+        },
       },
     },
     {
