@@ -8,20 +8,13 @@ const {
   Shipment,
 
   Sequelize,
+  sequelize,
 } = require("../models");
 
 const Op = Sequelize.Op;
 
 const getCustomerFromDB = async (req, res) => {
   try {
-    const allowField = [
-      "id",
-      "first_name",
-      "last_name",
-      "email",
-      "phone_number",
-      "address",
-    ];
     const order = [];
     const pagination = {
       count: null,
@@ -29,7 +22,8 @@ const getCustomerFromDB = async (req, res) => {
       limit: 5,
       offset: 0,
     };
-
+    var seachOn = null;
+    var searchValue = null;
     if (!isNaN(req.query.page) && parseInt(req.query.page) >= 0) {
       pagination.page = parseInt(req.query.page);
     }
@@ -39,17 +33,22 @@ const getCustomerFromDB = async (req, res) => {
     }
 
     pagination.offset = (pagination.page - 1) * pagination.limit;
-
     if (req.query.where) {
-      var searchField = Object.entries(JSON.parse(req.query.where))[0];
+      var searchField = JSON.parse(req.query.where);
+      const searchObject = [];
+      console.log(":::::::SEARCH FIELD:::::::::", searchField);
+      const keys = Object.keys(searchField);
+      console.log("::::::::::KEYS:::::::::", keys);
+      const values = Object.values(searchField);
+      console.log(":::::VALUES::::::", values);
+      seachOn = searchField[0];
+      searchValue = searchField[1];
+      const query = keys.forEach((i, index) => [
+        searchObject.push({ [i]: { [Op.like]: `%${values[index]}%` } }),
+      ]);
+      console.log(":::::::SEARCH OBJECT::::::", searchObject);
       var searchCondition = {
-        [Op.or]: [
-          { first_name: { [Op.like]: "%" + searchField[1] + "%" } },
-          { last_name: { [Op.like]: "%" + searchField[1] + "%" } },
-          { email: { [Op.like]: "%" + searchField[1] + "%" } },
-          { address: { [Op.like]: "%" + searchField[1] + "%" } },
-          { phone_number: { [Op.like]: "%" + searchField[1] + "%" } },
-        ],
+        [Op.and]: searchObject,
       };
       console.log("searchCOndition::::::::::::", searchCondition);
     }
@@ -57,7 +56,7 @@ const getCustomerFromDB = async (req, res) => {
       const sortField = Object.entries(JSON.parse(req.query.sort))[0];
       order.push([[sortField[0], sortField[1]]]);
     }
-    console.log("::::::::::order123:::::::", order);
+
     const { count, rows } = await Customer.findAndCountAll({
       where: searchCondition,
       limit: pagination.limit,
@@ -66,7 +65,6 @@ const getCustomerFromDB = async (req, res) => {
     });
 
     pagination.count = count;
-
     return res.json({ data: rows, pagination: pagination });
   } catch (error) {
     console.log(error);
@@ -123,7 +121,8 @@ const getCustomerRecords = async (req, res) => {
     limit: 10,
   });
   console.log(JSON.parse(JSON.stringify(response[0].dataValues)));
-  return res.json(response[0].dataValues);
+  return res.json({ data: rows, pagination: pagination });
+  // return res.json(response[0].dataValues);
 };
 
 const getAllCustomerRecords = async (req, res) => {
@@ -133,7 +132,73 @@ const getAllCustomerRecords = async (req, res) => {
 
 const getDetailsOfCustomer = async (req, res) => {
   try {
+    let orderField = "id";
+    let order = "desc";
+    const pagination = {
+      count: null,
+      page: 1,
+      limit: 10,
+      offset: 0,
+    };
+
+    if (!isNaN(req.query.page) && parseInt(req.query.page) >= 0) {
+      pagination.page = parseInt(req.query.page);
+    }
+
+    if (!isNaN(req.query.limit) && req.query.limit >= 0) {
+      pagination.limit = parseInt(req.query.limit);
+    }
+
+    pagination.offset = (pagination.page - 1) * pagination.limit;
+
+    if (req.query.where) {
+      var searchField = Object.entries(JSON.parse(req.query.where))[0];
+      var searchCondition = {
+        [Op.or]: [{ id: { [Op.like]: "%" + searchField[1] + "%" } }],
+      };
+      // console.log("searchCondition::::::::::::", searchCondition);
+    }
+    if (req.query.sort) {
+      const sortField = Object.entries(JSON.parse(req.query.sort))[0];
+      // console.log(":::::::::sortfield::::::::::::", sortField);
+      orderField = sortField[0];
+      orderField = sortField[1];
+    }
+    // console.log(":::::::::order:::::::", orderList);
+    const { count, rows } = await Customer.findAndCountAll({
+      where: searchCondition,
+      limit: pagination.limit,
+      offset: pagination.offset,
+      // order: orderList,
+      include: [
+        {
+          model: Whishlist,
+          include: [
+            {
+              model: Product,
+              // order: orderList,
+              // limit: pagination.limit,
+            },
+          ],
+          order: [[{ model: Whishlist }, { model: Product }, "id", "desc"]],
+        },
+      ],
+    });
+
+    pagination.count = count;
+    // return res.json(rows);
+    return res.json({ data: rows, pagination: pagination });
+  } catch (error) {
+    console.log(error);
+    res.json(error.message);
+  }
+};
+
+const getCartDetails = async (req, res) => {
+  try {
     const orderList = [];
+    let orderField = "id";
+    let order = "desc";
     const pagination = {
       count: null,
       page: 1,
@@ -161,101 +226,45 @@ const getDetailsOfCustomer = async (req, res) => {
     if (req.query.sort) {
       const sortField = Object.entries(JSON.parse(req.query.sort))[0];
       console.log(":::::::::sortfield::::::::::::", sortField);
-      orderList.push([[sortField[0], sortField[1]]]);
+      orderList.push(sortField[0]);
+      orderList.push(sortField[1]);
+      orderField = sortField[0];
+      order = sortField[1];
     }
-    console.log(":::::::::order:::::::", orderList);
+    // console.log(":::::::::order:::::::", sortField[0], sortField[1]);
     const { count, rows } = await Customer.findAndCountAll({
       where: searchCondition,
-      limit: pagination.limit,
+      // limit: pagination.limit,
       offset: pagination.offset,
-      order: orderList,
+      // order: orderList,
+
       include: [
         {
-          model: Whishlist,
+          model: Cart,
+          // as: "cart",
+
           include: [
             {
               model: Product,
-              order: orderList,
-              limit: pagination.limit,
+              as: "cart",
+              through: "Cart_Product",
             },
           ],
-          // order: [[{ model: Product }, "id", "desc"]],
         },
+      ],
+      limit: pagination.limit,
+      order: [
+        [{ model: Cart }, { model: Product, as: "cart" }, orderField, order],
       ],
     });
 
     pagination.count = count;
-    // return res.json(rows);
     return res.json({ data: rows, pagination: pagination });
   } catch (error) {
     console.log(error);
     res.json(error.message);
   }
 };
-
-// const getCartDetails = async (req, res) => {
-//   try {
-//     const orderList = [];
-//     const pagination = {
-//       count: null,
-//       page: 1,
-//       limit: 10,
-//       offset: 0,
-//     };
-
-//     if (!isNaN(req.query.page) && parseInt(req.query.page) >= 0) {
-//       pagination.page = parseInt(req.query.page);
-//     }
-
-//     if (!isNaN(req.query.limit) && req.query.limit >= 0) {
-//       pagination.limit = parseInt(req.query.limit);
-//     }
-
-//     pagination.offset = (pagination.page - 1) * pagination.limit;
-
-//     if (req.query.where) {
-//       var searchField = Object.entries(JSON.parse(req.query.where))[0];
-//       var searchCondition = {
-//         [Op.or]: [{ id: { [Op.like]: "%" + searchField[1] + "%" } }],
-//       };
-//       console.log("searchCondition::::::::::::", searchCondition);
-//     }
-//     if (req.query.sort) {
-//       const sortField = Object.entries(JSON.parse(req.query.sort))[0];
-//       console.log(":::::::::sortfield::::::::::::", sortField);
-//       orderList.push([[sortField[0], sortField[1]]]);
-//     }
-//     console.log(":::::::::order:::::::", orderList);
-//     const { count, rows } = await Customer.findAndCountAll({
-//       where: searchCondition,
-//       // limit: pagination.limit,
-//       offset: pagination.offset,
-//       order: orderList,
-//       include: [
-//         {
-//           model: Cart,
-//           as: "cart",
-//           include: [
-//             {
-//               model: Product,
-//               as: "products",
-//               // order: orderList,
-//               // limit: pagination.limit,
-//             },
-//           ],
-//           order: [[{ model: Product }, "id", "desc"]],
-//         },
-//       ],
-//     });
-
-//     pagination.count = count;
-//     // return res.json(rows);
-//     return res.json({ data: rows, pagination: pagination });
-//   } catch (error) {
-//     console.log(error);
-//     res.json(error.message);
-//   }
-// };
 module.exports = {
   getCustomerFromDB,
   getCustomerRecords,
