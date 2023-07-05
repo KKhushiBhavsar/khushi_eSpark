@@ -4,33 +4,38 @@
       <h1>No Customer found at this moment</h1>
     </VCard>
     <v-card v-else>
-      <v-menu>
-        <template v-slot:activator="{ props }">
-          <v-btn color="primary" v-bind="props">Search List</v-btn>
-          <v-chip label v-if="searchTitle" color="primary">{{
-            searchTitle
-          }}</v-chip>
-        </template>
-        <ChildComponent :data="item" :getData="getData" />
-        <v-list>
-          <v-list-item
-            v-for="(item, index) in SearchTags"
-            :key="index"
-            @click="searchInData(item.key, item.title)"
-            :value="index"
-          >
-            <v-list-item-title>{{ item.title }}</v-list-item-title>
-          </v-list-item>
-        </v-list>
-      </v-menu>
-      <VTextField
-        v-model="search"
-        append-icon="mdi-magnify"
-        label="Search"
-        single-line
-        hide-details
-        @keyup="searchItem()"
-      ></VTextField>
+      <div>
+        <v-menu>
+          <template v-slot:activator="{ props }">
+            <v-btn color="primary" v-bind="props">Search List</v-btn>
+            <!-- <v-chip label v-if="searchTitle" color="primary">{{
+              searchTitle
+            }}</v-chip> -->
+          </template>
+          <ChildComponent :data="item" :getData="getData" />
+          <v-list>
+            <v-list-item
+              v-for="(item, index) in SearchTags"
+              :key="index"
+              @click="searchInData(item.key, item.title), addComponent()"
+              :value="index"
+            >
+              <v-list-item-title>{{ item.title }}</v-list-item-title>
+            </v-list-item>
+          </v-list>
+        </v-menu>
+      </div>
+      <div v-for="item in count" :key="item">
+        <VTextField
+          v-model="search[item - 1]"
+          append-icon="mdi-magnify"
+          :label="searchItemTag[item - 1].title"
+          single-line
+          hide-details
+          @keyup="searchItem()"
+        ></VTextField>
+      </div>
+
       <VTable>
         <thead>
           <tr>
@@ -243,6 +248,9 @@ import {
 export default {
   name: "AllItems",
   setup() {
+    const count = ref(0);
+    const searchingObj = ref([]);
+    const searchItemTag = ref([]);
     const SearchTags = ref([
       { title: "First Name", align: "end", key: "first_name", headerIcon: "" },
       {
@@ -282,11 +290,14 @@ export default {
     const page = ref(1);
     const searchTitle = ref(null);
     const searchTitleKey = ref(null);
-    const search = ref(null);
+    const search = ref([]);
     const order = ref("asc");
     const dialog1 = ref(false);
     const dialog2 = ref(false);
     const searchingKeys = ref[null];
+    const addComponent = () => {
+      count.value = count.value + 1;
+    };
     const headers = ref([
       {
         title: "First Name",
@@ -377,8 +388,21 @@ export default {
     const searchInData = async (key, title) => {
       console.log("key::::::::::", key);
       console.log("title::::::::::", title);
+      SearchTags.value.splice(
+        SearchTags.value.findIndex((tag) => tag.key === key),
+        1
+      );
+      console.log("::::::::::::::AFTER FILTER:::::::", SearchTags.value);
+
+      searchItemTag.value.push({ title: title, key: key });
       searchTitleKey.value = key;
       searchTitle.value = title;
+      console.log(
+        ":::::::::::;SEARCH ITEM TAG:::::::::::",
+        searchItemTag.value
+      );
+
+      searchingObj.value.push({ searchTitleKey: key, searchTitle: title });
     };
     const viewCartDetails = async (id) => {
       userId.value = id;
@@ -436,35 +460,29 @@ export default {
       getfunction();
     };
     const searchInItems = (key, title) => {
-      searchTitleKey.value = key;
-      searchTitle.value = title;
+      searchingObj.value.push({ searchTitleKey: key, searchTitle: title });
+      // searchTitleKey.value = key;
+      // searchTitle.value = title;
     };
 
     const searchItem = async () => {
-      // console.log("search title", searchTitleKey.value);
-      // console.log("search value ", search.value);
-      const searchingArray = {
-        searchTitleKey: searchTitleKey.value,
-        search: search.value,
-      };
-      // if (!searchingKeys?.value?.length) {
-      // searchingKeys.value.push(searchingArray);
-      console.log("::::::::SEARCHING ARRAY::::::::::", searchingArray);
-      const allCustomer = await getCustomer(
-        `?where={"${searchTitleKey.value}": "${search.value}"}`
-      );
-      console.log(":::::::search responce:::::::", allCustomer);
-      const pagination = allCustomer.data.pagination;
-
-      noOfPages.value = Math.ceil(pagination.count / pagination.limit);
-      customerData.value = allCustomer.data.data;
-
-      console.log("searchValue::::::::::::::", customerData.value);
-      // } else {
-      //   console.log(searchingKeys?.value.length);
-      // }
+      let obj = {};
+      searchingObj.value.forEach(async (searchObj, index) => {
+        console.log(
+          "!!!!!!!!!",
+          (obj[searchObj.searchTitleKey] = search.value[index])
+        );
+        obj[searchObj.searchTitleKey] = search.value[index];
+        const allCustomer = await getCustomer(`?where=${JSON.stringify(obj)}`);
+        console.log(":::::::search responce:::::::", allCustomer);
+        customerData.value = allCustomer.data.data;
+      });
     };
     return {
+      searchingObj,
+      searchItemTag,
+      addComponent,
+      count,
       searchingKeys,
       userId,
       searchInData,
