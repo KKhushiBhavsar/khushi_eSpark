@@ -24,6 +24,12 @@ export class AppService {
         last_name: 'abc',
         email: 'abc@mail.com',
       },
+      {
+        id: 2,
+        first_name: 'xyz',
+        last_name: 'xyz',
+        email: 'xyz@mail.com',
+      },
     ];
   }
 }

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import {
   Controller,
   Get,
@@ -16,14 +17,18 @@ import {
   HttpException,
   ParseIntPipe,
   UseGuards,
+  UseInterceptors,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { response } from 'express';
 import { AuthGuard } from 'src/guards/auth.guard';
+import { CustomInterceptors } from 'src/custom.interceptor/custom.interceptor';
+import { dataValidation } from 'src/custom.interceptor/dataValidation.interceptor';
 
 @Controller('user')
+// @UseInterceptors(CustomInterceptors)
 // @UseGuards(AuthGuard)
 export class UserController {
   constructor(private readonly userService: UserService) {}
@@ -83,7 +88,9 @@ export class UserController {
   //   return 'this route use as wild card';
   // }
   @Post()
-  async create(@Body() CreateUserDto: CreateUserDto) {
+  @UseInterceptors(dataValidation)
+  // async create(@Body() CreateUserDto: CreateUserDto) {
+  getUser() {
     return 'this is done with dto file ';
   }
 

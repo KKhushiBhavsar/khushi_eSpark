@@ -3,6 +3,7 @@ import { AppService } from './app.service';
 import { AuthGuard } from './guards/auth.guard';
 import { UserInterface } from './app.service';
 import { CustomInterceptors } from './custom.interceptor/custom.interceptor';
+import { AuthInterceptor } from './custom.interceptor/auth.interceptor';
 
 @Controller()
 export class AppController {
@@ -22,7 +23,8 @@ export class AppController {
 
   //custom interceptor
   @Get()
-  @UseInterceptors(CustomInterceptors)
+  @UseInterceptors(AuthInterceptor)
+  // @UseInterceptors(CustomInterceptors)
   getUser(): UserInterface[] {
     return this.appService.getUser();
   }
