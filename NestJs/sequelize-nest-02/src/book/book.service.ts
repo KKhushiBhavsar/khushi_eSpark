@@ -1,17 +1,51 @@
 import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
+import { CreateBookDto } from './dto/create-book.dto';
+import { UpdateBookDto } from './dto/update-book-dto';
 import { Book } from './entities/book.entity';
-import { CreateBookDto } from './entities/dto/create-book.dto';
-import { UpdateBookDto } from './entities/dto/update-book-dto';
 
 @Injectable()
 export class BookService {
+  sequelize: any;
   constructor(
     @Inject('BOOK_REPOSITORY')
     private book_repository: typeof Book,
   ) {}
+  async find(): Promise<Book[]> {
+    return;
+  }
+  async findAll(req): Promise<Book[]> {
+    console.log('req', req.query.where ? req.query.where : '');
 
-  async findAll(): Promise<Book[]> {
-    return this.book_repository.findAll<Book>();
+    const searchField = req.query.where
+      ? Object.keys(JSON.parse(req.query?.where))
+      : '';
+    const searchValue = req.query.where
+      ? Object.values(JSON.parse(req.query?.where))
+      : '';
+
+    const sortField = req.query.sort
+      ? Object.keys(JSON.parse(req.query.sort))
+      : '';
+    const sortValue = req.query.sort
+      ? Object.values(JSON.parse(req.query.sort))
+      : '';
+    let sort;
+    if (sortValue[0] === 'desc') {
+      sort = 'desc';
+    } else {
+      sort = 'asc';
+    }
+    console.log('search Value', searchField, 'searchvalue', searchValue);
+    console.log('sort field', sortField, 'sortValue', sortValue);
+    return this.book_repository.findAll<Book>({
+      where: req.query.where
+        ? {
+            [searchField[0]]: searchValue[0],
+          }
+        : null,
+      limit: req.query.limit ? parseInt(req.query.limit) : null,
+      order: req.query.sort ? [[sortField[0], sort]] : null,
+    });
   }
   async create(CreateBookDto: CreateBookDto): Promise<Book> {
     const book = new Book();
